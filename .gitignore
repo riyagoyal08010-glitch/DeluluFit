@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Environment & secrets (.env.example is the committed template)
+.env
+.env.*
+!.env.example
+
+# Local data (uploaded menu images in development)
+backend/var/
+
+# Frontend
+node_modules/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Local databases, logs and temporary files
+*.sqlite
+*.sqlite3
+*.db
+*.log
+tmp/
+temp/
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Personal Claude Code settings (shared .claude/settings.json may be committed)
+.claude/settings.local.json

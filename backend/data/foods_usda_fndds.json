@@ -1,0 +1,3097 @@
+{
+ "dataset": "USDA FoodData Central - FNDDS Survey Foods",
+ "dataset_version": "2024-10-31",
+ "license": "CC0 1.0",
+ "url": "https://fdc.nal.usda.gov/download-datasets",
+ "foods": [
+  {
+   "canonical_name": "Roti / chapati",
+   "category": "bread",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "roti",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chapati",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chapatti",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chappati",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "phulka",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "fulka",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "tawa roti",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "butter roti",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "299",
+    "protein_g": "7.85",
+    "carbohydrate_g": "46.13",
+    "fat_g": "9.2",
+    "fibre_g": "9.7",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707713: Bread, chappatti or roti",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 small chappatti or roti (6\")",
+     "mass_g": "27.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707713 food_portion"
+    },
+    {
+     "label": "1 medium chappatti or roti (7\")",
+     "mass_g": "40.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707713 food_portion"
+    },
+    {
+     "label": "1 large chappatti or roti (8\")",
+     "mass_g": "52.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707713 food_portion"
+    },
+    {
+     "label": "1 surface inch",
+     "mass_g": "1.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707713 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Paratha",
+   "category": "bread",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten"
+   ],
+   "preparation_notes": "Plain paratha; stuffed parathas differ.",
+   "aliases": [
+    {
+     "alias": "paratha",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "plain paratha",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "lachha paratha",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "aloo paratha",
+     "confidence": "LOW"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "326",
+    "protein_g": "6.36",
+    "carbohydrate_g": "45.35",
+    "fat_g": "13.2",
+    "fibre_g": "9.6",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707715: Bread, paratha",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 paratha",
+     "mass_g": "70.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707715 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Puri",
+   "category": "bread",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten"
+   ],
+   "preparation_notes": "Deep-fried wheat bread.",
+   "aliases": [
+    {
+     "alias": "puri",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "poori",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "409",
+    "protein_g": "6.84",
+    "carbohydrate_g": "39.23",
+    "fat_g": "24.94",
+    "fibre_g": "3.5",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707714: Bread, puri",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 puri (approx 4-4/5\" dia)",
+     "mass_g": "36.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707714 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Naan",
+   "category": "bread",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten",
+    "milk"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "naan",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "butter naan",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "311",
+    "protein_g": "11.09",
+    "carbohydrate_g": "50.23",
+    "fat_g": "7.28",
+    "fibre_g": "5.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707613: Bread, naan",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 piece (1/4 of 10\" dia)",
+     "mass_g": "44.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707613 food_portion"
+    },
+    {
+     "label": "1 Naan (10\" dia)",
+     "mass_g": "177.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707613 food_portion"
+    },
+    {
+     "label": "1 surface inch",
+     "mass_g": "2.4",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707613 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "White bread",
+   "category": "bread",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "bread",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "white bread",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "bread slice",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "267",
+    "protein_g": "9.43",
+    "carbohydrate_g": "49.2",
+    "fat_g": "3.59",
+    "fibre_g": "2.3",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707598: Bread, white",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 small or thin/very thin slice",
+     "mass_g": "24.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707598 food_portion"
+    },
+    {
+     "label": "1 medium or regular slice",
+     "mass_g": "28.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707598 food_portion"
+    },
+    {
+     "label": "1 large or thick slice",
+     "mass_g": "43.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707598 food_portion"
+    },
+    {
+     "label": "1 slice, crust not eaten",
+     "mass_g": "13.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707598 food_portion"
+    },
+    {
+     "label": "1 slice, snack-size",
+     "mass_g": "10.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707598 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "40.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707598 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Steamed white rice",
+   "category": "grain",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Cooked white rice, no added fat.",
+   "aliases": [
+    {
+     "alias": "rice",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "plain rice",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "steamed rice",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "boiled rice",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "white rice",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chawal",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "jeera rice",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "129",
+    "protein_g": "2.67",
+    "carbohydrate_g": "27.99",
+    "fat_g": "0.28",
+    "fibre_g": "0.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708408: Rice, white, cooked, no added fat",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup, cooked",
+     "mass_g": "158.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708408 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Brown rice",
+   "category": "grain",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Cooked brown rice, no added fat.",
+   "aliases": [
+    {
+     "alias": "brown rice",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "123",
+    "protein_g": "2.43",
+    "carbohydrate_g": "25.76",
+    "fat_g": "1.11",
+    "fibre_g": "1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708414: Rice, brown, cooked, no added fat",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup, cooked",
+     "mass_g": "195.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708414 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Rice pilaf",
+   "category": "grain",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Seasoned rice cooked with fat.",
+   "aliases": [
+    {
+     "alias": "pulao",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "pulav",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "veg pulao",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "rice pilaf",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "137",
+    "protein_g": "3.29",
+    "carbohydrate_g": "24.08",
+    "fat_g": "3.03",
+    "fibre_g": "0.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709077: Rice pilaf",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "206.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709077 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Oatmeal (made with water)",
+   "category": "grain",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Plain oats cooked in water, no added fat.",
+   "aliases": [
+    {
+     "alias": "oats",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "oatmeal",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "porridge",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "64",
+    "protein_g": "2.21",
+    "carbohydrate_g": "11.36",
+    "fat_g": "1.09",
+    "fibre_g": "1.7",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708381: Oatmeal, regular or quick, made with water, no added fat",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup, cooked",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708381 food_portion"
+    },
+    {
+     "label": "1 cup, dry, yields",
+     "mass_g": "485.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708381 food_portion"
+    },
+    {
+     "label": "1 oz, dry, yields",
+     "mass_g": "170.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708381 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Corn flakes",
+   "category": "grain",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Dry cereal, without milk.",
+   "aliases": [
+    {
+     "alias": "corn flakes",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "cornflakes",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "365",
+    "protein_g": "6.4",
+    "carbohydrate_g": "79.52",
+    "fat_g": "1.6",
+    "fibre_g": "3.5",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708453: Cereal, corn flakes, plain",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708453 food_portion"
+    },
+    {
+     "label": "1 prepackaged single serving",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708453 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Dal",
+   "category": "pulse",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Generic cooked lentil dal; recipes and lentil types vary.",
+   "aliases": [
+    {
+     "alias": "dal",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "daal",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "dhal",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "yellow dal",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "dal fry",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "dal tadka",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "arhar dal",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "toor dal",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "moong dal",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "masoor dal",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "chana dal",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "145",
+    "protein_g": "8.6",
+    "carbohydrate_g": "19.17",
+    "fat_g": "4.31",
+    "fibre_g": "7.5",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707427: Dal",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707427 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Lentil curry",
+   "category": "pulse",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "lentil curry",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "111",
+    "protein_g": "3.68",
+    "carbohydrate_g": "12.33",
+    "fat_g": "5.65",
+    "fibre_g": "3.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707431: Lentil curry",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707431 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Sambar",
+   "category": "pulse",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Lentil and vegetable stew.",
+   "aliases": [
+    {
+     "alias": "sambar",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "sambhar",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "86",
+    "protein_g": "4.33",
+    "carbohydrate_g": "11.77",
+    "fat_g": "2.71",
+    "fibre_g": "4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707430: Sambar, vegetable stew",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "248.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707430 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Kidney beans (cooked, with fat)",
+   "category": "pulse",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Cooked kidney beans with added fat; a rajma curry with gravy will differ.",
+   "aliases": [
+    {
+     "alias": "rajma",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "kidney beans",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "rajma masala",
+     "confidence": "LOW"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "177",
+    "protein_g": "8.06",
+    "carbohydrate_g": "21.19",
+    "fat_g": "6.97",
+    "fibre_g": "6.9",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707380: Kidney beans, from dried, fat added",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "185.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707380 food_portion"
+    },
+    {
+     "label": "1 oz dry, yield after cooking",
+     "mass_g": "72.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707380 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Chickpeas (cooked, with fat)",
+   "category": "pulse",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Cooked chickpeas with added fat; chole with gravy will differ.",
+   "aliases": [
+    {
+     "alias": "chole",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "chhole",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "chana",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "kabuli chana",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "chickpeas",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chana masala",
+     "confidence": "LOW"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "211",
+    "protein_g": "8.23",
+    "carbohydrate_g": "25.48",
+    "fat_g": "8.91",
+    "fibre_g": "7.1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707415: Chickpeas, from dried, fat added",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "185.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707415 food_portion"
+    },
+    {
+     "label": "1 oz dry, yield after cooking",
+     "mass_g": "72.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707415 food_portion"
+    },
+    {
+     "label": "1 pea",
+     "mass_g": "2.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707415 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Mung beans (cooked)",
+   "category": "pulse",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "mung beans",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "green moong",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "156",
+    "protein_g": "6.52",
+    "carbohydrate_g": "17.8",
+    "fat_g": "6.86",
+    "fibre_g": "7.1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707389: Mung beans, cooked",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "185.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707389 food_portion"
+    },
+    {
+     "label": "1 oz dry, yield after cooking",
+     "mass_g": "72.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707389 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Idli",
+   "category": "south_indian",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "idli",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "idly",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "128",
+    "protein_g": "6.36",
+    "carbohydrate_g": "24.98",
+    "fat_g": "0.35",
+    "fibre_g": "5.8",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708346: Idli",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 item",
+     "mass_g": "38.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708346 food_portion"
+    },
+    {
+     "label": "1 surface inch",
+     "mass_g": "9.8",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708346 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Plain dosa",
+   "category": "south_indian",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "dosa",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "plain dosa",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "sada dosa",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "210",
+    "protein_g": "5.7",
+    "carbohydrate_g": "37.04",
+    "fat_g": "4.05",
+    "fibre_g": "1.8",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708347: Dosa, plain",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 small",
+     "mass_g": "35.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708347 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "80.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708347 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "155.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708347 food_portion"
+    },
+    {
+     "label": "1 surface inch",
+     "mass_g": "1.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708347 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Masala dosa",
+   "category": "south_indian",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Dosa with filling.",
+   "aliases": [
+    {
+     "alias": "masala dosa",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "184",
+    "protein_g": "5.46",
+    "carbohydrate_g": "30.8",
+    "fat_g": "4.27",
+    "fibre_g": "2.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709129: Dosa, with filling",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 small",
+     "mass_g": "113.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709129 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "267.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709129 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "523.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709129 food_portion"
+    },
+    {
+     "label": "1 surface inch",
+     "mass_g": "3.4",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709129 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Upma",
+   "category": "breakfast",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten"
+   ],
+   "preparation_notes": "Semolina (wheat) based.",
+   "aliases": [
+    {
+     "alias": "upma",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "rava upma",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "suji upma",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "87",
+    "protein_g": "1.98",
+    "carbohydrate_g": "13.81",
+    "fat_g": "2.64",
+    "fibre_g": "1.3",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709128: Upma",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup, cooked",
+     "mass_g": "170.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709128 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Samosa",
+   "category": "snack",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "wheat_gluten"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "samosa",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "aloo samosa",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "310",
+    "protein_g": "5.14",
+    "carbohydrate_g": "33.16",
+    "fat_g": "17.47",
+    "fibre_g": "1.8",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708730: Samosa",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 small/individual",
+     "mass_g": "25.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708730 food_portion"
+    },
+    {
+     "label": "1 regular/large",
+     "mass_g": "100.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708730 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Pakora",
+   "category": "snack",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Batter-fried vegetables; batter and filling vary.",
+   "aliases": [
+    {
+     "alias": "pakora",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "pakoda",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "bhajji",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "bhaji",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "125",
+    "protein_g": "4.92",
+    "carbohydrate_g": "16.24",
+    "fat_g": "4.77",
+    "fibre_g": "3.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710066: Pakora",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 pakora",
+     "mass_g": "12.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710066 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Papad",
+   "category": "snack",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Grilled or broiled.",
+   "aliases": [
+    {
+     "alias": "papad",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "papadum",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "371",
+    "protein_g": "25.56",
+    "carbohydrate_g": "59.87",
+    "fat_g": "3.25",
+    "fibre_g": "18.6",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707429: Papad, grilled or broiled",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 papad",
+     "mass_g": "9.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707429 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Potato chips",
+   "category": "snack",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "potato chips",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chips",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "532",
+    "protein_g": "6.39",
+    "carbohydrate_g": "53.83",
+    "fat_g": "33.98",
+    "fibre_g": "3.1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709422: Potato chips, plain",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 chip",
+     "mass_g": "2.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709422 food_portion"
+    },
+    {
+     "label": "1 small single serving bag",
+     "mass_g": "28.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709422 food_portion"
+    },
+    {
+     "label": "1 medium single serving bag",
+     "mass_g": "57.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709422 food_portion"
+    },
+    {
+     "label": "1 large single serving bag",
+     "mass_g": "85.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709422 food_portion"
+    },
+    {
+     "label": "1 100 calorie package",
+     "mass_g": "18.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709422 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "25.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709422 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "French fries",
+   "category": "snack",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "french fries",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "fries",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "225",
+    "protein_g": "2.5",
+    "carbohydrate_g": "23.23",
+    "fat_g": "14.07",
+    "fibre_g": "1.8",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709456: Potato, french fries, NFS",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fry, NS as to shape",
+     "mass_g": "5.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709456 food_portion"
+    },
+    {
+     "label": "1 shoestring",
+     "mass_g": "2.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709456 food_portion"
+    },
+    {
+     "label": "1 straight cut",
+     "mass_g": "5.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709456 food_portion"
+    },
+    {
+     "label": "1 spiral or curly",
+     "mass_g": "8.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709456 food_portion"
+    },
+    {
+     "label": "1 waffle",
+     "mass_g": "8.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709456 food_portion"
+    },
+    {
+     "label": "1 wedge",
+     "mass_g": "9.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709456 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Vegetable curry",
+   "category": "vegetable",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": "Generic vegetable curry; vegetables and gravy vary.",
+   "aliases": [
+    {
+     "alias": "vegetable curry",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "veg curry",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "mix veg",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "mixed vegetable",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "sabzi",
+     "confidence": "LOW"
+    },
+    {
+     "alias": "sabji",
+     "confidence": "LOW"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "86",
+    "protein_g": "1.6",
+    "carbohydrate_g": "8.81",
+    "fat_g": "5.27",
+    "fibre_g": "1.8",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710067: Vegetable curry",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710067 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Okra (cooked, with fat)",
+   "category": "vegetable",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "bhindi",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "okra",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "59",
+    "protein_g": "2.02",
+    "carbohydrate_g": "7.76",
+    "fat_g": "2.94",
+    "fibre_g": "3.3",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709947: Okra, fresh, cooked, fat added",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 pod",
+     "mass_g": "10.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709947 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "165.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709947 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Boiled potato",
+   "category": "vegetable",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "boiled potato",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "potato",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "126",
+    "protein_g": "1.87",
+    "carbohydrate_g": "20.45",
+    "fat_g": "4.25",
+    "fibre_g": "1.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709385: Potato, boiled, NFS",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 baby potato",
+     "mass_g": "60.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709385 food_portion"
+    },
+    {
+     "label": "1 new potato",
+     "mass_g": "60.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709385 food_portion"
+    },
+    {
+     "label": "1 small",
+     "mass_g": "130.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709385 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "170.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709385 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "300.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709385 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "160.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709385 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Cucumber (raw)",
+   "category": "vegetable",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "cucumber",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "kheera",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "16",
+    "protein_g": "0.62",
+    "carbohydrate_g": "2.95",
+    "fat_g": "0.18",
+    "fibre_g": "0.5",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709784: Cucumber, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 piece/slice",
+     "mass_g": "10.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709784 food_portion"
+    },
+    {
+     "label": "1 stick",
+     "mass_g": "10.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709784 food_portion"
+    },
+    {
+     "label": "1 regular",
+     "mass_g": "200.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709784 food_portion"
+    },
+    {
+     "label": "1 miniature",
+     "mass_g": "65.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709784 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "120.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709784 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Tomato (raw)",
+   "category": "vegetable",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "tomato",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "20",
+    "protein_g": "0.82",
+    "carbohydrate_g": "4.04",
+    "fat_g": "0.31",
+    "fibre_g": "1.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709719: Tomatoes, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 slice",
+     "mass_g": "20.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709719 food_portion"
+    },
+    {
+     "label": "1 grape tomato",
+     "mass_g": "8.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709719 food_portion"
+    },
+    {
+     "label": "1 cherry",
+     "mass_g": "17.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709719 food_portion"
+    },
+    {
+     "label": "1 Italian tomato",
+     "mass_g": "60.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709719 food_portion"
+    },
+    {
+     "label": "1 plum tomato",
+     "mass_g": "60.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709719 food_portion"
+    },
+    {
+     "label": "1 whole",
+     "mass_g": "125.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709719 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Onion (raw)",
+   "category": "vegetable",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "onion",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "pyaz",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "38",
+    "protein_g": "0.86",
+    "carbohydrate_g": "8.46",
+    "fat_g": "0.08",
+    "fibre_g": "1.7",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709795: Onions, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 slice",
+     "mass_g": "15.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709795 food_portion"
+    },
+    {
+     "label": "1 ring",
+     "mass_g": "5.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709795 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "160.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709795 food_portion"
+    },
+    {
+     "label": "1 whole",
+     "mass_g": "148.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709795 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Carrot (raw)",
+   "category": "vegetable",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "carrot",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "gajar",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "44",
+    "protein_g": "0.87",
+    "carbohydrate_g": "9.68",
+    "fat_g": "0.24",
+    "fibre_g": "2.9",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709660: Carrots, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "120.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709660 food_portion"
+    },
+    {
+     "label": "1 baby carrot",
+     "mass_g": "10.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709660 food_portion"
+    },
+    {
+     "label": "1 regular carrot",
+     "mass_g": "60.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709660 food_portion"
+    },
+    {
+     "label": "1 strip/stick",
+     "mass_g": "10.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709660 food_portion"
+    },
+    {
+     "label": "1 piece/slice",
+     "mass_g": "5.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709660 food_portion"
+    },
+    {
+     "label": "1 single serving bag",
+     "mass_g": "80.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709660 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Tomato soup",
+   "category": "soup",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "tomato soup",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "19",
+    "protein_g": "0.65",
+    "carbohydrate_g": "3.64",
+    "fat_g": "0.41",
+    "fibre_g": "0.9",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709757: Soup, tomato",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "245.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709757 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Paneer",
+   "category": "dairy",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": "Plain paneer as described by FNDDS, not a paneer curry.",
+   "aliases": [
+    {
+     "alias": "paneer",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "299",
+    "protein_g": "15.86",
+    "carbohydrate_g": "22.46",
+    "fat_g": "15.52",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2705740: Cheese, paneer",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "246.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705740 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Curd (plain whole-milk yogurt)",
+   "category": "dairy",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "curd",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "dahi",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "yogurt",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "plain yogurt",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "78",
+    "protein_g": "3.82",
+    "carbohydrate_g": "5.57",
+    "fat_g": "4.48",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2705418: Yogurt, whole milk, plain",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 4 oz container",
+     "mass_g": "113.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705418 food_portion"
+    },
+    {
+     "label": "1 6 oz container",
+     "mass_g": "170.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705418 food_portion"
+    },
+    {
+     "label": "1 container, NFS",
+     "mass_g": "170.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705418 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "245.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705418 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Milk (whole)",
+   "category": "dairy",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "milk",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "whole milk",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "doodh",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "61",
+    "protein_g": "3.27",
+    "carbohydrate_g": "4.63",
+    "fat_g": "3.2",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2705385: Milk, whole",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "244.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705385 food_portion"
+    },
+    {
+     "label": "1 fl oz",
+     "mass_g": "30.5",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705385 food_portion"
+    },
+    {
+     "label": "1 individual school container",
+     "mass_g": "244.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705385 food_portion"
+    },
+    {
+     "label": "Guideline amount per fl oz of beverage",
+     "mass_g": "2.5",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705385 food_portion"
+    },
+    {
+     "label": "Guideline amount per cup of hot cereal",
+     "mass_g": "61.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705385 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Buttermilk",
+   "category": "dairy",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": "Cultured buttermilk; spiced Indian chaas may differ.",
+   "aliases": [
+    {
+     "alias": "buttermilk",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chaas",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "chhach",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "43",
+    "protein_g": "3.46",
+    "carbohydrate_g": "4.81",
+    "fat_g": "1.08",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2705393: Buttermilk",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "244.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705393 food_portion"
+    },
+    {
+     "label": "1 fl oz",
+     "mass_g": "30.5",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705393 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Rice pudding",
+   "category": "dessert",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "rice pudding",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "kheer",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "108",
+    "protein_g": "3.23",
+    "carbohydrate_g": "18.39",
+    "fat_g": "2.15",
+    "fibre_g": "0.3",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2705685: Pudding, rice",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "260.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705685 food_portion"
+    },
+    {
+     "label": "1 snack size container",
+     "mass_g": "110.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2705685 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Ghee",
+   "category": "fat",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "ghee",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "876",
+    "protein_g": "0.28",
+    "carbohydrate_g": "0",
+    "fat_g": "99.48",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710168: Ghee, clarified butter",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "224.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710168 food_portion"
+    },
+    {
+     "label": "1 tablespoon",
+     "mass_g": "14.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710168 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Butter",
+   "category": "fat",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "butter",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "makhan",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "743",
+    "protein_g": "0.85",
+    "carbohydrate_g": "0.06",
+    "fat_g": "82.2",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710154: Butter, NFS",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "224.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710154 food_portion"
+    },
+    {
+     "label": "1 tablespoon",
+     "mass_g": "14.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710154 food_portion"
+    },
+    {
+     "label": "1 pat",
+     "mass_g": "7.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710154 food_portion"
+    },
+    {
+     "label": "1 individual container",
+     "mass_g": "5.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710154 food_portion"
+    },
+    {
+     "label": "Guideline amount per slice of bread/roll",
+     "mass_g": "7.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710154 food_portion"
+    },
+    {
+     "label": "Guideline amount on regular sandwich",
+     "mass_g": "14.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710154 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Boiled egg",
+   "category": "egg",
+   "diet_type": "eggetarian",
+   "known_allergens": [
+    "egg"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "boiled egg",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "egg",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "anda",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "poached egg",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "143",
+    "protein_g": "12.4",
+    "carbohydrate_g": "0.96",
+    "fat_g": "9.96",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707154: Egg, whole, boiled or poached",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 egg",
+     "mass_g": "50.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707154 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "135.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707154 food_portion"
+    },
+    {
+     "label": "1 slice",
+     "mass_g": "5.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707154 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Omelette (made with oil)",
+   "category": "egg",
+   "diet_type": "eggetarian",
+   "known_allergens": [
+    "egg"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "omelette",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "omelet",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "egg omelette",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "scrambled egg",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "egg bhurji",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "192",
+    "protein_g": "11.56",
+    "carbohydrate_g": "0.9",
+    "fat_g": "15.81",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707200: Egg omelet or scrambled egg, made with oil",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 egg",
+     "mass_g": "55.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707200 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "135.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707200 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Chicken curry",
+   "category": "meat",
+   "diet_type": "non_vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "chicken curry",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chicken masala",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "chicken gravy",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "107",
+    "protein_g": "6.48",
+    "carbohydrate_g": "6.54",
+    "fat_g": "6.48",
+    "fibre_g": "1.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2706437: Chicken curry",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2706437 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Chicken biryani",
+   "category": "meat",
+   "diet_type": "non_vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "chicken biryani",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "104",
+    "protein_g": "7.15",
+    "carbohydrate_g": "13.55",
+    "fat_g": "2.38",
+    "fibre_g": "1.1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2706538: Biryani with chicken",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "196.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2706538 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Fish curry",
+   "category": "meat",
+   "diet_type": "non_vegetarian",
+   "known_allergens": [
+    "fish"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "fish curry",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "93",
+    "protein_g": "4.94",
+    "carbohydrate_g": "6.65",
+    "fat_g": "5.42",
+    "fibre_g": "1.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2706460: Fish curry",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2706460 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Mutton with gravy",
+   "category": "meat",
+   "diet_type": "non_vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "mutton curry",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "mutton gravy",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "219",
+    "protein_g": "17.29",
+    "carbohydrate_g": "1.58",
+    "fat_g": "15.37",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2706413: Lamb or mutton with gravy",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "244.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2706413 food_portion"
+    },
+    {
+     "label": "1 slice with gravy",
+     "mass_g": "43.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2706413 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Vegetable biryani",
+   "category": "grain",
+   "diet_type": "vegetarian",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "veg biryani",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "vegetable biryani",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "109",
+    "protein_g": "1.93",
+    "carbohydrate_g": "17.91",
+    "fat_g": "3.2",
+    "fibre_g": "1.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2708985: Biryani with vegetables",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup",
+     "mass_g": "172.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2708985 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Tofu",
+   "category": "pulse",
+   "diet_type": "vegan",
+   "known_allergens": [
+    "soy"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "tofu",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "soya paneer",
+     "confidence": "MEDIUM"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "61",
+    "protein_g": "7.17",
+    "carbohydrate_g": "1.18",
+    "fat_g": "3.69",
+    "fibre_g": "0.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707435: Soybean curd",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 cup (1/2\" cubes)",
+     "mass_g": "248.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707435 food_portion"
+    },
+    {
+     "label": "1 piece (2-1/2\" x 2-3/4\" x 1\")",
+     "mass_g": "120.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707435 food_portion"
+    },
+    {
+     "label": "1 cubic inch",
+     "mass_g": "17.6",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707435 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Roasted peanuts (salted)",
+   "category": "nut",
+   "diet_type": "vegan",
+   "known_allergens": [
+    "peanut"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "peanuts",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "roasted peanuts",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "moongphali",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "587",
+    "protein_g": "24.35",
+    "carbohydrate_g": "21.26",
+    "fat_g": "49.66",
+    "fibre_g": "8.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707517: Peanuts, dry roasted, salted",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 peanut, without shell",
+     "mass_g": "1.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707517 food_portion"
+    },
+    {
+     "label": "1 peanut in shell, yields",
+     "mass_g": "2.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707517 food_portion"
+    },
+    {
+     "label": "1 peanut, NFS",
+     "mass_g": "1.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707517 food_portion"
+    },
+    {
+     "label": "1 cup, without shell, NS as to form",
+     "mass_g": "146.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707517 food_portion"
+    },
+    {
+     "label": "1 cup, in shell, yields",
+     "mass_g": "51.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707517 food_portion"
+    },
+    {
+     "label": "1 cup, NFS",
+     "mass_g": "146.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707517 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Peanut butter",
+   "category": "nut",
+   "diet_type": "vegan",
+   "known_allergens": [
+    "peanut"
+   ],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "peanut butter",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "598",
+    "protein_g": "22.21",
+    "carbohydrate_g": "22.31",
+    "fat_g": "51.36",
+    "fibre_g": "5",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707537: Peanut butter",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 tablespoon",
+     "mass_g": "16.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707537 food_portion"
+    },
+    {
+     "label": "1 single serving",
+     "mass_g": "45.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707537 food_portion"
+    },
+    {
+     "label": "Guideline amount per slice of bread/roll",
+     "mass_g": "16.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707537 food_portion"
+    },
+    {
+     "label": "Guideline amount per sandwich",
+     "mass_g": "32.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707537 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Banana",
+   "category": "fruit",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "banana",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "kela",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "97",
+    "protein_g": "0.74",
+    "carbohydrate_g": "22.71",
+    "fat_g": "0.28",
+    "fibre_g": "1.7",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709224: Banana, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 banana",
+     "mass_g": "126.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709224 food_portion"
+    },
+    {
+     "label": "1 slice",
+     "mass_g": "6.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709224 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "150.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709224 food_portion"
+    },
+    {
+     "label": "1 cup, mashed",
+     "mass_g": "225.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709224 food_portion"
+    },
+    {
+     "label": "1 linear inch",
+     "mass_g": "15.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709224 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Apple",
+   "category": "fruit",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "apple",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "seb",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "61",
+    "protein_g": "0.17",
+    "carbohydrate_g": "14.8",
+    "fat_g": "0.15",
+    "fibre_g": "2.1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709215: Apple, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 small",
+     "mass_g": "165.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709215 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "200.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709215 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "242.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709215 food_portion"
+    },
+    {
+     "label": "1 extra large",
+     "mass_g": "295.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709215 food_portion"
+    },
+    {
+     "label": "1 slice",
+     "mass_g": "25.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709215 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "125.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709215 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Orange",
+   "category": "fruit",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "orange",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "santra",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "50",
+    "protein_g": "0.92",
+    "carbohydrate_g": "11.78",
+    "fat_g": "0.14",
+    "fibre_g": "2.2",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709171: Orange, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fruit",
+     "mass_g": "154.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709171 food_portion"
+    },
+    {
+     "label": "1 section/slice",
+     "mass_g": "15.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709171 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "180.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709171 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Mango",
+   "category": "fruit",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "mango",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "aam",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "60",
+    "protein_g": "0.82",
+    "carbohydrate_g": "14.98",
+    "fat_g": "0.38",
+    "fibre_g": "1.6",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709242: Mango, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 slice/chunk",
+     "mass_g": "25.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709242 food_portion"
+    },
+    {
+     "label": "1 mango",
+     "mass_g": "210.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709242 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "165.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709242 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Papaya",
+   "category": "fruit",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "papaya",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "papita",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "43",
+    "protein_g": "0.47",
+    "carbohydrate_g": "10.82",
+    "fat_g": "0.26",
+    "fibre_g": "1.7",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709246: Papaya, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 slice/chunk",
+     "mass_g": "40.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709246 food_portion"
+    },
+    {
+     "label": "1 fruit",
+     "mass_g": "330.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709246 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "165.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709246 food_portion"
+    },
+    {
+     "label": "1 cup, mashed",
+     "mass_g": "230.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709246 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Guava",
+   "category": "fruit",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": null,
+   "aliases": [
+    {
+     "alias": "guava",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "amrood",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "68",
+    "protein_g": "2.55",
+    "carbohydrate_g": "14.32",
+    "fat_g": "0.95",
+    "fibre_g": "5.4",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2709238: Guava, raw",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fruit",
+     "mass_g": "55.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709238 food_portion"
+    },
+    {
+     "label": "1 slice",
+     "mass_g": "15.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709238 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "165.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2709238 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Coconut water",
+   "category": "beverage",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Unsweetened.",
+   "aliases": [
+    {
+     "alias": "coconut water",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "nariyal pani",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "18",
+    "protein_g": "0.22",
+    "carbohydrate_g": "4.24",
+    "fat_g": "0",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2707572: Coconut water, unsweetened",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fl oz (no ice)",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707572 food_portion"
+    },
+    {
+     "label": "1 fl oz (with ice)",
+     "mass_g": "23.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707572 food_portion"
+    },
+    {
+     "label": "1 fl oz (NFS)",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707572 food_portion"
+    },
+    {
+     "label": "1 coconut yields",
+     "mass_g": "206.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2707572 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Tea with milk",
+   "category": "beverage",
+   "diet_type": "vegetarian",
+   "known_allergens": [
+    "milk"
+   ],
+   "preparation_notes": "As described by FNDDS; sugar and milk amounts in hostel chai vary.",
+   "aliases": [
+    {
+     "alias": "tea with milk",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "milk tea",
+     "confidence": "HIGH"
+    },
+    {
+     "alias": "chai",
+     "confidence": "MEDIUM"
+    },
+    {
+     "alias": "tea",
+     "confidence": "LOW"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "51",
+    "protein_g": "1.58",
+    "carbohydrate_g": "8.95",
+    "fat_g": "1.05",
+    "fibre_g": "0.1",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710506: Tea, hot, with milk",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fl oz",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710506 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710506 food_portion"
+    },
+    {
+     "label": "1 small",
+     "mass_g": "360.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710506 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "480.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710506 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "600.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710506 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Black tea",
+   "category": "beverage",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Brewed, no milk or sugar.",
+   "aliases": [
+    {
+     "alias": "black tea",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "1",
+    "protein_g": "0",
+    "carbohydrate_g": "0.3",
+    "fat_g": "0",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710488: Tea, hot, leaf, black",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fl oz",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710488 food_portion"
+    },
+    {
+     "label": "1 cup",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710488 food_portion"
+    },
+    {
+     "label": "1 small",
+     "mass_g": "360.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710488 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "480.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710488 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "600.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710488 food_portion"
+    }
+   ]
+  },
+  {
+   "canonical_name": "Black coffee",
+   "category": "beverage",
+   "diet_type": "vegan",
+   "known_allergens": [],
+   "preparation_notes": "Brewed, no milk or sugar.",
+   "aliases": [
+    {
+     "alias": "black coffee",
+     "confidence": "HIGH"
+    }
+   ],
+   "nutrients": {
+    "reference_mass_g": "100",
+    "energy_kcal": "1",
+    "protein_g": "0.12",
+    "carbohydrate_g": "0",
+    "fat_g": "0.02",
+    "fibre_g": "0",
+    "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+    "source_reference": "FDC ID 2710375: Coffee, brewed",
+    "dataset_version": "2024-10-31"
+   },
+   "servings": [
+    {
+     "label": "1 fl oz",
+     "mass_g": "30.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710375 food_portion"
+    },
+    {
+     "label": "1 cup (8 fl oz)",
+     "mass_g": "240.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710375 food_portion"
+    },
+    {
+     "label": "1 small",
+     "mass_g": "360.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710375 food_portion"
+    },
+    {
+     "label": "1 medium",
+     "mass_g": "480.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710375 food_portion"
+    },
+    {
+     "label": "1 large",
+     "mass_g": "600.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710375 food_portion"
+    },
+    {
+     "label": "1 small pot (20 FO, 4 servings)",
+     "mass_g": "600.0",
+     "source_name": "USDA FoodData Central - FNDDS Survey Foods",
+     "source_reference": "FDC ID 2710375 food_portion"
+    }
+   ]
+  }
+ ]
+}
