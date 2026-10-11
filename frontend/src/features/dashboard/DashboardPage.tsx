@@ -1,16 +1,17 @@
-import { CalendarDays, Plus, Soup, UtensilsCrossed, Wallet } from "lucide-react";
-import type { ReactNode } from "react";
+import { ArrowRight, ChevronRight, Soup, UtensilsCrossed, Wallet } from "lucide-react";
 
+import { CoinJarIllustration } from "@/components/illustrations/Porcelain";
 import { DemoTag } from "@/components/layout/DemoTag";
 import { MealTimeline } from "@/components/meals/MealTimeline";
-import { NutritionSummary } from "@/components/nutrition/NutritionSummary";
 import { ButtonLink } from "@/components/ui/Button";
-import { Card, CardHeader } from "@/components/ui/Card";
-import { Badge, EmptyState, ErrorState, PageHeader, Progress, Skeleton } from "@/components/ui/Feedback";
+import { Card, CardHeader, SectionTitle } from "@/components/ui/Card";
+import { DayStrip } from "@/components/ui/DayStrip";
+import { Badge, EmptyState, ErrorState, Progress, Skeleton } from "@/components/ui/Feedback";
+import { GlassChip, ImagePanel } from "@/components/ui/ImagePanel";
 import { ApiError } from "@/lib/api/client";
-import { formatLongDate, formatMoney, greeting, localIsoDate, MEAL_LABELS } from "@/lib/format";
+import { formatAmount, formatLongDate, formatMoney, greeting, localIsoDate, MEAL_LABELS, NUTRIENT_LABELS } from "@/lib/format";
 import { DEMO_MENU } from "@/mocks/demoData";
-import type { BudgetSummary } from "@/types/api";
+import type { BudgetSummary, NutrientKey, Totals } from "@/types/api";
 
 import { absText } from "@/features/budget/money";
 
@@ -33,7 +34,7 @@ function BudgetBody({ budget }: { budget: BudgetSummary }) {
   if (!budget.has_budget || budget.budget_amount === null) {
     return (
       <div className="space-y-2">
-        <p className="metric text-2xl font-semibold">{formatMoney(budget.net_spending, budget.currency)}</p>
+        <p className="metric text-3xl font-light">{formatMoney(budget.net_spending, budget.currency)}</p>
         <p className="text-sm text-ink-muted">
           spent {budget.period === "daily" ? "today" : `this ${budget.period.replace("ly", "")}`}. No budget is set
           for this period, so there's nothing to compare against.
@@ -44,8 +45,8 @@ function BudgetBody({ budget }: { budget: BudgetSummary }) {
   const used = Number(budget.utilization ?? 0);
   return (
     <div className="space-y-3">
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="metric text-2xl font-semibold">{formatMoney(budget.net_spending, budget.currency)}</p>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <p className="metric text-3xl font-light">{formatMoney(budget.net_spending, budget.currency)}</p>
         <p className="text-sm text-ink-muted">of {formatMoney(budget.budget_amount, budget.currency)}</p>
       </div>
       <Progress value={Math.min(used, 1)} label="Share of budget used" tone={budget.over_budget ? "warning" : "accent"} />
@@ -58,15 +59,32 @@ function BudgetBody({ budget }: { budget: BudgetSummary }) {
   );
 }
 
-function Section({ id, title, description, tag, action, children, className }:
-  { id: string; title: string; description?: string; tag?: ReactNode; action?: ReactNode; children: ReactNode;
-    className?: string }) {
+const CHIPS: NutrientKey[] = ["protein_g", "carbohydrate_g", "fat_g"];
+
+/** Today's totals over the hero image. Unknown stays "—"; partial totals are marked, never shown as complete. */
+function HeroTotals({ totals }: { totals: Totals }) {
+  const energy = totals.nutrients.energy_kcal;
+  const known = energy.status === "complete" || energy.status === "incomplete";
+  const partial = (["energy_kcal", ...CHIPS] as NutrientKey[]).some((k) => totals.nutrients[k].status === "incomplete");
   return (
-    <Card aria-labelledby={id} className={className}>
-      <CardHeader id={id} title={<span className="flex items-center gap-2">{title}{tag}</span>}
-                  description={description} action={action} />
-      {children}
-    </Card>
+    <>
+      <p className="metric mt-3 flex items-baseline gap-2">
+        {energy.status === "incomplete" && <span className="sr-only">At least </span>}
+        {energy.status === "incomplete" && <span aria-hidden="true" className="text-2xl font-light text-white/90">≥</span>}
+        <span className="text-5xl font-light tracking-tight sm:text-6xl">{known ? Number(energy.display).toLocaleString("en-IN") : "—"}</span>
+        <span className="text-base text-white/90">kcal{known ? " estimated" : ", no data"}</span>
+      </p>
+      <ul className="mt-5 flex flex-wrap gap-2" aria-label="Macronutrients">
+        {CHIPS.map((k) => {
+          const t = totals.nutrients[k];
+          const value = t.status === "complete" || t.status === "incomplete"
+            ? `${t.status === "incomplete" ? "≥ " : ""}${formatAmount(t.display, t.unit)}` : "—";
+          return <li key={k}><GlassChip>{NUTRIENT_LABELS[k]} <span className="metric font-semibold">{value}</span></GlassChip></li>;
+        })}
+        {partial && <li><GlassChip className="ring-1 ring-warning/60">Partial</GlassChip></li>}
+      </ul>
+      {totals.note && <p className="mt-4 max-w-md text-xs leading-relaxed text-white/90">{totals.note}</p>}
+    </>
   );
 }
 
@@ -79,29 +97,60 @@ export function DashboardPage() {
   const date = today.data?.date ?? localIsoDate();
 
   return (
-    <>
-      <PageHeader
-        title={name ? `${greeting()}, ${name}` : greeting()}
-        description={<span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4" aria-hidden="true" />{formatLongDate(date)}</span>}
-        actions={<>
-          <ButtonLink to="/app/meals" icon={<Plus className="h-4 w-4" aria-hidden="true" />}>Log a meal</ButtonLink>
-          <ButtonLink to="/app/menu" variant="secondary" icon={<Soup className="h-4 w-4" aria-hidden="true" />}>View menu</ButtonLink>
-        </>}
-      />
+    <div className="space-y-6">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="text-[1.875rem] leading-tight sm:text-[2.5rem]">
+            {greeting()}{name ? <>, <span className="font-semibold">{name}</span></> : null}
+          </h1>
+          <p className="mt-1 text-sm text-ink-muted">Welcome to DeluluFit · {formatLongDate(date)}</p>
+        </div>
+      </header>
 
-      <div className="grid gap-4 lg:grid-cols-3 lg:gap-6">
-        <Section id="today-nutrition" title="Today's nutrition" tag={demoTag} className="lg:col-span-2"
-                 description="Known totals for what you've logged today.">
-          {today.isPending ? <CardSkeleton />
-            : today.isError ? <ErrorState message={errorMessage(today.error)} onRetry={() => today.refetch()} />
-            : today.data.totals.item_count === 0
-              ? <EmptyState icon={UtensilsCrossed} title="No meals logged today">
-                  Log what you actually ate and your estimated totals will appear here.
-                </EmptyState>
-              : <NutritionSummary totals={today.data.totals} />}
-        </Section>
+      <Card className="p-4 sm:p-5">
+        <SectionTitle action={<ButtonLink to="/app/meals?view=history" variant="ghost" size="sm">History <ChevronRight className="h-4 w-4" aria-hidden="true" /></ButtonLink>}>
+          This week
+        </SectionTitle>
+        <DayStrip hrefFor={(d) => `/app/meals?view=history&date=${d}`} />
+      </Card>
 
-        <Section id="budget" title="Food budget" tag={demoTag} description="Spending recorded for the current period.">
+      <div className="grid gap-6 lg:grid-cols-3">
+        {today.isError ? (
+          <Card aria-labelledby="today-nutrition" className="lg:col-span-2">
+            <CardHeader id="today-nutrition" title="Today's nutrition" />
+            <ErrorState message={errorMessage(today.error)} onRetry={() => today.refetch()} />
+          </Card>
+        ) : (
+          <ImagePanel scene="thali" aria-labelledby="today-nutrition" className="lg:col-span-2">
+            <div className="flex min-h-[19rem] flex-col justify-between p-6 sm:p-8">
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 id="today-nutrition" className="text-base font-medium text-white">Today's nutrition</h2>
+                  {demoTag}
+                </div>
+                {today.isPending ? <p className="mt-6 text-sm text-white/90" role="status">Loading today's totals…</p>
+                  : today.data.totals.item_count === 0 ? (
+                    <div className="mt-6 max-w-sm">
+                      <p className="text-2xl font-light">No meals logged today</p>
+                      <p className="mt-2 text-sm text-white/90">Log what you actually ate and your estimated totals will appear here.</p>
+                    </div>
+                  ) : <HeroTotals totals={today.data.totals} />}
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-2">
+                <ButtonLink to="/app/meals" variant="secondary" className="pl-1.5"
+                            icon={<span className="grid h-8 w-8 place-items-center rounded-full bg-action text-ink-inverse"><ArrowRight className="h-4 w-4" aria-hidden="true" /></span>}>
+                  Log a meal
+                </ButtonLink>
+                <ButtonLink to="/app/nutrition" variant="onImage">Nutrition details <ChevronRight className="h-4 w-4" aria-hidden="true" /></ButtonLink>
+              </div>
+            </div>
+          </ImagePanel>
+        )}
+
+        <Card aria-labelledby="budget" className="relative overflow-hidden">
+          <div aria-hidden="true" className="pointer-events-none absolute -right-6 -top-4 w-28 opacity-70"><CoinJarIllustration /></div>
+          <CardHeader id="budget" title={<span className="flex items-center gap-2">Food budget{demoTag}</span>}
+                      description="Spending recorded for the current period." />
           {budget.isPending ? <CardSkeleton />
             : budget.isError ? <ErrorState message={errorMessage(budget.error)} onRetry={() => budget.refetch()} />
             : budget.data.transaction_count === 0 && !budget.data.has_budget
@@ -109,37 +158,49 @@ export function DashboardPage() {
                   Set a budget and record food you buy outside the mess to see what's left.
                 </EmptyState>
               : <BudgetBody budget={budget.data} />}
-        </Section>
+        </Card>
 
-        <Section id="meals" title="Meals today" tag={demoTag} className="lg:col-span-2">
+        <Card aria-labelledby="meals" className="lg:col-span-2">
+          <CardHeader id="meals" title={<span className="flex items-center gap-2">Meals today{demoTag}</span>}
+                      action={<ButtonLink to="/app/meals?view=history" variant="ghost" size="sm">All meals <ChevronRight className="h-4 w-4" aria-hidden="true" /></ButtonLink>} />
           {today.isPending ? <CardSkeleton />
             : today.isError ? <ErrorState message={errorMessage(today.error)} onRetry={() => today.refetch()} />
             : today.data.meals.length === 0
-              ? <p className="text-sm text-ink-muted">Nothing logged yet. Breakfast, lunch, snacks and dinner you log appear here in order.</p>
+              ? <EmptyState icon={UtensilsCrossed} title="Nothing logged yet">
+                  Breakfast, lunch, snacks and dinner you log appear here in order.
+                </EmptyState>
               : <MealTimeline meals={today.data.meals} timeZone={timeZone} />}
-        </Section>
+        </Card>
 
-        <Section id="menu" title="Today's mess menu" tag={demoTag}
-                 description={isDemo ? "What the mess planned. Planned isn't the same as eaten." : undefined}>
-          {isDemo ? (
-            <ul className="space-y-3">
-              {DEMO_MENU.map((m) => (
-                <li key={m.meal}>
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-semibold">{MEAL_LABELS[m.meal]}</h3>
-                    {m.status === "confirmed" ? <Badge tone="success">Confirmed</Badge> : <Badge tone="warning">Needs review</Badge>}
-                  </div>
-                  <p className="text-sm text-ink-muted">{m.items.join(", ")}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <EmptyState icon={Soup} title="No menu yet">
-              Uploading and reviewing your mess menu is coming in a later update.
-            </EmptyState>
+        <div className="space-y-6">
+          <Card aria-labelledby="quick" className="p-4 sm:p-5">
+            <h2 id="quick" className="mb-3 px-1 text-base font-medium">Quick actions</h2>
+            <div className="flex flex-wrap gap-2">
+              <ButtonLink to="/app/budget" variant="secondary" size="sm" icon={<Wallet className="h-4 w-4" aria-hidden="true" />}>Record spending</ButtonLink>
+              <ButtonLink to="/app/menu" variant="secondary" size="sm" icon={<Soup className="h-4 w-4" aria-hidden="true" />}>View menu</ButtonLink>
+            </div>
+          </Card>
+
+          {/* A menu summary appears only when menu data exists; today that is demo mode only. */}
+          {isDemo && (
+            <Card aria-labelledby="menu">
+              <CardHeader id="menu" title={<span className="flex items-center gap-2">Today's mess menu{demoTag}</span>}
+                          description="What the mess planned. Planned isn't the same as eaten." />
+              <ul className="space-y-3">
+                {DEMO_MENU.map((m) => (
+                  <li key={m.meal}>
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-sm font-semibold">{MEAL_LABELS[m.meal]}</h3>
+                      {m.status === "confirmed" ? <Badge tone="success">Confirmed</Badge> : <Badge tone="warning">Needs review</Badge>}
+                    </div>
+                    <p className="text-sm text-ink-muted">{m.items.join(", ")}</p>
+                  </li>
+                ))}
+              </ul>
+            </Card>
           )}
-        </Section>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
