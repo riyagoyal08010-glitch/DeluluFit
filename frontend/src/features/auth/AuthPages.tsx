@@ -84,6 +84,7 @@ export function LoginPage() {
     <AuthLayout title="Welcome back" subtitle="Sign in to see your meals and spending."
                 footer={<>New to DeluluFit? <Link className="text-accent hover:underline" to="/register">Create an account</Link></>}>
       <form onSubmit={onSubmit} noValidate className="space-y-4">
+        {state.status === "anonymous" && state.notice && <p role="status" className="rounded-control border border-success/30 bg-success/10 p-3 text-sm text-success">{state.notice}</p>}
         {state.status === "anonymous" && state.connectionError && !formError && (
           <ErrorState title="Can't reach the server" message={state.connectionError} />
         )}
