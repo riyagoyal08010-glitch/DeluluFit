@@ -10,6 +10,10 @@ export const liveKeys = {
   // Under "meals" so invalidateMeals() also refreshes nutrition summaries after any meal change.
   nutritionSummary: (days: number, end: string) => ["live", "meals", "summary", days, end] as const,
   targets: ["live", "targets"] as const,
+  // Shared with the dashboard's greeting (it uses [mode, "profile"]).
+  profile: ["live", "profile"] as const,
+  institutionSearch: (q: string) => ["live", "institutions", q] as const,
+  hostels: (institutionId: string) => ["live", "hostels", institutionId] as const,
   // Everything budget-related, including the dashboard card, lives under ["live","budget"].
   budget: ["live", "budget"] as const,
   budgetSummary: (period: string | null, date: string | null) =>
