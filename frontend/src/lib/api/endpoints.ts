@@ -1,5 +1,6 @@
-import type { BudgetSummary, DayMeals, FoodDetail, FoodSearchResult, ItemPreview, Meal, MealInput, MealItemInput,
-              MealItemUpdateInput, MealUpdateInput, Page, ProfileBundle, SessionResponse, Unit } from "@/types/api";
+import type { Budget, BudgetOverview, BudgetPeriod, BudgetSummary, DayMeals, FoodDetail, FoodSearchResult, ItemPreview, Meal, MealInput, MealItemInput,
+              MealItemUpdateInput, MealUpdateInput, NutritionTarget, Page, ProfileBundle, RangeSummary, SessionResponse,
+              SpendingPoint, Transaction, TransactionInput, TransactionUpdateInput, Unit } from "@/types/api";
 
 import { apiRequest } from "./client";
 
@@ -52,6 +53,33 @@ export const mealsApi = {
     apiRequest<Meal>(`${meal(id)}/items/${encodeURIComponent(itemId)}`, { method: "DELETE" }),
 };
 
+const txn = (id: string) => `/api/v1/budget/transactions/${encodeURIComponent(id)}`;
+
 export const budgetApi = {
-  summary: (signal?: AbortSignal) => apiRequest<BudgetSummary>("/api/v1/budget/summary", { signal }),
+  /** Without arguments the server picks today (profile timezone) and the active budget's period. */
+  summary: (params: { date?: string; period?: BudgetPeriod } = {}, signal?: AbortSignal) =>
+    apiRequest<BudgetSummary>("/api/v1/budget/summary", { query: params, signal }),
+  overview: (signal?: AbortSignal) => apiRequest<BudgetOverview>("/api/v1/budget", { signal }),
+  setActive: (body: { period: BudgetPeriod; amount: string; effective_from?: string | null }) =>
+    apiRequest<Budget>("/api/v1/budget/active", { method: "PUT", body }),
+  endActive: () => apiRequest<void>("/api/v1/budget/active", { method: "DELETE" }),
+  trend: (days: number, signal?: AbortSignal) =>
+    apiRequest<SpendingPoint[]>("/api/v1/budget/trend", { query: { days }, signal }),
+  transactions: (params: { start?: string; end?: string; limit?: number; offset?: number }, signal?: AbortSignal) =>
+    apiRequest<Page<Transaction>>("/api/v1/budget/transactions", { query: params, signal }),
+  createTransaction: (body: TransactionInput) =>
+    apiRequest<Transaction>("/api/v1/budget/transactions", { method: "POST", body }),
+  updateTransaction: (id: string, body: TransactionUpdateInput) =>
+    apiRequest<Transaction>(txn(id), { method: "PATCH", body }),
+  deleteTransaction: (id: string) => apiRequest<void>(txn(id), { method: "DELETE" }),
+};
+
+export const nutritionApi = {
+  /** Either `days` (optionally with `end`) or `start` + `end`; omit `end` to let the server pick today. */
+  summary: (params: { start?: string; end?: string; days?: number }, signal?: AbortSignal) =>
+    apiRequest<RangeSummary>("/api/v1/nutrition/summary", { query: params, signal }),
+};
+
+export const targetsApi = {
+  list: (signal?: AbortSignal) => apiRequest<NutritionTarget[]>("/api/v1/targets", { signal }),
 };
