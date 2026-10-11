@@ -14,5 +14,5 @@ tests together; nothing is wired to an endpoint that hasn't been checked.
 | 6 | Budget page from existing `/budget` endpoints | 2 | **Done** (live API, 19 tests): overview with period navigation, transactions (add / refund / edit / delete, meal link), last 14 days, budget set / change / end / history. Kind/category filters unsupported by the API |
 | 7 | Mess menu upload/review/confirm | backend menu API (not built) | Upload with validation and progress, review/correct, confirm, calendar |
 | 8 | Suggestions | backend rules (not built) | Explainable, dismissible, persisted |
-| 9 | Profile & settings, account deletion, privacy | 2 | Edit profile/preferences/allergies/targets; delete account with confirmation |
+| 9 | Profile & settings, account deletion, privacy | 2 | **Done** (live API, 22 tests): profile (full-replacement save), preferences, allergies, targets with provenance and history, change password, sign out, account deletion with cache clearing. College/hostel creation and data export not built |
 | 10 | End-to-end (Playwright) and accessibility pass | 3–9 | 16-step journey from the product brief; keyboard and screen-reader checks |
