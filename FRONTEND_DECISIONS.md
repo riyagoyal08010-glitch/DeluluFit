@@ -147,3 +147,34 @@ The test QueryClient uses the same 30 s staleTime as production (only retries
 are disabled), so tests that check refresh-after-mutation fail if an
 invalidation is missing. Testing Library's async timeout is 3 s because cold
 tests can exceed the 1 s default when all test files run in parallel.
+
+## F24. The profile form always sends every field
+`PUT /profile` replaces the whole profile; omitted fields revert to their
+defaults (verified live: currency back to INR, college cleared). The form
+therefore sends all fields, including ones not shown as changed, and only
+re-syncs from the server when there are no unsaved edits.
+
+## F25. List editors keep a draft and a saved baseline
+Preferences and allergies are edited as drafts and saved as a whole list.
+The saved baseline is the server's save response (then any refetch), so a
+failed save never changes what is shown as saved and a successful one never
+flashes "unsaved".
+
+## F26. Account-endpoint 401s don't trigger the global sign-out
+Change password and delete account return 401 for a wrong password, so they
+opt out of the client's automatic "session expired" handling and decide
+locally: wrong password → field/dialog error; `not_authenticated` or
+`session_expired` → clear the session and go to login.
+
+## F27. Account deletion clears everything client-side first
+After the server confirms deletion, the CSRF token and the entire query
+cache are cleared and the session becomes signed out (carrying the
+confirmation notice), before the login screen shows. A test proves the next
+person to sign in on the same tab never sees the deleted account's cached
+data within the 30 s cache window.
+
+## F28. Targets: provenance as stored, never interpreted
+Sources are labelled as stored ("Set by you", "From a professional, as you
+entered it"); a professional target is never described as verified or
+prescribed. Inputs allow one decimal place because targets are stored to
+0.1. No defaults are suggested and no met/not-met judgement is made.
