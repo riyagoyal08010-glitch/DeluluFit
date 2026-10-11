@@ -1,62 +1,68 @@
 import { useQuery } from "@tanstack/react-query";
-import { LogOut } from "lucide-react";
-import { useState } from "react";
 
-import { ComingSoon } from "@/components/layout/ComingSoon";
 import { DemoTag } from "@/components/layout/DemoTag";
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader } from "@/components/ui/Card";
-import { ErrorState, PageHeader, Skeleton } from "@/components/ui/Feedback";
+import { ErrorState, LoadingState, PageHeader } from "@/components/ui/Feedback";
 import { useSession } from "@/features/auth/session";
-import { ApiError } from "@/lib/api/client";
 import { profileApi } from "@/lib/api/endpoints";
+import { liveKeys } from "@/lib/api/queryKeys";
+
+import { AccountSettings } from "./AccountSettings";
+import { AllergiesEditor } from "./AllergiesEditor";
+import { PersonalProfileForm } from "./PersonalProfileForm";
+import { PreferencesEditor } from "./PreferencesEditor";
+import { apiMessage } from "./shared";
+import { TargetsManager } from "./TargetsManager";
+
+const SECTIONS = [
+  { id: "personal", label: "Profile" }, { id: "preferences", label: "Food preferences" },
+  { id: "allergies", label: "Allergies" }, { id: "targets", label: "Targets" }, { id: "account", label: "Account" },
+];
 
 export function ProfilePage() {
-  const { state, logout, exitDemo } = useSession();
-  const [busy, setBusy] = useState(false);
-  const live = state.status === "authenticated";
-  const profile = useQuery({ queryKey: ["live", "profile"], queryFn: ({ signal }) => profileApi.get(signal),
-                             enabled: live });
-
+  const { state, exitDemo } = useSession();
   return (
     <>
-      <PageHeader title="Profile & settings" />
-      <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
-        <Card aria-labelledby="account">
-          <CardHeader id="account" title={<span className="flex items-center gap-2">Account{!live && <DemoTag />}</span>} />
-          {live ? (
-            <dl className="space-y-3 text-sm">
-              <div><dt className="text-ink-muted">Email</dt><dd className="text-ink">{state.user.email}</dd></div>
-              <div>
-                <dt className="text-ink-muted">Display name</dt>
-                <dd className="text-ink">
-                  {profile.isPending ? <Skeleton className="mt-1 h-5 w-32" />
-                    : profile.isError ? <ErrorState message={profile.error instanceof ApiError ? profile.error.message : "Couldn't load your profile."}
-                                                    onRetry={() => profile.refetch()} />
-                    : profile.data.profile?.display_name ?? <span className="text-ink-muted">Not set</span>}
-                </dd>
-              </div>
-            </dl>
-          ) : (
-            <p className="text-sm text-ink-muted">You're exploring sample data. There is no account and nothing is saved.</p>
-          )}
-          <div className="mt-6">
-            {live ? (
-              <Button variant="secondary" loading={busy} icon={<LogOut className="h-4 w-4" aria-hidden="true" />}
-                      onClick={async () => { setBusy(true); await logout(); }}>
-                Sign out
-              </Button>
-            ) : (
-              <Button variant="secondary" onClick={exitDemo}>Exit demo</Button>
-            )}
-          </div>
+      <PageHeader title="Profile & settings" description="Your details and choices. Only your name is required." />
+      {state.status === "authenticated" ? <LiveProfile email={state.user.email} /> : (
+        <Card aria-labelledby="demo-account">
+          <CardHeader id="demo-account" title={<span className="flex items-center gap-2">Account<DemoTag /></span>} />
+          <p className="text-sm text-ink-muted">
+            You're exploring sample data. There is no account, nothing is saved, and profile editing is available only
+            with a real account.
+          </p>
+          <Button variant="secondary" className="mt-6" onClick={exitDemo}>Exit demo</Button>
         </Card>
-        <ComingSoon feature="Profile editing" tryDemo={false} plans={[
-          "Change your name, food preferences and allergies or ingredients to avoid.",
-          "Set or skip nutrition targets, and say where a target came from.",
-          "Download or delete your data, and delete your account.",
-        ]} />
-      </div>
+      )}
     </>
+  );
+}
+
+function LiveProfile({ email }: { email: string }) {
+  const bundle = useQuery({ queryKey: liveKeys.profile, queryFn: ({ signal }) => profileApi.get(signal) });
+  return (
+    <div className="space-y-4">
+      <nav aria-label="Profile sections" className="-mx-1 flex gap-1 overflow-x-auto pb-1">
+        {SECTIONS.map((s) => (
+          <a key={s.id} href={`#${s.id}`}
+             className="shrink-0 rounded-full border border-line/40 px-3 py-1.5 text-sm text-ink-muted hover:bg-surface-raised hover:text-ink">
+            {s.label}
+          </a>
+        ))}
+      </nav>
+      {bundle.isPending ? <LoadingState label="Loading your profile" />
+        : bundle.isError ? <ErrorState title="Couldn't load your profile" message={apiMessage(bundle.error)}
+                                       onRetry={() => bundle.refetch()} />
+        : (
+          <>
+            <PersonalProfileForm bundle={bundle.data} />
+            <PreferencesEditor saved={bundle.data.preferences ?? []} />
+            <AllergiesEditor saved={bundle.data.allergies ?? []} />
+          </>
+        )}
+      <TargetsManager />
+      <AccountSettings email={email} />
+    </div>
   );
 }
