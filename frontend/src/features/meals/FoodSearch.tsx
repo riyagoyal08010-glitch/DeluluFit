@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { PenLine, Search } from "lucide-react";
+import { PenLine, Search, Soup } from "lucide-react";
 import { useId, useState } from "react";
 
 import { Button } from "@/components/ui/Button";
@@ -70,19 +70,22 @@ export function FoodSearch({ onSelect, onManual, autoFocus = false }:
         <div className={stale ? "opacity-60 transition-opacity" : undefined} aria-busy={stale || search.isFetching}>
           {showingFor && showingFor !== query && <p className="mb-2 text-xs text-ink-muted">Showing results for “{showingFor}”…</p>}
           {results.length === 0 ? (
-            <p className="rounded-control border border-line/30 bg-canvas/40 p-3 text-sm text-ink-muted">
+            <p className="rounded-control border border-line/70 bg-sheet p-3 text-sm text-ink-muted">
               No foods match “{showingFor}”.
             </p>
           ) : (
-            <ul className="divide-y divide-line/30 overflow-hidden rounded-control border border-line/30" aria-label="Search results">
+            <ul className="divide-y divide-line/70 overflow-hidden rounded-control border border-line/70" aria-label="Search results">
               {results.map((hit) => {
                 const note = matchNote(hit);
                 return (
                   <li key={hit.id}>
                     <button type="button" onClick={() => onSelect(hit)}
-                            className="flex min-h-[52px] w-full items-center justify-between gap-3 bg-canvas/40 px-3 py-2.5
-                                       text-left hover:bg-surface-raised/60 focus-visible:shadow-focus">
-                      <span className="min-w-0">
+                            className="flex min-h-[56px] w-full items-center justify-between gap-3 bg-surface px-3 py-2.5
+                                       text-left hover:bg-surface-raised focus-visible:shadow-focus">
+                      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-control bg-accent-tint/70">
+                        <Soup className="h-5 w-5 text-accent" />
+                      </span>
+                      <span className="min-w-0 flex-1">
                         <span className="block truncate font-medium text-ink">{hit.canonical_name}</span>
                         <span className="block truncate text-xs text-ink-muted">
                           {[note, hit.category, DIET_LABELS[hit.diet_type]].filter(Boolean).join(" · ")}
