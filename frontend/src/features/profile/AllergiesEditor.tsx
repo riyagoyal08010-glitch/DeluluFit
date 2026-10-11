@@ -82,7 +82,7 @@ export function AllergiesEditor({ saved }: { saved: UserAllergy[] }) {
         {draft.length === 0 ? (
           <p className="text-sm text-ink-muted">No allergies listed.</p>
         ) : (
-          <ul className="divide-y divide-line/30 rounded-control border border-line/30" aria-label="Allergies list">
+          <ul className="divide-y divide-line/70 rounded-control border border-line/70" aria-label="Allergies list">
             {draft.map((d, i) => (
               <li key={keyOf(d)} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2">
                 <span className="min-w-0 text-sm text-ink">
@@ -93,7 +93,7 @@ export function AllergiesEditor({ saved }: { saved: UserAllergy[] }) {
                   <label className="sr-only" htmlFor={`sev-${i}`}>Severity for {describe(d)}</label>
                   <select id={`sev-${i}`} value={d.severity}
                           onChange={(e) => setDraft((all) => all.map((x, j) => (j === i ? { ...x, severity: e.target.value as AllergySeverity } : x)))}
-                          className="h-10 rounded-control border border-line/50 bg-canvas/60 px-2 text-sm text-ink focus-visible:shadow-focus">
+                          className="h-10 rounded-control border border-line/50 bg-surface px-2 text-sm text-ink focus-visible:shadow-focus">
                     {options(SEVERITY_LABELS).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                   <button type="button" aria-label={`Remove ${describe(d)}`} onClick={() => setDraft((all) => all.filter((_, j) => j !== i))}
