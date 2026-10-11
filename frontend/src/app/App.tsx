@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router-dom";
 
+import { ChaiIllustration } from "@/components/illustrations/Porcelain";
 import { AppShell } from "@/components/layout/AppShell";
 import { Brand } from "@/components/layout/Brand";
 import { ButtonLink } from "@/components/ui/Button";
@@ -20,7 +21,8 @@ export function NotFoundPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 text-center">
       <Brand />
-      <h1 className="mt-8 text-2xl font-semibold">Page not found</h1>
+      <div className="glass-card mt-8 w-48 rounded-card p-5"><ChaiIllustration /></div>
+      <h1 className="mt-8 text-3xl">Page <span className="font-semibold">not found</span></h1>
       <p className="mt-2 text-sm text-ink-muted">That address doesn't match anything in DeluluFit.</p>
       <ButtonLink to="/" className="mt-6">Go to the home page</ButtonLink>
     </main>
