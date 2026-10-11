@@ -17,7 +17,7 @@ import type { SessionResponse, SessionUser } from "@/types/api";
  */
 export type SessionState =
   | { status: "loading" }
-  | { status: "anonymous"; connectionError?: string }
+  | { status: "anonymous"; connectionError?: string; notice?: string }
   | { status: "authenticated"; user: SessionUser }
   | { status: "demo" };
 
@@ -28,6 +28,8 @@ interface SessionContextValue {
   logout: () => Promise<void>;
   enterDemo: () => void;
   exitDemo: () => void;
+  /** Forget the session locally (no API call): clears the CSRF token and every cached query. */
+  clearLocalSession: (notice?: string) => void;
 }
 
 const SessionContext = createContext<SessionContextValue | null>(null);
@@ -99,6 +101,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setCsrfToken(null);
       queryClient.clear();
       setState({ status: "demo" });
+    },
+    clearLocalSession: (notice?: string) => {
+      setCsrfToken(null);
+      queryClient.clear();
+      setState({ status: "anonymous", notice });
     },
     exitDemo: () => {
       writeDemoFlag(false);
