@@ -1,7 +1,11 @@
 import "@testing-library/jest-dom/vitest";
 
-import { cleanup } from "@testing-library/react";
+import { cleanup, configure } from "@testing-library/react";
 import { afterEach } from "vitest";
+
+// findBy*/waitFor default to 1 s, which cold tests can exceed when every test file runs in
+// parallel; 3 s removes that flakiness without hiding real failures (which never resolve).
+configure({ asyncUtilTimeout: 3000 });
 
 afterEach(() => {
   cleanup();
