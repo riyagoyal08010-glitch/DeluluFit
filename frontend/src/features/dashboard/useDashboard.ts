@@ -32,7 +32,7 @@ export function useDashboard(): {
   });
   const budget = useQuery({
     queryKey: [mode, "budget", "summary"],
-    queryFn: ({ signal }) => (isDemo ? Promise.resolve(demoBudget(date)) : budgetApi.summary(signal)),
+    queryFn: ({ signal }) => (isDemo ? Promise.resolve(demoBudget(date)) : budgetApi.summary({}, signal)),
   });
   return { isDemo, profile, today, budget };
 }
