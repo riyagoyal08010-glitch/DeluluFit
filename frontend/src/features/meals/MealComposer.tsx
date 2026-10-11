@@ -115,7 +115,7 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
   const error = create.isError ? describeMealError(create.error) : null;
 
   return (
-    <Card aria-labelledby="log-title">
+    <Card aria-labelledby="log-title" surface="solid">
       <CardHeader id="log-title" title="Log a meal"
                   description="Record what you actually ate, from the mess or anywhere else." />
 
@@ -168,7 +168,7 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
             {items.length === 0 ? (
               <EmptyState icon={PenLine} title="No foods added yet">Add each thing you ate, with how much.</EmptyState>
             ) : (
-              <ul className="divide-y divide-line/30 rounded-control border border-line/30">
+              <ul className="divide-y divide-line/70 rounded-control border border-line/70">
                 {items.map((item) => (
                   <li key={item.key} className="flex items-center justify-between gap-3 px-3 py-2.5">
                     <div className="min-w-0">
