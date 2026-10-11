@@ -33,7 +33,7 @@ export function ManualItemForm({ initial, submitLabel, onSubmit, onCancel, busy 
 
   return (
     <form onSubmit={submit} noValidate className="space-y-4" aria-label="Food not in the list">
-      <p className="rounded-control border border-line/30 bg-canvas/40 p-3 text-sm text-ink-muted">
+      <p className="rounded-control border border-line/70 bg-sheet p-3 text-sm text-ink-muted">
         This dish isn't in the food list, so DeluluFit can't estimate its nutrition. It will be saved by name and
         shown as “no data” in your totals rather than counted as zero.
       </p>
