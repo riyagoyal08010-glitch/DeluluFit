@@ -12,7 +12,7 @@ export function NutrientTotalsGrid({ totals }: { totals: Totals }) {
         const t = totals.nutrients[k];
         const items = t.known_items + t.missing_items;
         return (
-          <div key={k} className="rounded-control border border-line/30 bg-canvas/40 p-3">
+          <div key={k} className="rounded-control border border-line/70 bg-sheet p-3">
             <dt className="text-xs font-medium text-ink-muted">{NUTRIENT_LABELS[k]}</dt>
             <dd className="metric mt-1 text-lg font-semibold text-ink">
               {t.status === "incomplete" && <span className="sr-only">At least </span>}
