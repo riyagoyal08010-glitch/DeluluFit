@@ -88,7 +88,7 @@ export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
   };
 
   return (
-    <Card aria-labelledby="personal-title" id="personal">
+    <Card aria-labelledby="personal-title" id="personal" surface="solid">
       <CardHeader id="personal-title" title="Personal profile"
                   description={bundle.profile ? undefined : "You haven't saved a profile yet. Only your name is required."} />
       <form onSubmit={onSubmit} noValidate className="space-y-4" aria-label="Personal profile">
@@ -99,7 +99,7 @@ export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
                   hint="Used to describe your choices; it doesn't filter foods yet." {...register("dietaryPattern")} />
         </div>
 
-        <fieldset className="space-y-3 rounded-control border border-line/30 p-4">
+        <fieldset className="space-y-3 rounded-control border border-line/70 p-4">
           <legend className="px-1 text-sm font-medium">Body and activity <span className="font-normal text-ink-muted">(optional)</span></legend>
           <p className="text-xs text-ink-muted">You can leave these empty. DeluluFit doesn't use them for any calculation yet.</p>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -151,7 +151,7 @@ function InstitutionPicker({ institution, institutionId, hostelId, onInstitution
                              queryFn: ({ signal }) => profileApi.hostels(institutionId, signal) });
 
   return (
-    <fieldset className="space-y-3 rounded-control border border-line/30 p-4">
+    <fieldset className="space-y-3 rounded-control border border-line/70 p-4">
       <legend className="px-1 text-sm font-medium">College and hostel <span className="font-normal text-ink-muted">(optional)</span></legend>
       {institution && !searching ? (
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -167,10 +167,10 @@ function InstitutionPicker({ institution, institutionId, hostelId, onInstitution
           {results.isError && <ErrorState message={apiMessage(results.error)} onRetry={() => results.refetch()} />}
           {results.data && results.data.length === 0 && <p className="text-sm text-ink-muted">No colleges match “{q}”. Adding new ones isn't available here yet.</p>}
           {results.data && results.data.length > 0 && (
-            <ul className="divide-y divide-line/30 rounded-control border border-line/30" aria-label="Colleges">
+            <ul className="divide-y divide-line/70 rounded-control border border-line/70" aria-label="Colleges">
               {results.data.map((i) => (
                 <li key={i.id}>
-                  <button type="button" className="w-full px-3 py-2.5 text-left text-sm hover:bg-surface-raised/60"
+                  <button type="button" className="w-full px-3 py-2.5 text-left text-sm hover:bg-surface-raised"
                           onClick={() => { onInstitution(i); setSearching(false); setText(""); }}>
                     {i.name}{i.city ? <span className="text-ink-muted">, {i.city}</span> : null}
                   </button>
