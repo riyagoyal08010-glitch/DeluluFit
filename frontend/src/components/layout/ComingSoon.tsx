@@ -10,7 +10,7 @@ export function ComingSoon({ feature, plans, tryDemo = true }: { feature: string
   return (
     <Card>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-        <div className="w-fit rounded-full border border-line/40 bg-surface-raised/60 p-3">
+        <div className="w-fit rounded-full bg-accent-tint p-3.5">
           <Hammer className="h-6 w-6 text-accent" aria-hidden="true" />
         </div>
         <div>
