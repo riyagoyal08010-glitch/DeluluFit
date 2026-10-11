@@ -15,4 +15,6 @@ tests together; nothing is wired to an endpoint that hasn't been checked.
 | 7 | Mess menu upload/review/confirm | backend menu API (not built) | Upload with validation and progress, review/correct, confirm, calendar |
 | 8 | Suggestions | backend rules (not built) | Explainable, dismissible, persisted |
 | 9 | Profile & settings, account deletion, privacy | 2 | **Done** (live API, 22 tests): profile (full-replacement save), preferences, allergies, targets with provenance and history, change password, sign out, account deletion with cache clearing. College/hostel creation and data export not built |
+| R | Light editorial redesign (all pages) | 1–9 | Done, then superseded by G (F29 → F30) |
+| G | Premium glass redesign (all pages) | R | **Done** (F30): glass tokens and variants, Inter, ImagePanel, DayStrip, glass shell with floating bottom nav; Dashboard, Meals, Nutrition, Budget, Profile, Login/Register, Landing, Not found, Menu, Suggestions migrated; 107 tests, type-check, build and contrast audit pass. **Not visually checked in a browser** (no browser tool available) |
 | 10 | End-to-end (Playwright) and accessibility pass | 3–9 | 16-step journey from the product brief; keyboard and screen-reader checks |
