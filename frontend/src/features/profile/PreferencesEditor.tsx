@@ -71,7 +71,7 @@ export function PreferencesEditor({ saved }: { saved: FoodPreference[] }) {
         {draft.length === 0 ? (
           <p className="text-sm text-ink-muted">No food preferences listed.</p>
         ) : (
-          <ul className="divide-y divide-line/30 rounded-control border border-line/30" aria-label="Food preferences list">
+          <ul className="divide-y divide-line/70 rounded-control border border-line/70" aria-label="Food preferences list">
             {draft.map((d, i) => {
               const savedRow = saved.find((s) => looseKey(s.label) === looseKey(d.label));
               return (
@@ -84,7 +84,7 @@ export function PreferencesEditor({ saved }: { saved: FoodPreference[] }) {
                     <label className="sr-only" htmlFor={`pref-${i}`}>Preference for {d.label}</label>
                     <select id={`pref-${i}`} value={d.preference}
                             onChange={(e) => setDraft((all) => all.map((x, j) => (j === i ? { ...x, preference: e.target.value as PreferenceKind } : x)))}
-                            className="h-10 rounded-control border border-line/50 bg-canvas/60 px-2 text-sm text-ink focus-visible:shadow-focus">
+                            className="h-10 rounded-control border border-line/50 bg-surface px-2 text-sm text-ink focus-visible:shadow-focus">
                       {options(PREFERENCE_LABELS).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                     </select>
                     <button type="button" aria-label={`Remove ${d.label}`} onClick={() => setDraft((all) => all.filter((_, j) => j !== i))}
