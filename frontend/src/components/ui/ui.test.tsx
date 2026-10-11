@@ -8,6 +8,11 @@ import { Dialog } from "./Dialog";
 import { Badge, EmptyState, ErrorState, Progress, Tooltip } from "./Feedback";
 import { Checkbox, Input, Select } from "./Field";
 import { Soup } from "lucide-react";
+import { MemoryRouter } from "react-router-dom";
+
+import { Card } from "./Card";
+import { DayStrip } from "./DayStrip";
+import { ImagePanel } from "./ImagePanel";
 
 describe("Button", () => {
   it("is disabled and announces busy while loading", async () => {
@@ -120,5 +125,35 @@ describe("feedback components", () => {
     await userEvent.click(screen.getByRole("button", { name: "Try again" }));
     expect(retry).toHaveBeenCalled();
     expect(screen.getByText("Partial")).toBeInTheDocument();
+  });
+});
+
+describe("glass design components", () => {
+  it("applies the requested surface material", () => {
+    render(<><Card aria-label="a">x</Card><Card aria-label="b" surface="solid">y</Card><Card aria-label="c" raised>z</Card></>);
+    expect(screen.getByRole("region", { name: "a" }).className).toContain("glass-card");
+    expect(screen.getByRole("region", { name: "b" }).className).toContain("surface-solid");
+    expect(screen.getByRole("region", { name: "c" }).className).toContain("glass-elevated");
+  });
+
+  it("keeps image-panel artwork decorative and its content accessible", () => {
+    render(<ImagePanel scene="bowl" aria-label="Hero"><h2>Readable title</h2></ImagePanel>);
+    const panel = screen.getByRole("region", { name: "Hero" });
+    expect(screen.getByRole("heading", { name: "Readable title" })).toBeInTheDocument();
+    // Every SVG in the panel is hidden from assistive technology.
+    for (const svg of panel.querySelectorAll("svg")) expect(svg.closest("[aria-hidden='true']")).not.toBeNull();
+  });
+
+  it("links past days and today to meal history, and never links future days", () => {
+    render(<MemoryRouter><DayStrip today="2026-10-08" hrefFor={(d) => `/history/${d}`} /></MemoryRouter>);
+    // 8 Oct 2026 is a Thursday: the week runs Mon 5 – Sun 11.
+    const strip = screen.getByRole("navigation", { name: "This week" });
+    const links = Array.from(strip.querySelectorAll("a"));
+    expect(links.map((a) => a.getAttribute("href"))).toEqual(
+      ["/history/2026-10-05", "/history/2026-10-06", "/history/2026-10-07", "/history/2026-10-08"]);
+    const today = screen.getByRole("link", { name: /Thursday, 8 October, today: meals/ });
+    expect(today).toHaveAttribute("aria-current", "date");
+    expect(screen.getByLabelText("Friday, 9 October (upcoming)").tagName).toBe("SPAN");
+    expect(screen.queryByRole("link", { name: /Sunday, 11 October/ })).not.toBeInTheDocument();
   });
 });
