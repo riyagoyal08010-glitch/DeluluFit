@@ -68,7 +68,7 @@ export function TransactionForm({ mode, currency, busy, error, onSubmit, onCance
     <form onSubmit={submit} noValidate className="space-y-4" aria-label={title}>
       <h3 className="text-base font-semibold">{title}</h3>
       {refundOf && (
-        <p className="rounded-control border border-line/30 bg-canvas/40 p-3 text-sm text-ink-muted">
+        <p className="rounded-control border border-line/70 bg-sheet p-3 text-sm text-ink-muted">
           Refund for “{refundOf.description ?? CATEGORY_LABELS[refundOf.category]}”, {formatMoney(refundOf.amount, refundOf.currency)} on{" "}
           {formatLongDate(refundOf.occurred_on)}. Refunds for an expense can't add up to more than the expense.
         </p>
