@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/Feedback";
 import { Checkbox, Input } from "@/components/ui/Field";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { ApiError } from "@/lib/api/client";
 
 import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "./schemas";
@@ -17,14 +18,24 @@ import { useSession } from "./session";
 function AuthLayout({ title, subtitle, children, footer }:
   { title: string; subtitle: string; children: ReactNode; footer: ReactNode }) {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-4 py-10">
-      <Link to="/" className="mb-8 self-start rounded-control"><Brand /></Link>
-      <Card>
-        <h1 className="text-2xl font-semibold">{title}</h1>
-        <p className="mb-6 mt-1 text-sm text-ink-muted">{subtitle}</p>
-        {children}
-      </Card>
-      <p className="mt-6 text-center text-sm text-ink-muted">{footer}</p>
+    <main className="mx-auto grid min-h-screen w-full max-w-6xl items-center gap-8 px-4 py-8 lg:grid-cols-2 lg:px-8">
+      {/* Cinematic panel (large screens only): decorative, so hidden from assistive tech. */}
+      <ImagePanel scene="bowl" as="div" aria-hidden="true" className="hidden h-full max-h-[44rem] lg:block"
+                  artClassName="md:top-auto md:bottom-6 md:right-6 md:w-[70%] md:translate-y-0">
+        <div className="p-10">
+          <p className="text-4xl font-light leading-tight">Eat, log,<br /><span className="font-semibold">and know.</span></p>
+          <p className="mt-4 max-w-xs text-sm text-white/90">Estimates with sources. Gaps marked, never guessed.</p>
+        </div>
+      </ImagePanel>
+      <div className="mx-auto w-full max-w-md">
+        <Link to="/" className="mb-8 inline-block rounded-control"><Brand /></Link>
+        <Card raised>
+          <h1 className="text-3xl leading-tight">{title}</h1>
+          <p className="mb-7 mt-2 text-sm text-ink-muted">{subtitle}</p>
+          {children}
+        </Card>
+        <p className="mt-6 text-center text-sm text-ink-muted">{footer}</p>
+      </div>
     </main>
   );
 }
@@ -32,7 +43,7 @@ function AuthLayout({ title, subtitle, children, footer }:
 function PasswordToggle({ shown, onToggle }: { shown: boolean; onToggle: () => void }) {
   return (
     <button type="button" onClick={onToggle} aria-label={shown ? "Hide password" : "Show password"}
-            aria-pressed={shown} className="rounded-control p-2 text-ink-muted hover:text-ink">
+            aria-pressed={shown} className="rounded-full p-2 text-ink-muted hover:text-accent">
       {shown ? <EyeOff className="h-5 w-5" aria-hidden="true" /> : <Eye className="h-5 w-5" aria-hidden="true" />}
     </button>
   );
@@ -82,7 +93,7 @@ export function LoginPage() {
 
   return (
     <AuthLayout title="Welcome back" subtitle="Sign in to see your meals and spending."
-                footer={<>New to DeluluFit? <Link className="text-accent hover:underline" to="/register">Create an account</Link></>}>
+                footer={<>New to DeluluFit? <Link className="font-medium text-accent hover:underline" to="/register">Create an account</Link></>}>
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {state.status === "anonymous" && state.notice && <p role="status" className="rounded-control border border-success/30 bg-success/10 p-3 text-sm text-success">{state.notice}</p>}
         {state.status === "anonymous" && state.connectionError && !formError && (
@@ -129,7 +140,7 @@ export function RegisterPage() {
 
   return (
     <AuthLayout title="Create your account" subtitle="Log meals, see estimates and track food spending."
-                footer={<>Already have an account? <Link className="text-accent hover:underline" to="/login">Sign in</Link></>}>
+                footer={<>Already have an account? <Link className="font-medium text-accent hover:underline" to="/login">Sign in</Link></>}>
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {formError && <ErrorState title="Couldn't create your account" message={formError} />}
         <Input label="What should we call you?" optional autoComplete="nickname" error={errors.displayName?.message}
