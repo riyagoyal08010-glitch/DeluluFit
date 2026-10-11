@@ -10,9 +10,17 @@ import { cn } from "@/lib/cn";
 import { Brand } from "./Brand";
 import { NAV_ITEMS } from "./navigation";
 
+/*
+ * Navigation uses one set of destinations everywhere (NAV_ITEMS):
+ *   desktop  floating glass sidebar with every destination
+ *   mobile   floating circular bottom bar with the five primary destinations,
+ *            plus a menu drawer (top bar) with every destination
+ * The active destination is always a filled slate shape, as in the reference.
+ */
+
 function navClass(isActive: boolean): string {
-  return cn("flex items-center gap-3 rounded-control px-3 py-2.5 text-sm font-medium transition-colors",
-            isActive ? "bg-surface-raised text-ink" : "text-ink-muted hover:bg-surface-raised/50 hover:text-ink");
+  return cn("flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-medium transition-colors",
+            isActive ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:bg-white/70 hover:text-ink");
 }
 
 function NavList({ onNavigate }: { onNavigate?: () => void }) {
@@ -21,12 +29,8 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
       {NAV_ITEMS.map(({ to, label, icon: Icon }) => (
         <li key={to}>
           <NavLink to={to} end={to === "/app"} onClick={onNavigate} className={({ isActive }) => navClass(isActive)}>
-            {({ isActive }) => (
-              <>
-                <Icon className={cn("h-5 w-5", isActive && "text-accent")} aria-hidden="true" />
-                {label}
-              </>
-            )}
+            <Icon className="h-5 w-5" aria-hidden="true" />
+            {label}
           </NavLink>
         </li>
       ))}
@@ -54,7 +58,7 @@ function SessionFooter() {
 
 export function DesktopSidebar() {
   return (
-    <aside className="glass fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-line/30 px-4 py-6 lg:flex"
+    <aside className="glass-elevated fixed bottom-4 left-4 top-4 z-30 hidden w-60 flex-col rounded-card px-4 py-6 lg:flex"
            aria-label="Sidebar">
       <Link to="/app" className="mb-8 rounded-control px-2"><Brand /></Link>
       <nav aria-label="Main" className="flex-1"><NavList /></nav>
@@ -63,19 +67,20 @@ export function DesktopSidebar() {
   );
 }
 
-/** Bottom tab bar for phones and tablets: the five most used destinations. */
+/** Floating circular bottom bar for phones and tablets: the five primary destinations. */
 export function MobileTabBar() {
   return (
     <nav aria-label="Quick navigation"
-         className="glass fixed inset-x-0 bottom-0 z-30 border-t border-line/30 pb-[env(safe-area-inset-bottom)] lg:hidden">
-      <ul className="mx-auto grid max-w-lg grid-cols-5">
+         className="pointer-events-none fixed inset-x-0 bottom-0 z-30 flex justify-center px-4 pb-[max(env(safe-area-inset-bottom),0.75rem)] lg:hidden">
+      <ul className="glass-elevated pointer-events-auto flex items-center gap-1.5 rounded-full p-1.5">
         {NAV_ITEMS.filter((i) => i.primary).map(({ to, label, icon: Icon }) => (
           <li key={to}>
-            <NavLink to={to} end={to === "/app"}
-                     className={({ isActive }) => cn("flex min-h-[56px] flex-col items-center justify-center gap-0.5 text-[11px] font-medium",
-                                                     isActive ? "text-accent" : "text-ink-muted hover:text-ink")}>
+            <NavLink to={to} end={to === "/app"} title={label}
+                     className={({ isActive }) => cn("grid h-12 w-12 place-items-center rounded-full transition-colors",
+                                                     isActive ? "bg-action text-ink-inverse shadow-pill"
+                                                              : "bg-white/70 text-ink hover:bg-white")}>
               <Icon className="h-5 w-5" aria-hidden="true" />
-              {label}
+              <span className="sr-only">{label}</span>
             </NavLink>
           </li>
         ))}
@@ -97,13 +102,13 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-40 lg:hidden">
-      <div className="absolute inset-0 bg-canvas/80" aria-hidden="true" onClick={onClose} />
+      <div className="absolute inset-0 bg-[rgb(36_55_70/0.18)] backdrop-blur-sm" aria-hidden="true" onClick={onClose} />
       <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu"
-           className="absolute inset-y-0 left-0 flex w-72 max-w-[85vw] flex-col border-r border-line/30 bg-surface px-4 py-5">
+           className="glass-elevated absolute inset-y-2 left-2 flex w-72 max-w-[85vw] flex-col rounded-card px-4 py-5">
         <div className="mb-6 flex items-center justify-between">
           <Brand />
           <button ref={closeButton} type="button" onClick={onClose} aria-label="Close menu"
-                  className="rounded-control p-2 text-ink-muted hover:bg-surface-raised hover:text-ink">
+                  className="rounded-full p-2 text-ink-muted hover:bg-white/70 hover:text-ink">
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
@@ -117,13 +122,13 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
 export function DemoBanner() {
   const { exitDemo } = useSession();
   return (
-    <div role="status" className="border-b border-warning/30 bg-warning/10 px-4 py-2 text-sm text-warning">
-      <div className="mx-auto flex max-w-content flex-wrap items-center justify-between gap-2">
+    <div role="status" className="mx-auto max-w-content px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="glass-subtle flex flex-wrap items-center justify-between gap-2 rounded-card border-warning/30 px-4 py-2.5 text-sm text-warning">
         <span className="flex items-center gap-2">
           <FlaskConical className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span><strong className="font-semibold">Demo mode.</strong> Everything here is sample data. Nothing is saved and this is not an account.</span>
         </span>
-        <button type="button" onClick={exitDemo} className="rounded-control px-2 py-1 font-medium underline-offset-2 hover:underline">
+        <button type="button" onClick={exitDemo} className="rounded-full px-3 py-1 font-medium underline-offset-2 hover:bg-white/60 hover:underline">
           Exit demo
         </button>
       </div>
@@ -141,22 +146,22 @@ export function AppShell() {
   if (state.status === "anonymous") return <Navigate to="/login" replace state={{ from: location.pathname }} />;
 
   return (
-    <div className="min-h-screen lg:pl-64">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-accent focus:px-4 focus:py-2 focus:text-ink-inverse">
+    <div className="min-h-screen lg:pl-[17rem]">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-action focus:px-4 focus:py-2 focus:text-ink-inverse">
         Skip to content
       </a>
       <DesktopSidebar />
-      <header className="glass sticky top-0 z-20 flex items-center justify-between border-b border-line/30 px-4 py-3 lg:hidden">
+      <header className="glass sticky top-0 z-20 flex items-center justify-between border-b border-white/60 px-4 py-2.5 lg:hidden">
+        <Link to="/app" className="rounded-control"><Brand /></Link>
         <button type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu" aria-expanded={menuOpen}
-                aria-controls="mobile-menu" className="rounded-control p-2 text-ink-muted hover:bg-surface-raised hover:text-ink">
+                aria-controls="mobile-menu" className="grid h-10 w-10 place-items-center rounded-full bg-white/70 text-ink hover:bg-white">
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
-        <Link to="/app" className="rounded-control"><Brand /></Link>
-        <span className="w-9" aria-hidden="true" />
       </header>
       <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} />
       {state.status === "demo" && <DemoBanner />}
-      <main id="main" tabIndex={-1} className="mx-auto max-w-content px-4 pb-28 pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pb-12">
+      {/* Bottom padding leaves room for the floating tab bar so it never covers content. */}
+      <main id="main" tabIndex={-1} className="mx-auto max-w-content px-4 pb-32 pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pb-12">
         <Outlet />
       </main>
       <MobileTabBar />
