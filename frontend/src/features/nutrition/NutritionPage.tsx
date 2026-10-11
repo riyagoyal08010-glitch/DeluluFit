@@ -46,13 +46,14 @@ function DemoTrend() {
             <CartesianGrid vertical={false} stroke="rgb(var(--color-line) / 0.35)" />
             <XAxis dataKey="label" tickLine={false} axisLine={false} tick={{ fill: "rgb(var(--color-text-muted))", fontSize: 12 }} />
             <YAxis tickLine={false} axisLine={false} width={48} tick={{ fill: "rgb(var(--color-text-muted))", fontSize: 12 }} />
-            <ChartTooltip cursor={{ fill: "rgb(var(--color-surface-raised) / 0.5)" }}
-                          contentStyle={{ background: "rgb(var(--color-surface-raised))", border: "none", borderRadius: 12 }}
+            <ChartTooltip cursor={{ fill: "rgb(255 255 255 / 0.45)" }}
+                          contentStyle={{ background: "rgb(var(--color-surface))", border: "1px solid rgb(var(--color-line))", borderRadius: 14,
+                                          boxShadow: "0 12px 30px -16px rgb(31 52 89 / 0.3)", color: "rgb(var(--color-text-primary))" }}
                           formatter={(_v, _n, p) => [formatAmount((p.payload as { display: string | null }).display, unit),
                                                      NUTRIENT_LABELS[nutrient]]} />
             <Bar dataKey="value" radius={[6, 6, 0, 0]}>
               {days.map((d) => (
-                <Cell key={d.date} fill={d.status === "incomplete" ? "rgb(var(--color-accent) / 0.4)" : "rgb(var(--color-accent))"} />
+                <Cell key={d.date} fill={d.status === "incomplete" ? "rgb(var(--color-accent-light))" : "rgb(var(--color-accent-soft))"} />
               ))}
             </Bar>
           </BarChart>
@@ -64,7 +65,7 @@ function DemoTrend() {
         <thead className="text-xs text-ink-muted"><tr><th className="py-1 text-left font-medium">Day</th>
           <th className="py-1 text-right font-medium">{NUTRIENT_LABELS[nutrient]}</th>
           <th className="py-1 text-right font-medium">Completeness</th></tr></thead>
-        <tbody className="divide-y divide-line/20">
+        <tbody className="divide-y divide-line/60">
           {days.map((d) => (
             <tr key={d.date}>
               <td className="py-1.5">{d.label}</td>
