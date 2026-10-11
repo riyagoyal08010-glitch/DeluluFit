@@ -32,7 +32,7 @@ const REASON_TEXT: Record<string, string> = {
 function PreviewPanel({ preview }: { preview: ItemPreview }) {
   if (preview.method === "unavailable") {
     return (
-      <p className="flex items-start gap-2 rounded-control border border-line/30 bg-canvas/40 p-3 text-sm text-ink-muted">
+      <p className="flex items-start gap-2 rounded-control border border-line/70 bg-sheet p-3 text-sm text-ink-muted">
         <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         {REASON_TEXT[preview.reason ?? ""] ?? "An estimate isn't available for this portion."}
       </p>
@@ -40,7 +40,7 @@ function PreviewPanel({ preview }: { preview: ItemPreview }) {
   }
   const partial = Object.values(preview.nutrients).some((n) => n.status !== "estimated");
   return (
-    <div className="space-y-3 rounded-control border border-line/30 bg-canvas/40 p-3">
+    <div className="space-y-3 rounded-control border border-line/70 bg-sheet p-3">
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-muted">
         <span>About {Number(preview.estimated_mass_g)} g · estimate, not a measurement</span>
         {/* Confidence combines how well the food matches and how the portion was given (grams vs. a typical serving). */}
