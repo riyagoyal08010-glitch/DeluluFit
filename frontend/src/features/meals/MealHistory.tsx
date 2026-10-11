@@ -99,7 +99,7 @@ export function MealCard({ meal, timeZone }: { meal: Meal; timeZone?: string }) 
   const title = `${MEAL_LABELS[meal.meal_type]} · ${formatTime(meal.consumed_at, timeZone)}`;
 
   return (
-    <Card aria-labelledby={`meal-${meal.id}`}>
+    <Card aria-labelledby={`meal-${meal.id}`} surface="solid">
       <CardHeader id={`meal-${meal.id}`} title={title}
                   description={[meal.location_note, meal.note].filter(Boolean).join(" · ") || undefined}
                   action={mode.kind === "view" && (
@@ -156,7 +156,7 @@ export function MealCard({ meal, timeZone }: { meal: Meal; timeZone?: string }) 
           {meal.items.length === 0 ? (
             <p className="text-sm text-ink-muted">This meal has no foods yet.</p>
           ) : (
-            <ul className="divide-y divide-line/30">
+            <ul className="divide-y divide-line/70">
               {meal.items.map((item) => (
                 <li key={item.id} className="py-3">
                   <div className="flex flex-wrap items-start justify-between gap-2">
@@ -180,7 +180,7 @@ export function MealCard({ meal, timeZone }: { meal: Meal; timeZone?: string }) 
               ))}
             </ul>
           )}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line/30 pt-4">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line/70 pt-4">
             <p className="text-xs text-ink-muted">
               {meal.totals.note ?? (meal.items.length ? "All items have data for these nutrients." : "")}
             </p>
