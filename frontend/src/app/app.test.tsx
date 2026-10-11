@@ -73,7 +73,8 @@ describe("dashboard", () => {
     renderApp("/app");
     expect(await screen.findByText("No meals logged today")).toBeInTheDocument();
     expect(await screen.findByText("No spending recorded yet")).toBeInTheDocument();
-    expect(screen.getByText("No menu yet")).toBeInTheDocument();
+    // Live accounts have no menu data yet, so no menu card is shown (only the "View menu" action).
+    expect(screen.queryByRole("region", { name: /Today's mess menu/ })).not.toBeInTheDocument();
     expect(screen.queryByText("Demo data")).not.toBeInTheDocument();
     expect(screen.queryByText(/Demo mode/)).not.toBeInTheDocument();
     // Quick actions are real links.
