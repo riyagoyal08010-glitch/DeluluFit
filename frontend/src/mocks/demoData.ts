@@ -126,6 +126,7 @@ export function demoBudget(date: string): BudgetSummary {
   return {
     period: "daily", start: date, end: date, currency: "INR", budget_amount: "250.00", expenses: "90.00",
     refunds: "10.00", net_spending: "80.00", remaining: "170.00", utilization: "0.3200", over_budget: false,
+    excluded_other_currency: 0,
     transaction_count: 3, has_budget: true, by_category: { outside_food: "50.00", beverages: "30.00", snacks: "0.00" },
     explanation: "Net spending = expenses - refunds for transactions dated inside this period.",
   };
