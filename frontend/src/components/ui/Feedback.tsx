@@ -7,8 +7,8 @@ import { Button } from "./Button";
 
 type Tone = "neutral" | "accent" | "success" | "warning" | "danger" | "info";
 const tones: Record<Tone, string> = {
-  neutral: "bg-surface-raised text-ink-muted border-line/50",
-  accent: "bg-accent/10 text-accent border-accent/30",
+  neutral: "bg-white/60 text-ink-muted border-white/80",
+  accent: "bg-accent-tint text-accent border-accent/20",
   success: "bg-success/10 text-success border-success/30",
   warning: "bg-warning/10 text-warning border-warning/30",
   danger: "bg-danger/10 text-danger border-danger/30",
@@ -46,8 +46,8 @@ export function Tooltip({ label, content, children }: { label: string; content: 
       </button>
       {open && (
         <span id={id} role="tooltip"
-              className="absolute bottom-full left-1/2 z-40 mb-2 w-64 -translate-x-1/2 rounded-control border
-                         border-line/50 bg-surface-raised px-3 py-2 text-xs leading-snug text-ink shadow-card">
+              className="glass-elevated absolute bottom-full left-1/2 z-40 mb-2 w-64 -translate-x-1/2 rounded-control
+                         px-3 py-2 text-xs leading-snug text-ink">
           {content}
         </span>
       )}
@@ -60,9 +60,9 @@ export function Progress({ value, max = 1, label, tone = "accent" }:
   const pct = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
   return (
     <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100}
-         aria-valuenow={Math.round(pct)} className="h-2 w-full overflow-hidden rounded-full bg-surface-raised">
+         aria-valuenow={Math.round(pct)} className="h-2 w-full overflow-hidden rounded-full bg-white/70 ring-1 ring-inset ring-line/60">
       <div className={cn("h-full rounded-full transition-[width] duration-500",
-                         tone === "warning" ? "bg-warning" : "bg-accent")}
+                         tone === "warning" ? "bg-warning" : "bg-action")}
            style={{ width: `${pct}%` }} />
     </div>
   );
@@ -78,17 +78,17 @@ export function LoadingState({ label = "Loading" }: { label?: string }) {
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div aria-hidden="true" className={cn("animate-pulse rounded-control bg-surface-raised/70", className)} />;
+  return <div aria-hidden="true" className={cn("animate-pulse rounded-control bg-surface-raised", className)} />;
 }
 
 export function EmptyState({ icon: Icon, title, children, action }:
   { icon: LucideIcon; title: string; children?: ReactNode; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center px-4 py-8 text-center">
-      <div className="mb-3 rounded-full border border-line/40 bg-surface-raised/60 p-3">
+      <div className="mb-3 rounded-full bg-accent-tint p-3.5">
         <Icon className="h-6 w-6 text-accent" aria-hidden="true" />
       </div>
-      <h3 className="text-base font-semibold">{title}</h3>
+      <h3 className="text-base font-medium">{title}</h3>
       {children && <div className="mt-1 max-w-sm text-sm text-ink-muted">{children}</div>}
       {action && <div className="mt-4">{action}</div>}
     </div>
@@ -98,7 +98,7 @@ export function EmptyState({ icon: Icon, title, children, action }:
 export function ErrorState({ title = "Something went wrong", message, onRetry }:
   { title?: string; message: string; onRetry?: () => void }) {
   return (
-    <div role="alert" className="flex flex-col items-start gap-3 rounded-control border border-danger/30
+    <div role="alert" className="flex flex-col items-start gap-3 rounded-card border border-danger/25
                                  bg-danger/5 p-4 sm:flex-row sm:items-center">
       <AlertTriangle className="h-5 w-5 shrink-0 text-danger" aria-hidden="true" />
       <div className="min-w-0 flex-1">
@@ -111,12 +111,12 @@ export function ErrorState({ title = "Something went wrong", message, onRetry }:
 }
 
 export function PageHeader({ title, description, actions }:
-  { title: string; description?: ReactNode; actions?: ReactNode }) {
+  { title: ReactNode; description?: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-6 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <h1 className="text-2xl font-semibold sm:text-3xl">{title}</h1>
-        {description && <p className="mt-1 max-w-2xl text-sm text-ink-muted sm:text-base">{description}</p>}
+        <h1 className="text-[1.875rem] leading-tight sm:text-[2.5rem]">{title}</h1>
+        {description && <p className="mt-2 max-w-2xl text-sm text-ink-muted sm:text-base">{description}</p>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}
     </div>
