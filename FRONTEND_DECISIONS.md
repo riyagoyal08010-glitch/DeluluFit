@@ -104,3 +104,46 @@ Date and time inputs are interpreted in the device's timezone and sent with
 its UTC offset (the backend requires an offset and rejects future times).
 The server groups meals by the profile timezone; the mismatch case is a
 known limitation.
+
+## F18. Nutrition analytics show only what the backend computes
+The Nutrition page uses `/meals/day` (one day, with meals and sources) and
+`/nutrition/summary` (7 or 30 days; the backend allows up to 92). The frontend
+does not compute averages or sums: with partial days an average would
+mislead, and nutrition arithmetic belongs to the backend. Charts plot the
+server's display values; a day with nothing known is a gap, never a zero bar.
+
+## F19. "Today" comes from the server
+When no date is chosen, the page asks the backend for "today", which it
+resolves in the profile timezone. Navigating moves from the date the server
+returned, so device and profile timezones can't silently shift the window.
+Period navigation moves the end date by the full period length, so windows
+never overlap.
+
+## F20. Targets are shown per day, as the student's own numbers
+`GET /targets` returns daily targets (the backend's 1200 kcal floor for
+self-set energy makes them daily amounts). The page shows the target in effect on the
+selected day next to that day's recorded estimate, with its source and
+dates. Targets are never multiplied across periods, never invented, and no
+"met / not met" judgement is made. Setting targets in the UI is not built
+yet; the empty state says so.
+
+## F21. Money stays a decimal string
+Amounts are validated as strings (at most 10 integer digits and 2 decimal
+places, matching NUMERIC(12, 2)) and sent exactly as typed. The frontend
+never adds, subtracts or converts money: every total, remainder and
+utilisation comes from `GET /budget/summary`. "Over budget" wording strips the
+sign from the server's string instead of computing it. `Number()` is used
+only to format for display and to size bars.
+
+## F22. Budget data shares one cache prefix
+All budget queries (summary, overview, transactions, trend) and the
+dashboard's budget card live under `["live","budget"]`, so a single
+invalidation after any budget or transaction change refreshes everything.
+Deleting a meal also invalidates budget data, because the server unlinks
+(and keeps) expenses that pointed at that meal.
+
+## F23. Tests use production cache settings
+The test QueryClient uses the same 30 s staleTime as production (only retries
+are disabled), so tests that check refresh-after-mutation fail if an
+invalidation is missing. Testing Library's async timeout is 3 s because cold
+tests can exceed the 1 s default when all test files run in parallel.
