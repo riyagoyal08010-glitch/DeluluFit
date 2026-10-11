@@ -17,7 +17,7 @@ limit supply-chain risk. Recharts 2.x is no longer actively developed
 only), `src/test` (setup, helpers, fixtures). No component library: the
 handful of primitives needed is small and fits the visual direction.
 
-## F3. Design tokens live in one place
+## F3. Design tokens live in one place (palette superseded by F29)
 Colours are CSS variables in `src/styles/index.css` (space-separated RGB) and
 exposed to Tailwind with semantic names (`canvas`, `surface`, `surface-raised`,
 `ink`, `ink-muted`, `accent`, `success`, `warning`, `danger`, `info`, `line`).
@@ -66,11 +66,11 @@ equivalent data table for screen readers. The page is lazy-loaded so the
 charting library (~385 kB) isn't in the main bundle.
 
 ## F11. Navigation
-Desktop (≥ 1024 px): fixed sidebar with all destinations. Smaller screens:
+Desktop (≥ 1024 px): floating sidebar card with all destinations (see F29). Smaller screens:
 bottom tab bar with the five primary destinations plus a menu drawer with
 all of them. One `NAV_ITEMS` list feeds all three.
 
-## F12. Fonts
+## F12. Fonts (superseded by F29)
 System font stack (Inter / Plus Jakarta Sans are used only if installed). No
 web-font download, so no third-party requests and no layout shift.
 
@@ -178,3 +178,77 @@ Sources are labelled as stored ("Set by you", "From a professional, as you
 entered it"); a professional target is never described as verified or
 prescribed. Inputs allow one decimal place because targets are stored to
 0.1. No defaults are suggested and no met/not-met judgement is made.
+
+## F29. Light editorial redesign (replaces the dark palette)
+Based on a soft, editorial reference (blue-and-white porcelain). Light theme
+only.
+- **Layers:** pale blue page (#E6EBF3) → warm-white sheet (#F8F7F4, the main
+  content panel on large screens) → white cards. Selected states use a pale
+  periwinkle tint (#DCE7F7).
+- **Colour:** headings and actions in a deep muted blue (#3F65A0). The
+  reference's lighter blue (#5B7FBF) measures only 3.3–4.0:1, so it is used
+  for large display headings (≥ 30 px, ≥ 3:1) and decoration only. Semantic
+  colours were darkened for light backgrounds. Every normal-text pair is
+  ≥ 4.70:1 (audited with a script over the tokens).
+- **Type:** Montserrat, self-hosted via `@fontsource/montserrat` 5.2.8 (latin
+  and latin-ext, which covers ₹), weights 400/500/600. Headings are medium
+  weight with wide letter-spacing; small tracked "eyebrow" labels. No
+  third-party font requests.
+- **Shape:** pill buttons (solid blue primary, white pill secondary), 24 px
+  card radius, 32 px sheet radius, very soft blue-tinted shadows.
+- **Imagery:** original SVG illustrations (bowl, thali, chai, coin jar) in
+  `components/illustrations/Porcelain.tsx`, coloured with token classes;
+  decorative only (aria-hidden). No photos or stock assets.
+- **Shell:** floating white sidebar on desktop; light frosted top bar and
+  bottom tab bar on mobile with a tinted active pill.
+Token names stayed semantic (canvas, surface, ink, accent…), so components
+did not need renaming; new tokens: sheet, heading, accent-soft, accent-tint,
+on-accent.
+
+## F30. Premium glass redesign (supersedes F29's palette and Montserrat)
+Based on a glassmorphism fitness reference (frosted panels over a pale blue
+field, large image cards, light/bold headlines, capsule day selector,
+floating round bottom nav). Light theme only.
+- **Tokens** (space-separated RGB in `src/styles/index.css`, mapped in
+  `tailwind.config.ts`): page #DCE5EF with soft radial light; text #243746;
+  muted text #4D6072; accent #3E6189 (links, small accents); action slate
+  #2E4456 (primary buttons, active nav); success #2B6E4F, warning #855600,
+  danger #A63A3A, info #2C628A; line #CCD7E3. The reference's lighter blues
+  (accent-soft #789DC4 at 2.22:1, accent-light #B7D0E8 at 1.25:1) are
+  **decorative only**: chart bars, illustration fills, rings. They never
+  carry text. Every normal-text pair measures ≥ 4.79:1 (audit script).
+- **Type:** Inter, self-hosted (`@fontsource/inter` 5.2.8, latin and
+  latin-ext, weights 300–600). Light h1 with a semibold emphasis word
+  ("Good morning, **Asha**"), tight tracking (−0.01em). Wide tracking was
+  removed except for the small uppercase eyebrow (0.08em). Montserrat was
+  uninstalled.
+- **Glass variants:** `.glass-card` (white 62 %, blur 18 px; default Card),
+  `.glass-subtle` (48 %), `.glass-elevated` (84 %, blur 24 px; dialogs,
+  sidebar, tab bar, auth form), `.glass-dark` (slate 62 %, white text; chips
+  and buttons over imagery), `.surface-solid` (92 %, no blur). Blur is
+  used selectively: dense content (meal composer, meal history items,
+  transaction list, profile form, targets, landing feature tiles) sits on
+  the solid surface. `@supports not (backdrop-filter)` and
+  `prefers-reduced-transparency` switch every glass to a near-opaque fill.
+- **Imagery:** no licensed food photography is available, so
+  `ImagePanel` renders a "cinematic" scene: a slate-to-mist gradient,
+  a key light and one of the porcelain SVG illustrations. A slate overlay
+  (62 % on mobile, a left-to-right fade from md) keeps white text ≥ 5:1. The
+  art is aria-hidden and never implies what anyone ate or what a mess serves.
+  Real photos can be dropped in later behind the same overlay.
+- **Navigation:** the same five primary destinations (Home, Meals,
+  Nutrition, Budget, Profile) everywhere. Desktop: floating glass sidebar.
+  Mobile: frosted top bar with a menu drawer (all destinations) plus a
+  floating round bottom bar of icon circles with screen-reader labels; the
+  active item is a filled slate circle. Safe-area padding is respected.
+- **Dashboard:** greeting header, a week `DayStrip` (past days and today
+  link to that day's meal history; future days are not links), a hero image
+  panel with today's real totals (partial values marked "≥"/"Partial",
+  unknown shown as "—"), budget, meals and quick actions. **The mess-menu
+  card appears only when menu data exists** (today: demo mode only). The
+  live dashboard no longer shows an empty "No menu yet" card.
+- **Charts:** complete days in accent-soft, partial days in accent-light;
+  the table and tooltip still say "Partial", so colour is not the only cue.
+  Tooltips stay solid white for legibility.
+- **Segmented controls:** glass track, active segment filled slate with
+  white text.
