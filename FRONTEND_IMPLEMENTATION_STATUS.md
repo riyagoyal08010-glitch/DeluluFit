@@ -7,14 +7,15 @@ _Last updated: 2026-10-11. Nothing here is committed yet._
 | Check | Command | Result |
 |---|---|---|
 | Type check | `npx tsc --noEmit` (frontend) | passes |
-| Frontend tests | `npm test` (frontend) | **104 passed, 0 failed** (8 files; 22 new profile/settings tests); full suite run 2× consecutively, all green |
-| Production build | `npm run build` (frontend) | passes; main JS 487 kB (147 kB gzip), Nutrition chunk 398 kB (111 kB gzip, lazy) |
+| Frontend tests | `npm test` (frontend) | **107 passed, 0 failed** (8 files; 3 new tests for Card surfaces, ImagePanel and DayStrip; the live-dashboard test now asserts no menu card without menu data) |
+| Production build | `npm run build` (frontend) | passes; main JS 500 kB (150 kB gzip; Vite prints its >500 kB advisory), Nutrition chunk 398 kB (111 kB gzip, lazy) |
 | Backend tests | `python -m pytest` (backend) | **238 passed** (last run in the meal-logging phase; no backend code changed in the nutrition, budget or profile phases) |
 | Live API check | frontend request shapes replayed through the Vite proxy against the real backend | register 201; search; food detail; preview; create 201 / identical replay 200 (same meal); saved estimate equals preview; day view; edit → estimate version 2; delete 204; missing CSRF 403 |
 | Live nutrition check | requests replayed against the real backend | `/nutrition/summary?days=7` (and with `end`), `/meals/day` without a date (server picks today), `/targets` before/after setting one: shapes match `src/types/api.ts`; per-day `incomplete`/`complete` statuses and `unavailable` sodium come through |
 | Live budget check | requests replayed against the real backend | set budget; expense + identical replay (same id); over-refund 422 with server message; refund; summary totals (expenses/refunds/net/remaining/utilisation/by category); list for the summary range; delete expense with refunds → `has_refunds`; edit; meal deleted → linked expense kept and unlinked, net unchanged; weekly budget not compared with a daily view; trend; end budget |
 | Live profile/account check | real backend + disposable DB (port 54329) | full-body PUT keeps fields, partial body resets them (why the form always sends all fields); preference de-duplication; "other" allergy needs a label; self-set 1000 kcal → `unsafe_target`, professional accepted; wrong current password → 401 and session stays valid; delete with wrong confirmation (422) or password (401) deletes nothing; successful delete → 204, session gone, no rows left for the user in the tables checked, shared institution kept with attribution cleared |
-| Contrast | token pairs computed | all text/background pairs ≥ 5.0:1 |
+| Contrast | token audit script (text composited over glass and page) | glass redesign: every normal-text pair ≥ 4.79:1; white on image overlay and dark glass 5.06:1; accent-soft (2.22) and accent-light (1.25) are decorative only and carry no text |
+| Redesign build check | built CSS inspected | glass variants, backdrop-filter fallback (`@supports not`) and `prefers-reduced-transparency` rules generated; Inter bundled locally (no external font requests) |
 
 Deliberate-breakage checks confirmed: the duplicate-submission test fails
 when idempotency-key reuse is removed; the nutrition tests fail if unknown
@@ -23,8 +24,11 @@ post-meal-deletion invalidation is removed; the cross-account privacy test
 fails if the query cache is not cleared on account deletion. Tests now use the production
 cache settings (30 s staleTime), so a missing invalidation is detectable.
 
-Not run: Playwright browser tests, manual screen-reader testing. The UI was
-not inspected visually in a browser in this session.
+Not run: Playwright browser tests, manual screen-reader testing. The glass
+redesign (decision F30) has **not been inspected visually in a browser**: no
+browser tool was available, so layout, blur and illustration rendering are
+verified only by tests, type-check, build output, CSS inspection and the
+contrast script.
 
 ## Uses the real backend
 - **Auth**: sign in, register, session restore, sign out, auto sign-out on
@@ -129,6 +133,12 @@ foods quick-log (no backend support), Playwright tests.
   refund limit and its message is shown.
 - Mess fees have no special handling beyond the Mess category; logging a
   meal never creates an expense, so nothing is counted twice automatically.
+- Glass redesign: cinematic panels use SVG illustrations, not photographs
+  (no licensed photos available). Blur cost on low-end phones is untested;
+  the fallbacks cover browsers without `backdrop-filter` and users who ask
+  for reduced transparency.
+- The mess-menu summary on the dashboard is shown only in demo mode until a
+  menu API exists.
 - Recharts 2.x is no longer actively developed (move to v3 later).
 - Test-only shim in `src/test/setup.ts` for a jsdom/Node `Request` AbortSignal
   incompatibility.
