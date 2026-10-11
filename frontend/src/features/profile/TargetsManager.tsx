@@ -74,7 +74,7 @@ export function TargetsManager() {
   });
 
   return (
-    <Card aria-labelledby="targets-title" id="targets">
+    <Card aria-labelledby="targets-title" id="targets" surface="solid">
       <CardHeader id="targets-title" title="Nutrition targets"
                   description="Optional daily amounts you choose. They're shown next to your logged estimates on the Nutrition page." />
       <div className="space-y-4">
@@ -91,7 +91,7 @@ export function TargetsManager() {
           ) : (
             <>
               {active ? (
-                <div className="space-y-2 rounded-control border border-line/30 bg-canvas/40 p-4">
+                <div className="space-y-2 rounded-control border border-line/70 bg-sheet p-4">
                   <p className="text-sm font-medium">{TARGET_SOURCE_LABELS[active.source]}</p>
                   <p className="text-xs text-ink-muted">
                     {active.effective_from > localIsoDate() ? "Starts" : "In effect since"} {formatLongDate(active.effective_from)}
