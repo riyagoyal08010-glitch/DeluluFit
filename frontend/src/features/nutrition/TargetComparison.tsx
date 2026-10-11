@@ -44,7 +44,7 @@ export function TargetComparison({ date, totals }: { date: string; totals: Total
                   {TARGET_SOURCE_TEXT[target.source]} · in effect from {formatLongDate(target.effective_from)}
                   {target.effective_to ? ` to ${formatLongDate(target.effective_to)}` : ""}
                 </p>
-                <ul className="divide-y divide-line/30">
+                <ul className="divide-y divide-line/70">
                   {rows.map((k) => {
                     const t = totals.nutrients[k];
                     const known = t.status === "complete" || t.status === "incomplete";
