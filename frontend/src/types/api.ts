@@ -34,8 +34,73 @@ export interface Profile {
   onboarding_completed_at: string | null;
 }
 
+export type DietaryPattern = "vegetarian" | "eggetarian" | "non_vegetarian" | "vegan" | "jain" | "no_preference";
+export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "very_active";
+export type PreferenceKind = "like" | "dislike" | "avoid";
+export type Allergen = "peanut" | "tree_nut" | "milk" | "egg" | "wheat_gluten" | "soy" | "fish" | "shellfish" |
+  "sesame" | "mustard" | "other";
+export type AllergySeverity = "mild" | "moderate" | "severe" | "unknown";
+
+export interface FoodPreference {
+  id: string;
+  label: string;
+  preference: PreferenceKind;
+  food_id: string | null;
+}
+
+export interface UserAllergy {
+  id: string;
+  allergen: Allergen;
+  custom_label: string | null;
+  severity: AllergySeverity;
+  notes: string | null;
+}
+
+export interface Institution {
+  id: string;
+  name: string;
+  city: string | null;
+  state: string | null;
+}
+
+export interface Hostel {
+  id: string;
+  institution_id: string;
+  name: string;
+}
+
+/** GET /profile. `profile` is null until the student saves one. */
 export interface ProfileBundle {
   profile: Profile | null;
+  preferences?: FoodPreference[];
+  allergies?: UserAllergy[];
+  institution?: Institution | null;
+  hostel?: Hostel | null;
+  active_target?: NutritionTarget | null;
+}
+
+/** PUT /profile replaces every field: anything omitted reverts to its default, so always send all of them. */
+export interface ProfileInput {
+  display_name: string;
+  height_cm: string | null;
+  weight_kg: string | null;
+  activity_level: ActivityLevel | null;
+  dietary_pattern: DietaryPattern;
+  currency: string;
+  timezone: string;
+  institution_id: string | null;
+  hostel_id: string | null;
+}
+
+export interface TargetInput {
+  source: "self_set" | "professional";
+  energy_kcal: string | null;
+  protein_g: string | null;
+  carbohydrate_g: string | null;
+  fat_g: string | null;
+  fibre_g: string | null;
+  effective_from: string | null;
+  notes: string | null;
 }
 
 export type NutrientKey = "energy_kcal" | "protein_g" | "carbohydrate_g" | "fat_g" | "fibre_g" | "sugars_g" | "sodium_mg";
