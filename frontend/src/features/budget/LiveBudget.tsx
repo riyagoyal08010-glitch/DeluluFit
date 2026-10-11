@@ -47,11 +47,11 @@ export function LiveBudget() {
         <CardHeader id="overview-title" title={s ? `${PERIOD_LABELS[s.period]} spending` : "Spending"}
                     description={s ? (s.start === s.end ? formatLongDate(s.start) : `${formatLongDate(s.start)} – ${formatLongDate(s.end)}`) : undefined} />
         <div className="mb-5 flex flex-wrap items-center gap-2">
-          <div role="group" aria-label="Period" className="inline-flex rounded-control border border-line/40 bg-surface p-1">
+          <div role="group" aria-label="Period" className="glass-card inline-flex rounded-full p-1">
             {PERIODS.map((p) => (
               <button key={p} type="button" aria-pressed={s?.period === p} onClick={() => go(p, date)}
-                      className={cn("min-h-[36px] rounded-[0.6rem] px-3 text-sm font-medium transition-colors",
-                                    s?.period === p ? "bg-surface-raised text-ink" : "text-ink-muted hover:text-ink")}>
+                      className={cn("min-h-[36px] rounded-full px-3 text-sm font-medium transition-colors",
+                                    s?.period === p ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:text-ink")}>
                 {PERIOD_LABELS[p]}
               </button>
             ))}
@@ -193,7 +193,7 @@ function TransactionsCard({ start, end, currency }: { start: string; end: string
   const byId = new Map(items.map((t) => [t.id, t]));
 
   return (
-    <Card aria-labelledby="txn-title">
+    <Card aria-labelledby="txn-title" surface="solid">
       <CardHeader id="txn-title" title="Transactions" description="Recorded in this period, newest first."
                   action={!form && (
                     <div className="flex flex-wrap gap-2">
@@ -203,7 +203,7 @@ function TransactionsCard({ start, end, currency }: { start: string; end: string
                     </div>
                   )} />
       {form && (
-        <div className="mb-5 rounded-control border border-line/30 bg-canvas/30 p-4">
+        <div className="mb-5 rounded-control border border-line/70 bg-sheet p-4">
           <TransactionForm key={form.kind === "edit" ? form.txn.id : form.kind} mode={form} currency={currency}
                            busy={mutation.isPending} error={mutation.isError ? errorText(mutation.error) : null}
                            onCancel={() => { create.reset(); update.reset(); setForm(null); }} onSubmit={submit} />
@@ -217,7 +217,7 @@ function TransactionsCard({ start, end, currency }: { start: string; end: string
             </EmptyState>
           : (
             <>
-              <ul className="divide-y divide-line/30">
+              <ul className="divide-y divide-line/70">
                 {items.map((t) => {
                   const original = t.refund_of_id ? byId.get(t.refund_of_id) : undefined;
                   const label = t.description ?? CATEGORY_LABELS[t.category];
