@@ -7,18 +7,20 @@ _Last updated: 2026-10-11. Nothing here is committed yet._
 | Check | Command | Result |
 |---|---|---|
 | Type check | `npx tsc --noEmit` (frontend) | passes |
-| Frontend tests | `npm test` (frontend) | **82 passed, 0 failed** (7 files; 19 new budget tests); full suite run 3× consecutively, all green |
-| Production build | `npm run build` (frontend) | passes; main JS 454 kB (138 kB gzip), Nutrition chunk 398 kB (111 kB gzip, lazy) |
-| Backend tests | `python -m pytest` (backend) | **238 passed** (last run in the meal-logging phase; no backend code changed in the nutrition or budget phases) |
+| Frontend tests | `npm test` (frontend) | **104 passed, 0 failed** (8 files; 22 new profile/settings tests); full suite run 2× consecutively, all green |
+| Production build | `npm run build` (frontend) | passes; main JS 487 kB (147 kB gzip), Nutrition chunk 398 kB (111 kB gzip, lazy) |
+| Backend tests | `python -m pytest` (backend) | **238 passed** (last run in the meal-logging phase; no backend code changed in the nutrition, budget or profile phases) |
 | Live API check | frontend request shapes replayed through the Vite proxy against the real backend | register 201; search; food detail; preview; create 201 / identical replay 200 (same meal); saved estimate equals preview; day view; edit → estimate version 2; delete 204; missing CSRF 403 |
 | Live nutrition check | requests replayed against the real backend | `/nutrition/summary?days=7` (and with `end`), `/meals/day` without a date (server picks today), `/targets` before/after setting one: shapes match `src/types/api.ts`; per-day `incomplete`/`complete` statuses and `unavailable` sodium come through |
 | Live budget check | requests replayed against the real backend | set budget; expense + identical replay (same id); over-refund 422 with server message; refund; summary totals (expenses/refunds/net/remaining/utilisation/by category); list for the summary range; delete expense with refunds → `has_refunds`; edit; meal deleted → linked expense kept and unlinked, net unchanged; weekly budget not compared with a daily view; trend; end budget |
+| Live profile/account check | real backend + disposable DB (port 54329) | full-body PUT keeps fields, partial body resets them (why the form always sends all fields); preference de-duplication; "other" allergy needs a label; self-set 1000 kcal → `unsafe_target`, professional accepted; wrong current password → 401 and session stays valid; delete with wrong confirmation (422) or password (401) deletes nothing; successful delete → 204, session gone, no rows left for the user in the tables checked, shared institution kept with attribution cleared |
 | Contrast | token pairs computed | all text/background pairs ≥ 5.0:1 |
 
 Deliberate-breakage checks confirmed: the duplicate-submission test fails
 when idempotency-key reuse is removed; the nutrition tests fail if unknown
 days are charted as zero; the budget refresh tests fail if the dashboard or
-post-meal-deletion invalidation is removed. Tests now use the production
+post-meal-deletion invalidation is removed; the cross-account privacy test
+fails if the query cache is not cleared on account deletion. Tests now use the production
 cache settings (30 s staleTime), so a missing invalidation is detectable.
 
 Not run: Playwright browser tests, manual screen-reader testing. The UI was
@@ -62,7 +64,22 @@ not inspected visually in a browser in this session.
   date), end with confirmation, past budgets. Every change refreshes the
   Budget page and the dashboard card; deleting a meal also refreshes budget
   views.
-- **Profile**: email, display name, sign out.
+- **Profile & settings** (`/app/profile`): section links; personal profile
+  from `GET /profile`, saved with `PUT /profile` (always sends every field,
+  since the endpoint replaces the whole profile): name, eating pattern,
+  optional height / weight / activity, currency, time zone, college and
+  hostel (search existing colleges with `GET /institutions`, hostels with
+  `GET /institutions/{id}/hostels`); unsaved-edit protection and discard.
+  Food preferences (`PUT /profile/preferences`) and allergies
+  (`PUT /profile/allergies`) as drafts saved as a whole list, with a saved
+  baseline that never changes on failure. Nutrition targets: current target
+  with provenance, past targets, set / change (source, five nutrients,
+  optional start date, note) via `PUT /targets/active`, end via
+  `DELETE /targets/active`. Account: email, change password
+  (`POST /auth/change-password`), sign out, account deletion
+  (`POST /auth/delete-account`) with password + typed DELETE confirmation;
+  on success the session and all cached queries are cleared before showing
+  the signed-out login screen.
 
 ## Demo data only (clearly labelled; real accounts see "not available yet")
 Mess menu, Suggestions, dashboard menu card. In demo mode the Meals,
@@ -71,7 +88,9 @@ Nutrition and Budget pages show their sample versions and make no API calls.
 ## Not implemented
 Onboarding wizard, custom date ranges on the Nutrition page (the API accepts
 `start`/`end` up to 92 days), target setting/editing UI (the API supports it),
-averages (deliberately not computed), filtering transactions by kind or
+creating new colleges or hostels from the profile page (the API supports it;
+not built), data export (no backend support), averages (deliberately not
+computed), filtering transactions by kind or
 category (the API filters by date only), changing a transaction's type or
 links after creation (the API doesn't allow it), currency choice or conversion
 (budgets use the profile currency), menu upload/review, suggestions, profile editing,
@@ -94,6 +113,14 @@ foods quick-log (no backend support), Playwright tests.
   not include them.
 - Targets cover energy, protein, carbohydrate, fat and fibre only, and are
   compared on single days only.
+- `PUT /targets/active` echoes values with more than one decimal place
+  (e.g. 60.55) although they are stored rounded (60.6). The UI only accepts
+  one decimal place and re-reads targets after saving, so it never shows the
+  echoed value.
+- Height, weight and activity are stored but not used by any calculation.
+- Account deletion: uploaded images are removed best-effort after the
+  database commit; server logs keep an internal account id; hosting backups
+  are outside the app's control. The confirmation dialog says so.
 - Budget summary applies whichever budget is in force on the viewed date to
   the whole period (a weekly budget started on Sunday is compared with
   spending from the preceding Monday). This is the backend's rule.
