@@ -48,7 +48,7 @@ function DemoBudget() {
       </Card>
       <Card aria-labelledby="b-tx" className="lg:col-span-3">
         <CardHeader id="b-tx" title={<span className="flex items-center gap-2">Recent transactions<DemoTag /></span>} />
-        <ul className="divide-y divide-line/30">
+        <ul className="divide-y divide-line/70">
           {DEMO_TRANSACTIONS.map((t) => (
             <li key={t.id} className="flex items-center justify-between gap-3 py-3 text-sm">
               <div className="min-w-0">
