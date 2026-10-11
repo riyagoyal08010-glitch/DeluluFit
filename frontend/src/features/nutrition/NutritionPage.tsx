@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip as ChartTooltip, XAxis, YAxis } from "recharts";
 
-import { ComingSoon } from "@/components/layout/ComingSoon";
 import { DemoTag } from "@/components/layout/DemoTag";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { PageHeader } from "@/components/ui/Feedback";
@@ -11,6 +10,8 @@ import { formatAmount, localIsoDate, NUTRIENT_LABELS } from "@/lib/format";
 import { demoWeek } from "@/mocks/demoData";
 import type { NutrientKey } from "@/types/api";
 
+import { LiveNutrition } from "./LiveNutrition";
+
 const CHOICES: NutrientKey[] = ["energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g"];
 
 export function NutritionPage() {
@@ -18,13 +19,7 @@ export function NutritionPage() {
   return (
     <>
       <PageHeader title="Nutrition" description="Estimated totals by day, with how complete each total is." />
-      {isDemo ? <DemoTrend /> : (
-        <ComingSoon feature="Nutrition history" plans={[
-          "See daily totals for the last 7 or 30 days, or any range you choose.",
-          "Tell complete totals apart from partial ones where some items had no data.",
-          "Check which reference food and dataset each estimate came from.",
-        ]} />
-      )}
+      {isDemo ? <DemoTrend /> : <LiveNutrition />}
     </>
   );
 }
