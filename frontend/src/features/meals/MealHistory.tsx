@@ -11,8 +11,8 @@ import { Badge, EmptyState, ErrorState, LoadingState } from "@/components/ui/Fee
 import { Input, Select } from "@/components/ui/Field";
 import { ApiError } from "@/lib/api/client";
 import { mealsApi } from "@/lib/api/endpoints";
-import { invalidateMeals, liveKeys } from "@/lib/api/queryKeys";
-import { formatLongDate, formatTime, localIsoDate, MEAL_LABELS } from "@/lib/format";
+import { invalidateBudget, invalidateMeals, liveKeys } from "@/lib/api/queryKeys";
+import { formatLongDate, formatTime, localIsoDate, MEAL_LABELS, shiftIsoDate } from "@/lib/format";
 import type { FoodSearchHit, Meal, MealItem, MealType } from "@/types/api";
 
 import { describeMealError } from "./errors";
@@ -21,12 +21,6 @@ import { portionText } from "./MealComposer";
 import { ManualItemForm } from "./ManualItemForm";
 import { isInFuture, MAX_ITEMS_PER_MEAL, MEAL_TYPE_OPTIONS, timeOf, toOffsetIso, trimDecimal } from "./portion";
 import { PortionEditor } from "./PortionEditor";
-
-function shiftDate(iso: string, days: number): string {
-  const d = new Date(`${iso}T00:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + days);
-  return d.toISOString().slice(0, 10);
-}
 
 function errorText(err: unknown): string {
   const e = describeMealError(err);
@@ -43,11 +37,11 @@ export function MealHistory({ date, onDateChange }: { date: string; onDateChange
       <Card aria-labelledby="history-title">
         <CardHeader id="history-title" title="Meal history" description={formatLongDate(date)} />
         <div className="flex flex-wrap items-end gap-2">
-          <Button variant="secondary" size="sm" onClick={() => onDateChange(shiftDate(date, -1))}
+          <Button variant="secondary" size="sm" onClick={() => onDateChange(shiftIsoDate(date, -1))}
                   icon={<ChevronLeft className="h-4 w-4" aria-hidden="true" />}>Previous day</Button>
           <div className="w-44"><Input label="Date" type="date" value={date} max={today}
                                        onChange={(e) => e.target.value && onDateChange(e.target.value)} /></div>
-          <Button variant="secondary" size="sm" disabled={date >= today} onClick={() => onDateChange(shiftDate(date, 1))}
+          <Button variant="secondary" size="sm" disabled={date >= today} onClick={() => onDateChange(shiftIsoDate(date, 1))}
                   icon={<ChevronRight className="h-4 w-4" aria-hidden="true" />}>Next day</Button>
         </div>
         <div className="mt-5">
@@ -96,7 +90,11 @@ export function MealCard({ meal, timeZone }: { meal: Meal; timeZone?: string }) 
   const updateMeal = useMutation({ mutationFn: (body: Parameters<typeof mealsApi.update>[1]) => mealsApi.update(meal.id, body),
                                    onSuccess: done });
   const deleteMeal = useMutation({ mutationFn: () => mealsApi.remove(meal.id),
-                                   onSuccess: async () => { setConfirmDelete(false); await invalidateMeals(queryClient); } });
+                                   onSuccess: async () => {
+                                     setConfirmDelete(false);
+                                     // The server keeps linked expenses and only unlinks them; refresh budget views too.
+                                     await Promise.all([invalidateMeals(queryClient), invalidateBudget(queryClient)]);
+                                   } });
 
   const title = `${MEAL_LABELS[meal.meal_type]} · ${formatTime(meal.consumed_at, timeZone)}`;
 
