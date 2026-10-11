@@ -3,25 +3,38 @@
 @tailwind utilities;
 
 /*
- * Design tokens. The palette is the product's; semantic colours were chosen to
- * keep at least 4.5:1 contrast for text on --color-surface and --color-background.
- * Values are space-separated RGB so Tailwind can apply opacity.
+ * Design tokens — cinematic, cool-toned glass (see FRONTEND_DECISIONS.md F30).
+ * Space-separated RGB so Tailwind can apply opacity.
+ *
+ * Contrast was measured against glass composited over the page background,
+ * not against pure white. The reference's lighter blues (#789DC4, #B7D0E8)
+ * measure below 3:1 on these backgrounds, so they are used for charts,
+ * highlights and art only; text uses the darker ink and accent values.
  */
 :root {
-  --color-background: 6 20 27;        /* #06141B */
-  --color-surface: 17 33 45;          /* #11212D */
-  --color-surface-raised: 37 55 69;   /* #253745 */
-  --color-surface-muted: 74 92 106;   /* #4A5C6A  borders/decoration only, not text backgrounds */
-  --color-text-muted: 155 168 171;    /* #9BA8AB */
-  --color-text-primary: 204 208 207;  /* #CCD0CF */
-  --color-accent: 245 200 215;        /* #F5C8D7 */
-  --color-accent-strong: 236 168 192; /* hover state of the accent */
-  --color-success: 143 211 176;
-  --color-warning: 242 201 125;
-  --color-danger: 244 154 154;
-  --color-info: 156 199 232;
-  --color-line: 74 92 106;
-  color-scheme: dark;
+  --color-background: 220 229 239;     /* #DCE5EF  misty blue-grey page */
+  --color-background-2: 233 239 245;   /* #E9EFF5  lighter band of the page gradient */
+  --color-sheet: 243 246 250;          /* #F3F6FA  wells inside cards */
+  --color-surface: 255 255 255;        /* white, used at glass opacities */
+  --color-surface-raised: 234 240 247; /* #EAF0F7  hover / tracks */
+  --color-surface-muted: 183 208 232;  /* #B7D0E8  decoration only */
+  --color-text-primary: 36 55 70;      /* #243746 */
+  --color-text-muted: 77 96 114;       /* #4D6072  secondary text (refined from #657989 for contrast) */
+  --color-heading: 36 55 70;           /* #243746 */
+  --color-accent: 62 97 137;           /* #3E6189  links, icons, selected labels */
+  --color-accent-strong: 47 78 114;    /* #2F4E72 */
+  --color-accent-soft: 120 157 196;    /* #789DC4  charts / art / large display only */
+  --color-accent-light: 183 208 232;   /* #B7D0E8  partial-data chart bars, highlights */
+  --color-accent-tint: 228 237 247;    /* #E4EDF7  selected backgrounds */
+  --color-action: 46 68 86;            /* #2E4456  primary actions, active navigation */
+  --color-action-strong: 31 50 66;     /* #1F3242 */
+  --color-on-accent: 255 255 255;
+  --color-success: 43 110 79;          /* #2B6E4F */
+  --color-warning: 133 86 0;           /* #855600 */
+  --color-danger: 166 58 58;           /* #A63A3A */
+  --color-info: 44 98 138;             /* #2C628A */
+  --color-line: 204 215 227;           /* #CCD7E3  ≈ rgba(91,117,140,.16) over the page */
+  color-scheme: light;
 }
 
 @layer base {
@@ -31,33 +44,94 @@
   }
   body {
     @apply min-h-screen font-sans text-[15px] leading-relaxed;
+    /* Misty atmosphere: a soft top light, faint vertical light bands (as in the
+       reference backdrop), over a vertical page gradient. Deliberately subtle. */
     background:
-      radial-gradient(60rem 40rem at 10% -10%, rgb(var(--color-surface-raised) / 0.55), transparent 60%),
-      radial-gradient(50rem 30rem at 110% 0%, rgb(var(--color-accent) / 0.06), transparent 60%),
-      rgb(var(--color-background));
+      radial-gradient(70rem 40rem at 20% -15%, rgb(255 255 255 / 0.75), transparent 60%),
+      radial-gradient(40rem 30rem at 105% 20%, rgb(var(--color-accent-light) / 0.35), transparent 65%),
+      linear-gradient(90deg, transparent 0 18%, rgb(255 255 255 / 0.18) 22%, transparent 30% 62%,
+                      rgb(255 255 255 / 0.14) 68%, transparent 76%),
+      linear-gradient(180deg, rgb(var(--color-background-2)) 0%, rgb(var(--color-background)) 55%);
     background-attachment: fixed;
   }
   h1, h2, h3 {
-    @apply font-display tracking-tight text-ink;
+    @apply font-display text-heading tracking-[-0.01em];
   }
+  h1 { @apply font-light; }
+  h2 { @apply font-medium; }
+  h3 { @apply font-semibold; }
   :focus-visible {
     @apply outline-none shadow-focus;
   }
   ::selection {
-    background: rgb(var(--color-accent) / 0.3);
+    background: rgb(var(--color-accent-light) / 0.7);
   }
 }
 
 @layer components {
-  /* Restrained glass: used for the shell chrome, not for every card. */
+  /* Glass material. Blur is reserved for surfaces that float over varied
+     backgrounds; dense content uses .surface-solid instead. */
+  .glass-card {
+    background: rgb(255 255 255 / 0.62);
+    backdrop-filter: blur(18px) saturate(125%);
+    -webkit-backdrop-filter: blur(18px) saturate(125%);
+    border: 1px solid rgb(255 255 255 / 0.7);
+    box-shadow: 0 8px 28px rgb(40 60 80 / 0.08);
+  }
+  .glass-subtle {
+    background: rgb(255 255 255 / 0.48);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgb(255 255 255 / 0.6);
+  }
+  .glass-elevated {
+    background: rgb(255 255 255 / 0.84);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid rgb(255 255 255 / 0.8);
+    box-shadow: 0 18px 44px -14px rgb(30 50 70 / 0.28);
+  }
+  /* Dark glass for controls over imagery ("Next" pill in the reference). 0.62 keeps white
+     text ≥ 4.5:1 even over the lightest art colour (0.42 measured only 3.3:1). */
+  .glass-dark {
+    background: rgb(36 55 70 / 0.62);
+    backdrop-filter: blur(12px) saturate(120%);
+    -webkit-backdrop-filter: blur(12px) saturate(120%);
+    border: 1px solid rgb(255 255 255 / 0.22);
+    color: rgb(255 255 255);
+  }
+  .surface-solid {
+    background: rgb(255 255 255 / 0.92);
+    border: 1px solid rgb(var(--color-line) / 0.7);
+    box-shadow: 0 6px 22px rgb(40 60 80 / 0.06);
+  }
+  /* Kept for existing chrome (header, tab bar). */
   .glass {
-    background: rgb(var(--color-surface) / 0.72);
-    backdrop-filter: blur(14px) saturate(120%);
-    -webkit-backdrop-filter: blur(14px) saturate(120%);
+    background: rgb(255 255 255 / 0.72);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
   }
   .metric {
     font-variant-numeric: tabular-nums;
   }
+  .eyebrow {
+    @apply text-xs font-medium uppercase tracking-[0.08em] text-ink-muted;
+  }
+
+  /* Fallback: without backdrop-filter, glass becomes nearly opaque so text stays readable. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-card, .glass-subtle, .glass, .glass-elevated { background: rgb(255 255 255 / 0.94); }
+    .glass-dark { background: rgb(36 55 70 / 0.88); }
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass-card, .glass-subtle, .glass, .glass-elevated {
+    background: rgb(255 255 255 / 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-dark { background: rgb(36 55 70 / 0.92); backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
