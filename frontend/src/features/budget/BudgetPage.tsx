@@ -1,4 +1,3 @@
-import { ComingSoon } from "@/components/layout/ComingSoon";
 import { DemoTag } from "@/components/layout/DemoTag";
 import { Card, CardHeader } from "@/components/ui/Card";
 import { Badge, PageHeader, Progress } from "@/components/ui/Feedback";
@@ -6,23 +5,17 @@ import { useDataMode } from "@/features/auth/session";
 import { formatMoney, localIsoDate } from "@/lib/format";
 import { demoBudget, DEMO_TRANSACTIONS } from "@/mocks/demoData";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  mess: "Mess", outside_food: "Outside food", groceries: "Groceries", beverages: "Beverages", snacks: "Snacks",
-  other: "Other",
-};
+import { LiveBudget } from "./LiveBudget";
+import { CATEGORY_LABELS as LABELS } from "./money";
+
+const CATEGORY_LABELS: Record<string, string> = LABELS;
 
 export function BudgetPage() {
   const isDemo = useDataMode() === "demo";
   return (
     <>
       <PageHeader title="Food budget" description="Money you spend on food, kept separate from what you eat." />
-      {isDemo ? <DemoBudget /> : (
-        <ComingSoon feature="Budget tracking" plans={[
-          "Set a daily, weekly or monthly food budget in rupees.",
-          "Record purchases outside the mess, and refunds or corrections.",
-          "See spent and remaining amounts, spending by category and by day.",
-        ]} />
-      )}
+      {isDemo ? <DemoBudget /> : <LiveBudget />}
     </>
   );
 }
