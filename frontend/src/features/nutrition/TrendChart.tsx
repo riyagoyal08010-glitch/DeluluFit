@@ -35,8 +35,9 @@ export function TrendChart({ points, title }: { points: TrendPoint[]; title: str
                    tick={{ fill: "rgb(var(--color-text-muted))", fontSize: 11 }} />
             <YAxis tickLine={false} axisLine={false} width={52} allowDecimals={false}
                    tick={{ fill: "rgb(var(--color-text-muted))", fontSize: 11 }} />
-            <ChartTooltip cursor={{ fill: "rgb(var(--color-surface-raised) / 0.5)" }}
-                          contentStyle={{ background: "rgb(var(--color-surface-raised))", border: "none", borderRadius: 12 }}
+            <ChartTooltip cursor={{ fill: "rgb(255 255 255 / 0.45)" }}
+                          contentStyle={{ background: "rgb(var(--color-surface))", border: "1px solid rgb(var(--color-line))", borderRadius: 14,
+                                          boxShadow: "0 12px 30px -16px rgb(31 52 89 / 0.3)", color: "rgb(var(--color-text-primary))" }}
                           labelFormatter={(_l, payload) => {
                             const p = payload[0]?.payload as TrendPoint | undefined;
                             return p ? formatLongDate(p.date) : "";
@@ -47,7 +48,7 @@ export function TrendChart({ points, title }: { points: TrendPoint[]; title: str
                           }} />
             <Bar dataKey="value" radius={[6, 6, 0, 0]} isAnimationActive={false}>
               {points.map((p) => (
-                <Cell key={p.date} fill={p.status === "incomplete" ? "rgb(var(--color-accent) / 0.4)" : "rgb(var(--color-accent))"} />
+                <Cell key={p.date} fill={p.status === "incomplete" ? "rgb(var(--color-accent-light))" : "rgb(var(--color-accent-soft))"} />
               ))}
             </Bar>
           </BarChart>
@@ -71,7 +72,7 @@ export function DaysTable({ points, title }: { points: TrendPoint[]; title: stri
             <th scope="col" className="px-2 py-2 text-right font-medium">Completeness</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-line/20">
+        <tbody className="divide-y divide-line/60">
           {[...points].reverse().map((p) => (
             <tr key={p.date}>
               <th scope="row" className="px-2 py-2 text-left font-normal">{formatLongDate(p.date)}</th>
