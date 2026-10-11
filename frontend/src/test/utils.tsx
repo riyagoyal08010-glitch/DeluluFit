@@ -36,7 +36,9 @@ export const unauthenticated: Handler = () => ({
 });
 
 export function renderApp(path: string) {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  // Same caching as production (createQueryClient: staleTime 30 s), so refresh tests fail if an
+  // invalidation is missing; only retries are disabled to keep failure tests fast.
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false, staleTime: 30_000, refetchOnWindowFocus: false } } });
   const router = createMemoryRouter(routes, { initialEntries: [path], future: ROUTER_FUTURE });
   const view = render(<Providers client={client}><RouterProvider router={router} future={{ v7_startTransition: true }} /></Providers>);
   return { ...view, router };
