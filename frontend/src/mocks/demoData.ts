@@ -11,8 +11,8 @@
  *
  * Production data-access code (lib/api) never imports this file.
  */
-import type { BudgetSummary, DayMeals, Meal, MealItem, MealType, NutrientKey, NutrientTotal, NutrientValue,
-              Totals } from "@/types/api";
+import type { BudgetSummary, DayMeals, DishNutrition, DishSuggestion, Meal, MealItem, MealType, MenuSuggestions,
+              NutrientKey, NutrientTotal, NutrientValue, Totals } from "@/types/api";
 
 const KEYS: NutrientKey[] = ["energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g", "sugars_g", "sodium_mg"];
 const UNIT: Record<NutrientKey, string> = { energy_kcal: "kcal", protein_g: "g", carbohydrate_g: "g", fat_g: "g",
@@ -145,11 +145,73 @@ export const DEMO_MENU: Array<{ meal: MealType; items: string[]; status: "confir
   { meal: "dinner", items: ["Paratha", "Rajma", "Rice", "Curd"], status: "needs_review" },
 ];
 
-export const DEMO_SUGGESTIONS = [
-  { id: "s1", title: "Dinner isn't logged yet",
-    why: "You've logged breakfast and lunch today. Logging dinner keeps today's totals complete." },
-  { id: "s2", title: "One lunch item has no nutrition data",
-    why: "\"Aloo sabzi\" isn't in the reference dataset, so today's totals are lower bounds. You can choose a closer food if one fits." },
-  { id: "s3", title: "Rajma is on tonight's menu",
-    why: "You marked rajma as a food you like. The menu entry still needs your review before it's confirmed." },
-];
+/** Reference nutrition for a demo dish, in the shape of GET /menus/{id}/suggestions (per 100 g, five nutrients). */
+function dishNutrition(name: keyof typeof REFERENCE, sourceName = "USDA FoodData Central - FNDDS Survey Foods"): DishNutrition {
+  const ref = REFERENCE[name]!;
+  const shown: NutrientKey[] = ["energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g"];
+  return {
+    reference_mass_g: "100.00", source_name: sourceName,
+    nutrients: Object.fromEntries(shown.map((k) => {
+      const v = ref[k];
+      return [k, v === undefined
+        ? { value: null, display: null, unit: UNIT[k], status: "unknown" }
+        : { value: v.toFixed(4), display: displayOf(k, v), unit: UNIT[k], status: "reported" }];
+    })) as DishNutrition["nutrients"],
+  };
+}
+
+const DEMO_ALLERGY_UNKNOWN = { code: "allergy_unknown",
+                               text: "Ingredients aren't known, so we can't tell whether this dish contains milk." };
+
+/**
+ * Sample suggestions for one confirmed demo menu, in the exact shape the backend returns. Asha's demo
+ * profile is vegetarian, likes dal and rajma, and has recorded a milk allergy, so the sample shows every
+ * group: suggested, available (unlinked dish, nothing known) and check first (the reference food lists milk).
+ */
+export function demoMenuSuggestions(date: string, mealType: MealType | null = null): MenuSuggestions {
+  const dishes: DishSuggestion[] = [
+    { menu_item_id: "demo-dish-dal", menu_meal_id: "demo-meal-lunch", name: "Dal tadka", meal_type: "lunch",
+      section_heading: null, serving_note: null, source: "extraction", is_user_corrected: true, group: "suggested", score: 3,
+      reasons: [{ code: "likes", text: "You marked “dal” as a food you like." },
+                { code: "fits_pattern", text: "The matching reference food is listed as vegan, which fits your vegetarian eating pattern. The mess's recipe may differ." }],
+      cautions: [DEMO_ALLERGY_UNKNOWN], food: { id: "demo-food-Dal", canonical_name: "Dal" }, diet_type: "vegan",
+      nutrition: dishNutrition("Dal"), price: null, currency: "INR" },
+    { menu_item_id: "demo-dish-roti", menu_meal_id: "demo-meal-lunch", name: "Roti", meal_type: "lunch",
+      section_heading: null, serving_note: "2 pieces", source: "extraction", is_user_corrected: false, group: "suggested", score: 1,
+      reasons: [{ code: "fits_pattern", text: "The matching reference food is listed as vegetarian, which fits your vegetarian eating pattern. The mess's recipe may differ." }],
+      cautions: [DEMO_ALLERGY_UNKNOWN], food: { id: "demo-food-Roti / chapati", canonical_name: "Roti / chapati" }, diet_type: "vegetarian",
+      nutrition: dishNutrition("Roti / chapati"), price: null, currency: "INR" },
+    { menu_item_id: "demo-dish-rice", menu_meal_id: "demo-meal-lunch", name: "Jeera rice", meal_type: "lunch",
+      section_heading: null, serving_note: null, source: "extraction", is_user_corrected: false, group: "suggested", score: 1,
+      reasons: [{ code: "fits_pattern", text: "The matching reference food is listed as vegan, which fits your vegetarian eating pattern. The mess's recipe may differ." }],
+      cautions: [DEMO_ALLERGY_UNKNOWN], food: { id: "demo-food-Steamed white rice", canonical_name: "Steamed white rice" },
+      diet_type: "vegan", nutrition: dishNutrition("Steamed white rice"), price: null, currency: "INR" },
+    { menu_item_id: "demo-dish-aloo", menu_meal_id: "demo-meal-lunch", name: "Aloo sabzi", meal_type: "lunch",
+      section_heading: null, serving_note: null, source: "extraction", is_user_corrected: false, group: "available", score: 0,
+      reasons: [], cautions: [{ code: "diet_unknown", text: "We couldn't check this dish against your vegetarian eating pattern." },
+                              DEMO_ALLERGY_UNKNOWN],
+      food: null, diet_type: null, nutrition: null, price: null, currency: "INR" },
+    { menu_item_id: "demo-dish-samosa", menu_meal_id: "demo-meal-snacks", name: "Samosa", meal_type: "snacks",
+      section_heading: "Extras", serving_note: null, source: "manual", is_user_corrected: false, group: "available", score: 0,
+      reasons: [], cautions: [{ code: "diet_unknown", text: "We couldn't check this dish against your vegetarian eating pattern." },
+                              DEMO_ALLERGY_UNKNOWN],
+      food: null, diet_type: null, nutrition: null, price: "15.00", currency: "INR" },
+    { menu_item_id: "demo-dish-curd", menu_meal_id: "demo-meal-dinner", name: "Curd", meal_type: "dinner",
+      section_heading: null, serving_note: null, source: "extraction", is_user_corrected: false, group: "check_first", score: 1,
+      reasons: [{ code: "fits_pattern", text: "The matching reference food is listed as vegetarian, which fits your vegetarian eating pattern. The mess's recipe may differ." }],
+      cautions: [{ code: "allergen_listed", text: "The matching reference food lists milk, which you've recorded as an allergy." }],
+      food: { id: "demo-food-Curd (plain whole-milk yogurt)", canonical_name: "Curd (plain whole-milk yogurt)" },
+      diet_type: "vegetarian", nutrition: dishNutrition("Curd (plain whole-milk yogurt)"), price: null, currency: "INR" },
+  ];
+  return {
+    menu_id: "demo-menu", menu_date: date, status: "confirmed", confirmed: true, meal_types: ["lunch", "snacks", "dinner"],
+    meal_type: mealType, rule_version: "menu-rules-1",
+    personalization: { personalized: true, based_on: ["2 food preferences", "your vegetarian eating pattern",
+                                                      "your recorded allergies (as cautions only)"],
+                       message: "Based on 2 food preferences, your vegetarian eating pattern and your recorded allergies (as cautions only)." },
+    allergy_notice: "You've recorded milk. Menus don't list ingredients, so DeluluFit can't tell whether a dish contains them. "
+      + "Ask the mess before eating anything you're unsure about.",
+    budget: { has_budget: true, period: "weekly", remaining: "640.00", currency: "INR" },
+    dishes: mealType ? dishes.filter((d) => d.meal_type === mealType) : dishes,
+  };
+}

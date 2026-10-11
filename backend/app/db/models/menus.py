@@ -117,6 +117,8 @@ class MenuVersion(CreatedAtMixin, Base):
         CheckConstraint("version_number >= 1", name="version_number_positive"),
         CheckConstraint("(status = 'confirmed') = (confirmed_at IS NOT NULL)", name="confirmed_at_matches_status"),
         CheckConstraint("extraction_job_id IS NULL OR upload_id IS NOT NULL", name="job_requires_upload"),
+        CheckConstraint(f"meal_type_hint IS NULL OR {enum_check('meal_type_hint', enums.MEAL_TYPES)}",
+                        name="meal_type_hint"),
         CheckConstraint("source <> 'extraction' OR extraction_job_id IS NOT NULL", name="extraction_has_job"),
         UniqueConstraint("menu_id", "version_number"),
         UniqueConstraint("id", "menu_id"),
@@ -141,6 +143,8 @@ class MenuVersion(CreatedAtMixin, Base):
     based_on_version_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
     confirmed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     notes: Mapped[str | None] = mapped_column(String(500))
+    # The meal period the student said the photo shows (migration 0004).
+    meal_type_hint: Mapped[str | None] = mapped_column(String(10))
 
     menu: Mapped[MessMenu] = relationship(back_populates="versions", foreign_keys=[menu_id])
     days: Mapped[list[MenuDay]] = relationship(back_populates="version", passive_deletes=True,
@@ -191,6 +195,7 @@ class MenuItem(Base):
         CheckConstraint("price IS NULL OR price >= 0", name="price_nonnegative"),
         CheckConstraint("position >= 0", name="position_nonnegative"),
         CheckConstraint("length(btrim(display_name)) > 0", name="display_name_nonempty"),
+        CheckConstraint(enum_check("source", enums.MENU_ITEM_SOURCES), name="source"),
         UniqueConstraint("meal_id", "position"),
         # Target of the composite FK proving a consumed item came from the logged meal.
         UniqueConstraint("id", "meal_id"),
@@ -210,5 +215,10 @@ class MenuItem(Base):
     is_user_corrected: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"),
                                                     default=False)
     price: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
+    # Provenance (migration 0004): read from the photo or typed by the student.
+    source: Mapped[str] = mapped_column(String(12), nullable=False, server_default="manual", default="manual")
+    section_heading: Mapped[str | None] = mapped_column(String(80))
+    # Serving information printed on the menu, never inferred.
+    serving_note: Mapped[str | None] = mapped_column(String(80))
 
     meal: Mapped[MenuMeal] = relationship(back_populates="items")

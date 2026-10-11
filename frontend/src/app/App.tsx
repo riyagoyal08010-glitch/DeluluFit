@@ -2,7 +2,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { createBrowserRouter, RouterProvider, type RouteObject } from "react-router-dom";
 
-import { ChaiIllustration } from "@/components/illustrations/Porcelain";
 import { AppShell } from "@/components/layout/AppShell";
 import { Brand } from "@/components/layout/Brand";
 import { ButtonLink } from "@/components/ui/Button";
@@ -13,6 +12,7 @@ import { DashboardPage } from "@/features/dashboard/DashboardPage";
 import { LandingPage } from "@/features/landing/LandingPage";
 import { MealsPage } from "@/features/meals/MealsPage";
 import { MenuPage } from "@/features/menu/MenuPage";
+import { OnboardingPage } from "@/features/onboarding/OnboardingPage";
 import { ProfilePage } from "@/features/profile/ProfilePage";
 import { SuggestionsPage } from "@/features/recommendations/SuggestionsPage";
 import { ApiError } from "@/lib/api/client";
@@ -21,8 +21,8 @@ export function NotFoundPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 text-center">
       <Brand />
-      <div className="glass-card mt-8 w-48 rounded-card p-5"><ChaiIllustration /></div>
-      <h1 className="mt-8 text-3xl">Page <span className="font-semibold">not found</span></h1>
+      <div aria-hidden="true" className="iridescent mt-10 h-24 w-48" />
+      <h1 className="mt-10 text-5xl tracking-[-0.035em]">Page not found</h1>
       <p className="mt-2 text-sm text-ink-muted">That address doesn't match anything in DeluluFit.</p>
       <ButtonLink to="/" className="mt-6">Go to the home page</ButtonLink>
     </main>
@@ -33,6 +33,8 @@ export const routes: RouteObject[] = [
   { path: "/", element: <LandingPage /> },
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
+  // Outside AppShell: setup has its own focused layout, and the shell's setup redirect can't loop.
+  { path: "/app/onboarding", element: <OnboardingPage /> },
   {
     path: "/app",
     element: <AppShell />,

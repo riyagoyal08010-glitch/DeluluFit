@@ -35,9 +35,10 @@ export function TrendChart({ points, title }: { points: TrendPoint[]; title: str
                    tick={{ fill: "rgb(var(--color-text-muted))", fontSize: 11 }} />
             <YAxis tickLine={false} axisLine={false} width={52} allowDecimals={false}
                    tick={{ fill: "rgb(var(--color-text-muted))", fontSize: 11 }} />
-            <ChartTooltip cursor={{ fill: "rgb(255 255 255 / 0.45)" }}
+            <ChartTooltip cursor={{ fill: "rgb(0 0 0 / 0.04)" }}
                           contentStyle={{ background: "rgb(var(--color-surface))", border: "1px solid rgb(var(--color-line))", borderRadius: 14,
-                                          boxShadow: "0 12px 30px -16px rgb(31 52 89 / 0.3)", color: "rgb(var(--color-text-primary))" }}
+                                          boxShadow: "none", color: "rgb(var(--color-text-primary))" }}
+                          itemStyle={{ color: "rgb(var(--color-text-primary))" }}
                           labelFormatter={(_l, payload) => {
                             const p = payload[0]?.payload as TrendPoint | undefined;
                             return p ? formatLongDate(p.date) : "";
@@ -48,7 +49,7 @@ export function TrendChart({ points, title }: { points: TrendPoint[]; title: str
                           }} />
             <Bar dataKey="value" radius={[6, 6, 0, 0]} isAnimationActive={false}>
               {points.map((p) => (
-                <Cell key={p.date} fill={p.status === "incomplete" ? "rgb(var(--color-accent-light))" : "rgb(var(--color-accent-soft))"} />
+                <Cell key={p.date} fill={p.status === "incomplete" ? "rgb(var(--palette-mist) / 0.45)" : "rgb(var(--palette-white))"} />
               ))}
             </Bar>
           </BarChart>

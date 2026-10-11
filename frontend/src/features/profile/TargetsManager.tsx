@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Target } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/Button";
@@ -55,12 +55,13 @@ function TargetValues({ t }: { t: NutritionTarget }) {
  * Daily nutrition targets via GET /targets, PUT /targets/active and DELETE /targets/active.
  * Targets are the student's own numbers; DeluluFit never suggests one or judges progress against it.
  */
-export function TargetsManager() {
+export function TargetsManager({ onEditingChange }: { onEditingChange?: (editing: boolean) => void } = {}) {
   const queryClient = useQueryClient();
   const list = useQuery({ queryKey: liveKeys.targets, queryFn: ({ signal }) => targetsApi.list(signal) });
   const [editing, setEditing] = useState(false);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  useEffect(() => onEditingChange?.(editing), [editing, onEditingChange]);
   const active = list.data?.find((t) => t.effective_to === null) ?? null;
   const past = list.data?.filter((t) => t.effective_to !== null) ?? [];
 

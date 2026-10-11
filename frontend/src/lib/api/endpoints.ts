@@ -1,9 +1,9 @@
 import type { Budget, BudgetOverview, BudgetPeriod, BudgetSummary, DayMeals, FoodDetail, FoodSearchResult, ItemPreview, Meal, MealInput, MealItemInput,
-              MealItemUpdateInput, MealUpdateInput, NutritionTarget, Page, Profile, ProfileBundle, ProfileInput,
-              FoodPreference, Hostel, Institution, TargetInput, UserAllergy, RangeSummary, SessionResponse,
-              SpendingPoint, Transaction, TransactionInput, TransactionUpdateInput, Unit } from "@/types/api";
+              MealItemUpdateInput, MealType, MealUpdateInput, MenuCreateInput, MenuDetail, MenuDraftInput, MenuList, MenuSuggestions,
+              NutritionTarget, Page, Profile, ProfileBundle, ProfileInput, FoodPreference, Hostel, Institution, TargetInput, UserAllergy,
+              RangeSummary, SessionResponse, SpendingPoint, Transaction, TransactionInput, TransactionUpdateInput, Unit } from "@/types/api";
 
-import { apiRequest } from "./client";
+import { apiRequest, apiRequestBlob } from "./client";
 
 /** Typed wrappers for the endpoints the frontend uses today. Paths match backend/app/api/routes. */
 
@@ -32,6 +32,8 @@ export const authApi = {
 export const profileApi = {
   get: (signal?: AbortSignal) => apiRequest<ProfileBundle>("/api/v1/profile", { signal }),
   update: (body: ProfileInput) => apiRequest<Profile>("/api/v1/profile", { method: "PUT", body }),
+  /** Marks setup as finished. Idempotent; the server refuses it (422) while no profile exists. */
+  completeOnboarding: () => apiRequest<Profile>("/api/v1/profile/complete-onboarding", { method: "POST" }),
   /** Replaces the whole list. */
   replacePreferences: (items: Array<Pick<FoodPreference, "label" | "preference">>) =>
     apiRequest<FoodPreference[]>("/api/v1/profile/preferences", { method: "PUT", body: { items } }),
@@ -99,6 +101,42 @@ export const nutritionApi = {
   /** Either `days` (optionally with `end`) or `start` + `end`; omit `end` to let the server pick today. */
   summary: (params: { start?: string; end?: string; days?: number }, signal?: AbortSignal) =>
     apiRequest<RangeSummary>("/api/v1/nutrition/summary", { query: params, signal }),
+};
+
+const menu = (id: string) => `/api/v1/menus/${encodeURIComponent(id)}`;
+
+export const menusApi = {
+  /** Your menus, newest menu date first (limit ≤ 50). There is no date filter yet; callers filter client-side. */
+  list: (params: { limit?: number; offset?: number } = {}, signal?: AbortSignal) =>
+    apiRequest<MenuList>("/api/v1/menus", { query: params, signal }),
+  get: (id: string, signal?: AbortSignal) => apiRequest<MenuDetail>(menu(id), { signal }),
+  /**
+   * Create a menu for a date as a draft: from a photo (JPEG/PNG/WebP, multipart `image`), or without one
+   * to type the dishes in. With a photo, the server queues photo-reading when it has a provider; the
+   * returned detail says so (`status: "processing"`). Nothing is confirmed or logged by this call.
+   */
+  create: (input: MenuCreateInput) => {
+    const form = new FormData();
+    form.set("menu_date", input.menu_date);
+    if (input.meal_type) form.set("meal_type", input.meal_type);
+    if (input.image) form.set("image", input.image, input.image.name || "menu");
+    return apiRequest<MenuDetail>("/api/v1/menus", { method: "POST", body: form });
+  },
+  /** The stored photo, owner only (always JPEG). 404 `no_image` / `image_unavailable` when there is none. */
+  image: (id: string, signal?: AbortSignal) => apiRequestBlob(`${menu(id)}/image`, { signal }),
+  /** Start reading the photo (when `extraction.can_start`) or try again after a failure (`can_retry`). 202. */
+  startExtraction: (id: string) => apiRequest<MenuDetail>(`${menu(id)}/extraction`, { method: "POST" }),
+  /** Replace the draft's dish list. Kept dishes keep their `id` (and provenance); new ones omit it. */
+  saveDraft: (id: string, body: MenuDraftInput) => apiRequest<MenuDetail>(`${menu(id)}/draft`, { method: "PUT", body }),
+  /** Explicit confirmation of the draft. Repeating it on a confirmed menu changes nothing. */
+  confirm: (id: string) => apiRequest<MenuDetail>(`${menu(id)}/confirm`, { method: "POST" }),
+  /** Start editing a confirmed menu: a new draft copied from it. The confirmed version stays in use until confirmed again. */
+  revise: (id: string) => apiRequest<MenuDetail>(`${menu(id)}/revise`, { method: "POST" }),
+  /** Deletes the menu, its versions, photo and jobs. Meals already logged from it are kept as manual meals. */
+  remove: (id: string) => apiRequest<void>(menu(id), { method: "DELETE" }),
+  /** Read-only ranking of a confirmed menu's dishes against the profile. Viewing it never logs a meal. */
+  suggestions: (id: string, mealType?: MealType | null, signal?: AbortSignal) =>
+    apiRequest<MenuSuggestions>(`${menu(id)}/suggestions`, { query: { meal_type: mealType ?? undefined }, signal }),
 };
 
 export const targetsApi = {

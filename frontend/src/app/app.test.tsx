@@ -142,11 +142,13 @@ describe("pages", () => {
 
   it("demo pages render their labelled sample content", async () => {
     enterDemoMode();
-    const user = userEvent.setup();
+    const fetchMock = mockApi({});
     renderApp("/app/suggestions");
-    expect(await screen.findByText("Dinner isn't logged yet")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Dismiss suggestion: Dinner isn't logged yet" }));
-    expect(screen.queryByText("Dinner isn't logged yet")).not.toBeInTheDocument();
+    // Sample menu suggestions, labelled as demo data, with no request made and no way to log from them.
+    expect(await screen.findByRole("region", { name: /Dal tadka/ })).toBeInTheDocument();
+    expect(screen.getAllByText("Demo data").length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("button", { name: "Not available in demo" })[0]).toBeDisabled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("exit demo returns to a signed-out state", async () => {

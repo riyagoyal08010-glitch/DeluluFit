@@ -158,6 +158,34 @@ def test_extraction_provenance_must_match_upload(db: Session) -> None:
     db.commit()
 
 
+def test_menu_mess_must_belong_to_the_menu_owner(db: Session) -> None:
+    owner, other = f.make_user(db), f.make_user(db)
+    foreign = m.Mess(user_id=other.id, name="Other mess")
+    own = m.Mess(user_id=owner.id, name="Own mess")
+    db.add_all([foreign, own])
+    db.commit()
+    expect_db_error(db, lambda: db.add(m.MessMenu(user_id=owner.id, mess_id=foreign.id, title="T")))
+    db.add(m.MessMenu(user_id=owner.id, mess_id=own.id, title="T"))
+    db.commit()
+
+
+def test_menu_review_columns_are_checked(db: Session) -> None:
+    """CHECK constraints added by migration 0004."""
+    user = f.make_user(db)
+    menu, version, meal = f.make_draft_menu(db, user)
+    db.commit()
+
+    def set_hint(value: str) -> None:
+        version.meal_type_hint = value
+
+    expect_db_error(db, lambda: set_hint("brunch"))
+    expect_db_error(db, lambda: db.add(m.MenuItem(meal_id=meal.id, position=9, display_name="X", source="ai")))
+    version = db.get(m.MenuVersion, version.id)
+    version.meal_type_hint = "dinner"
+    db.add(m.MenuItem(meal_id=meal.id, position=9, display_name="X", source="extraction"))
+    db.commit()
+
+
 def test_consumed_menu_item_must_belong_to_logged_meal(db: Session) -> None:
     user = f.make_user(db)
     menu, version, meal = f.make_draft_menu(db, user)

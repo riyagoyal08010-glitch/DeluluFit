@@ -7,8 +7,8 @@ import { Button } from "./Button";
 
 type Tone = "neutral" | "accent" | "success" | "warning" | "danger" | "info";
 const tones: Record<Tone, string> = {
-  neutral: "bg-white/60 text-ink-muted border-white/80",
-  accent: "bg-accent-tint text-accent border-accent/20",
+  neutral: "bg-surface-muted text-ink-muted border-line",
+  accent: "bg-accent-tint text-accent-strong border-accent/25",
   success: "bg-success/10 text-success border-success/30",
   warning: "bg-warning/10 text-warning border-warning/30",
   danger: "bg-danger/10 text-danger border-danger/30",
@@ -60,7 +60,7 @@ export function Progress({ value, max = 1, label, tone = "accent" }:
   const pct = max > 0 ? Math.max(0, Math.min(100, (value / max) * 100)) : 0;
   return (
     <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100}
-         aria-valuenow={Math.round(pct)} className="h-2 w-full overflow-hidden rounded-full bg-white/70 ring-1 ring-inset ring-line/60">
+         aria-valuenow={Math.round(pct)} className="h-2 w-full overflow-hidden rounded-full bg-sheet ring-1 ring-inset ring-line">
       <div className={cn("h-full rounded-full transition-[width] duration-500",
                          tone === "warning" ? "bg-warning" : "bg-action")}
            style={{ width: `${pct}%` }} />
@@ -85,10 +85,10 @@ export function EmptyState({ icon: Icon, title, children, action }:
   { icon: LucideIcon; title: string; children?: ReactNode; action?: ReactNode }) {
   return (
     <div className="flex flex-col items-center px-4 py-8 text-center">
-      <div className="mb-3 rounded-full bg-accent-tint p-3.5">
+      <div className="mb-3 rounded-full border border-line p-3.5">
         <Icon className="h-6 w-6 text-accent" aria-hidden="true" />
       </div>
-      <h3 className="text-base font-medium">{title}</h3>
+      <h3 className="text-xl font-light tracking-[-0.015em]">{title}</h3>
       {children && <div className="mt-1 max-w-sm text-sm text-ink-muted">{children}</div>}
       {action && <div className="mt-4">{action}</div>}
     </div>
@@ -99,7 +99,7 @@ export function ErrorState({ title = "Something went wrong", message, onRetry }:
   { title?: string; message: string; onRetry?: () => void }) {
   return (
     <div role="alert" className="flex flex-col items-start gap-3 rounded-card border border-danger/25
-                                 bg-danger/5 p-4 sm:flex-row sm:items-center">
+                                 bg-danger/5 p-4 shadow-card sm:flex-row sm:items-center">
       <AlertTriangle className="h-5 w-5 shrink-0 text-danger" aria-hidden="true" />
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-ink">{title}</p>
@@ -113,9 +113,9 @@ export function ErrorState({ title = "Something went wrong", message, onRetry }:
 export function PageHeader({ title, description, actions }:
   { title: ReactNode; description?: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="mb-6 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-8 flex flex-col gap-4 border-b border-line pb-8 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <h1 className="text-[1.875rem] leading-tight sm:text-[2.5rem]">{title}</h1>
+        <h1 className="text-[2.25rem] leading-[1.02] tracking-[-0.03em] sm:text-[3.25rem]">{title}</h1>
         {description && <p className="mt-2 max-w-2xl text-sm text-ink-muted sm:text-base">{description}</p>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}

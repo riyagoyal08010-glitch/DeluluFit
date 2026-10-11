@@ -3,10 +3,10 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Surfaces:
- *   glass     translucent white with blur, for most cards (default)
- *   solid     near-opaque, no blur, for dense lists and long forms
- *   elevated  stronger glass for content that floats above other surfaces
+ * Surfaces (all opaque and lifted, F39):
+ *   glass     white with a hairline border and a soft shadow, for most cards (default)
+ *   solid     the same, for dense lists and long forms
+ *   elevated  a deeper shadow for content that floats above other surfaces
  * `raised` is kept as an alias of `elevated`.
  */
 export type Surface = "glass" | "solid" | "elevated";

@@ -64,7 +64,7 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
   if (!open) return null;
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
-      <div className="absolute inset-0 bg-[rgb(36_55_70/0.18)] backdrop-blur-sm" aria-hidden="true" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/40" aria-hidden="true" onClick={onClose} />
       <div ref={panel} role="dialog" aria-modal="true" aria-labelledby={titleId}
            aria-describedby={description ? descId : undefined} tabIndex={-1}
            className="glass-elevated relative w-full max-w-md rounded-card p-6 sm:p-7
@@ -72,7 +72,7 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
         <div className="mb-3 flex items-start justify-between gap-4">
           <h2 id={titleId} className="text-lg font-semibold">{title}</h2>
           <button type="button" onClick={onClose} aria-label="Close dialog"
-                  className="-mr-2 -mt-1 rounded-full p-2 text-ink-muted hover:bg-white/70 hover:text-ink">
+                  className="-mr-2 -mt-1 rounded-full p-2 text-ink-muted hover:bg-surface-raised hover:text-ink">
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>

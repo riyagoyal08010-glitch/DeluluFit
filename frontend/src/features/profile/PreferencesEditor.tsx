@@ -7,7 +7,7 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { Badge, ErrorState } from "@/components/ui/Feedback";
 import { Input, Select } from "@/components/ui/Field";
 import { profileApi } from "@/lib/api/endpoints";
-import { liveKeys } from "@/lib/api/queryKeys";
+import { invalidateMenus, liveKeys } from "@/lib/api/queryKeys";
 import type { FoodPreference, PreferenceKind } from "@/types/api";
 
 import { options, PREFERENCE_LABELS } from "./options";
@@ -22,7 +22,8 @@ const same = (a: Draft[], b: Draft[]) => JSON.stringify(a) === JSON.stringify(b)
  * Foods the student likes, dislikes or wants to avoid (PUT /profile/preferences replaces the list).
  * The draft is separate from the saved list, so a failed save never changes what is shown as saved.
  */
-export function PreferencesEditor({ saved }: { saved: FoodPreference[] }) {
+export function PreferencesEditor({ saved, onDirtyChange }:
+  { saved: FoodPreference[]; onDirtyChange?: (dirty: boolean) => void }) {
   const queryClient = useQueryClient();
   // The last list the server confirmed: the save response, until a refetched bundle replaces it.
   const [baseline, setBaseline] = useState<Draft[]>(() => toDraft(saved));
@@ -32,6 +33,7 @@ export function PreferencesEditor({ saved }: { saved: FoodPreference[] }) {
   const [addError, setAddError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const dirty = !same(draft, baseline);
+  useEffect(() => onDirtyChange?.(dirty), [dirty, onDirtyChange]);
 
   // Server changes replace the draft only when there are no unsaved edits.
   useEffect(() => {
@@ -46,6 +48,7 @@ export function PreferencesEditor({ saved }: { saved: FoodPreference[] }) {
       setDraft(toDraft(rows));
       setNotice("Food preferences saved.");
       await queryClient.invalidateQueries({ queryKey: liveKeys.profile });
+      await invalidateMenus(queryClient);  // menu suggestions are ranked from these preferences
     },
   });
 

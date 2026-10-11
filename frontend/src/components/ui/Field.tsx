@@ -4,7 +4,7 @@ import { forwardRef, useId, type InputHTMLAttributes, type ReactNode, type Selec
 import { cn } from "@/lib/cn";
 
 const control =
-  "w-full rounded-control border bg-white/85 px-3.5 text-ink placeholder:text-ink-muted/80 " +
+  "w-full rounded-control border border-accent-soft bg-surface px-3.5 text-ink placeholder:text-ink-muted " +
   "transition-colors focus-visible:shadow-focus focus-visible:border-accent disabled:cursor-not-allowed disabled:bg-surface-raised " +
   "disabled:opacity-50";
 
@@ -59,7 +59,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <div className="relative">
         <input ref={ref} id={inputId} aria-invalid={error ? true : undefined}
                aria-describedby={describedBy(inputId, hint, error)}
-               className={cn(control, "h-11", error ? "border-danger" : "border-line hover:border-accent-light",
+               className={cn(control, "h-11", error ? "border-danger" : "border-accent-soft hover:border-accent",
                              trailing ? "pr-12" : undefined, className)}
                {...rest} />
         {trailing && <div className="absolute inset-y-0 right-1 flex items-center">{trailing}</div>}
@@ -86,7 +86,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       <select ref={ref} id={selectId} aria-invalid={error ? true : undefined}
               aria-describedby={describedBy(selectId, hint, error)}
               className={cn(control, "h-11 appearance-none pr-9",
-                            error ? "border-danger" : "border-line hover:border-accent-light", className)}
+                            error ? "border-danger" : "border-accent-soft hover:border-accent", className)}
               {...rest}>
         {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
@@ -112,7 +112,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
       <div className="flex items-start gap-3">
         <input ref={ref} id={boxId} type="checkbox" aria-invalid={error ? true : undefined}
                aria-describedby={error ? `${boxId}-error` : undefined}
-               className={cn("mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-line bg-surface accent-[rgb(var(--color-accent))]",
+               className={cn("mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-accent-soft bg-surface accent-[rgb(var(--color-accent))]",
                              "focus-visible:shadow-focus disabled:cursor-not-allowed disabled:opacity-50", className)}
                {...rest} />
         <label htmlFor={boxId} className="cursor-pointer text-sm text-ink-muted">{label}</label>

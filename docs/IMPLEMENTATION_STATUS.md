@@ -8,6 +8,11 @@ Everything listed under "This phase" is **uncommitted and awaiting review**.
 The application is not complete or production-ready. There is no frontend,
 no meal logging API, no menu upload or extraction, and no recommendations.
 
+> **Update (2026-10-11, menu upload milestone):** the paragraph above
+> describes the state at the start of the nutrition phase. Meal logging, the
+> frontend and the menu API (upload, review, extraction worker, suggestions)
+> now exist as uncommitted work; see "Menu upload milestone" below.
+
 ## Completed
 
 ### In the checkpoint commit (`a316fb2`)
@@ -59,6 +64,45 @@ no meal logging API, no menu upload or extraction, and no recommendations.
   new DB tests for `user_sessions.csrf_token` and `food_aliases.confidence`.
 
 No schema change was needed, so there is no new migration.
+
+### Menu upload milestone (uncommitted, 2026-10-11)
+
+Inspection found the milestone already largely implemented by earlier
+uncommitted work (models in `app/db/models/menus.py`, migration `0004`,
+`app/services/storage`, `app/services/menu_images.py`,
+`app/services/menu_service.py`, `app/api/routes/menus.py`,
+`tests/test_api_menus.py`). This milestone verified it and closed the gaps:
+
+* **Model** (unchanged schema, see DECISIONS D17): `mess_menus` (owner,
+  optional `mess_id` → institution/hostel, timestamps), `menu_uploads`
+  (private storage key, content type, size, sha256, dimensions),
+  `menu_extraction_jobs` (status for later OCR/extraction),
+  `menu_versions.meal_type_hint`, `menu_days.menu_date`.
+* **Added — mess link**: `POST /menus` accepts an optional `mess_id`, checked
+  against the student's own messes before any file is written (422
+  `mess_unavailable`); summaries and details return `mess_id`.
+* **Hardened — deletion** collects storage keys only from uploads owned by
+  the deleting student, and a failed file delete is logged with its key.
+* **Documented** the upload limits (`MAX_UPLOAD_BYTES`, `MAX_IMAGE_PIXELS`,
+  `NORMALIZED_IMAGE_MAX_SIDE`, `UPLOAD_RATE_LIMIT_PER_HOUR`) and storage
+  settings in `backend/.env.example`; menu endpoints in `docs/API.md`;
+  decisions D17–D19 in `DECISIONS.md`.
+* **Tests added**: `tests/test_api_menu_uploads.py` (unauthenticated
+  upload/retrieve/delete, list isolation with two students' menus, retrieval
+  without storage details, invalid date / meal period / mess id, own vs
+  foreign mess, failed file cleanup on delete, deleting one menu leaves other
+  files alone, storage-key traversal refused by `LocalStorage`);
+  `tests/test_db_integrity.py` (mess ownership composite FK; the `0004`
+  CHECK constraints on `menu_versions.meal_type_hint` and
+  `menu_items.source`).
+* **Migration**: none added. `0004` is the single head; the round-trip and
+  drift tests pass, and the dev database `delulufit` (port 54329) was
+  upgraded `0003 → 0004` (forward only, no reset).
+
+Test run: from `backend/` against a separate disposable database
+`delulufit_test_m1` on the 54329 instance (other sessions were running the
+suite against `delulufit_test` at the same time, and the suite downgrades
+and truncates its database): **289 passed, 0 failed**.
 
 ## Test results (2026-10-11)
 
@@ -117,6 +161,23 @@ pre-existing errors in `profile_service.py` (untyped `dict(...)` of rows).
 * The CSRF cookie is readable by JavaScript by design; cross-site frontends
   must use the token from the response body.
 * `docs/SECURITY.md` is referenced in code comments but does not exist.
+* Menu uploads (2026-10-11):
+  * A file whose delete fails after the menu rows are committed stays in
+    storage as an orphan (logged as `upload_delete_failed` with its key);
+    there is no sweeper job yet.
+  * The duplicate check hashes the original bytes, so the same photo
+    re-saved or resized by the phone is treated as a new upload.
+  * The upload rate limit is in-process (resets on restart; not shared
+    between workers).
+  * `mess_id` can be set only when a menu is created; there is no endpoint to
+    change it, and no mess deletion endpoint exists (the FK would refuse to
+    delete a mess that menus reference).
+  * Images are fully read into memory (bounded by `MAX_UPLOAD_BYTES`) and
+    decoded synchronously in the request.
+  * The S3 backend is implemented but not exercised by the test suite.
+  * Running the suite while another process uses the same
+    `TEST_DATABASE_URL` causes spurious failures (tables dropped/truncated
+    mid-run); use a separate test database per concurrent runner.
 
 ## Remaining tasks
 
@@ -126,6 +187,7 @@ pre-existing errors in `profile_service.py` (untyped `dict(...)` of rows).
 2. Food search / match endpoint and daily nutrition summary (using
    `calculator.total`, surfacing lower-bound totals and confidence).
 3. Menu upload (image validation, private storage) and extraction worker.
+   *(Upload, storage, list/retrieve/delete: done and verified 2026-10-11.)*
 4. Menu review/confirmation flow and versioning API.
 5. Recommendations.
 6. Frontend (React + Vite, Tailwind CSS 3.4).

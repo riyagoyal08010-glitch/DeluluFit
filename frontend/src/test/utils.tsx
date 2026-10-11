@@ -24,9 +24,17 @@ export function mockApi(handlers: Record<string, Handler>) {
   return fetchMock;
 }
 
+/** An existing account that has finished setup (most tests). */
 export const USER: SessionResponse = {
   csrf_token: "csrf-test-token",
   user: { id: "u1", email: "student@example.test", role: "student", created_at: "2026-10-01T00:00:00Z",
+          has_profile: true, onboarding_completed: true },
+};
+
+/** An account the server reports as not set up yet (onboarding tests). */
+export const NEW_USER: SessionResponse = {
+  csrf_token: "csrf-new-token",
+  user: { id: "u2", email: "new@example.test", role: "student", created_at: "2026-10-11T00:00:00Z",
           has_profile: true, onboarding_completed: false },
 };
 

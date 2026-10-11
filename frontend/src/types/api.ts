@@ -90,6 +90,8 @@ export interface ProfileInput {
   timezone: string;
   institution_id: string | null;
   hostel_id: string | null;
+  /** Onboarding progress; the server only ever raises it, and ignores it once setup is complete. */
+  onboarding_step?: number;
 }
 
 export interface TargetInput {
@@ -274,6 +276,8 @@ export interface MealItemInput {
   unit: Unit;
   serving_id?: string | null;
   note?: string | null;
+  /** The dish on the meal's menu this item is, when logged from a confirmed menu (needs `MealInput.menu_meal_id`). */
+  menu_item_id?: string | null;
 }
 
 export interface MealInput {
@@ -282,6 +286,8 @@ export interface MealInput {
   note?: string | null;
   location_note?: string | null;
   idempotency_key?: string | null;
+  /** Set when the student logs what they ate from a confirmed menu meal; the server records source "mess_menu". */
+  menu_meal_id?: string | null;
   items: MealItemInput[];
 }
 
@@ -364,4 +370,131 @@ export type TransactionUpdateInput = Partial<Pick<TransactionInput, "amount" | "
 export interface SpendingPoint {
   date: string;
   net_spending: DecimalString;
+}
+
+/** Mess menus (backend/app/schemas/menus.py). Every menu belongs to the signed-in student. */
+export type MenuStatus = "processing" | "failed" | "needs_review" | "confirmed";
+
+/** GET /menus list rows (MenuSummaryOut). */
+export interface MenuSummary {
+  id: string;
+  title: string;
+  menu_date: string;
+  meal_type_hint: MealType | null;
+  mess_id: string | null;
+  status: MenuStatus;
+  has_draft: boolean;
+  has_confirmed: boolean;
+  item_count: number;
+  has_image: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MenuList {
+  items: MenuSummary[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface MenuItemView {
+  id: string;
+  meal_id: string;
+  meal_type: MealType;
+  position: number;
+  name: string;
+  /** "extraction" = read from the photo; "manual" = typed by the student. */
+  source: "extraction" | "manual";
+  is_user_corrected: boolean;
+  extraction_confidence: DecimalString | null;
+  section_heading: string | null;
+  serving_note: string | null;
+  price: DecimalString | null;
+  food: { id: string; canonical_name: string } | null;
+  match_confidence: string;
+}
+
+export interface MenuVersion {
+  id: string;
+  version_number: number;
+  status: "draft" | "confirmed";
+  source: "extraction" | "manual" | "revision";
+  meal_type_hint: MealType | null;
+  menu_date: string;
+  confirmed_at: string | null;
+  items: MenuItemView[];
+}
+
+/** GET /menus/{id} (MenuDetailOut). */
+export interface MenuDetail extends MenuSummary {
+  image: { width: number | null; height: number | null; size_bytes: number } | null;
+  extraction: {
+    available: boolean;
+    job: {
+      status: string; attempt_count: number; max_attempts: number; error_code: string | null;
+      error_message: string | null; started_at: string | null; finished_at: string | null;
+      is_menu: boolean | null; item_count: number | null; detected_date: string | null;
+    } | null;
+    can_start: boolean;
+    can_retry: boolean;
+  };
+  draft: MenuVersion | null;
+  confirmed: MenuVersion | null;
+}
+
+/** One reason or caution on a suggested dish. `code` is stable; `text` is the server's wording. */
+export interface SuggestionSignal {
+  code: string;
+  text: string;
+}
+
+/**
+ * Reference values per `reference_mass_g` grams of the linked reference food, not a portion.
+ * Statuses are the reference-data statuses (reported / unknown / not_in_source), not meal estimate statuses.
+ * Only the nutrients the server chose to show are present (energy, protein, carbohydrate, fat, fibre today).
+ */
+export interface DishNutrition {
+  reference_mass_g: DecimalString | null;
+  source_name: string | null;
+  nutrients: Partial<Record<NutrientKey, { value: DecimalString | null; display: DecimalString | null; unit: string;
+                                           status: ProfileNutrientStatus }>>;
+}
+
+export type SuggestionGroup = "suggested" | "available" | "check_first";
+
+/** GET /menus/{id}/suggestions dish (DishSuggestionOut). `score` is an internal ranking key, never shown. */
+export interface DishSuggestion {
+  menu_item_id: string;
+  menu_meal_id: string;
+  name: string;
+  meal_type: MealType;
+  section_heading: string | null;
+  serving_note: string | null;
+  source: "extraction" | "manual";
+  is_user_corrected: boolean;
+  group: SuggestionGroup;
+  score: number;
+  reasons: SuggestionSignal[];
+  cautions: SuggestionSignal[];
+  food: { id: string; canonical_name: string } | null;
+  diet_type: string | null;
+  nutrition: DishNutrition | null;
+  price: DecimalString | null;
+  currency: string;
+}
+
+/** GET /menus/{id}/suggestions (MenuSuggestionsOut). Viewing suggestions never logs a meal. */
+export interface MenuSuggestions {
+  menu_id: string;
+  menu_date: string;
+  status: MenuStatus;
+  confirmed: boolean;
+  meal_types: MealType[];
+  meal_type: MealType | null;
+  rule_version: string;
+  personalization: { personalized: boolean; based_on: string[]; message: string };
+  allergy_notice: string | null;
+  budget: { has_budget: boolean; period: BudgetPeriod | null; remaining: DecimalString | null; currency: string };
+  dishes: DishSuggestion[];
 }

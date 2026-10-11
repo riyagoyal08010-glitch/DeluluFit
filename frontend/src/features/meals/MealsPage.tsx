@@ -37,7 +37,7 @@ function LiveMeals() {
         {(["log", "history"] as View[]).map((v) => (
           <button key={v} type="button" aria-pressed={view === v} onClick={() => go(v)}
                   className={cn("min-h-[40px] rounded-full px-4 text-sm font-medium transition-colors",
-                                view === v ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:text-ink")}>
+                                view === v ? "bg-action text-ink-inverse" : "text-ink-muted hover:text-ink")}>
             {v === "log" ? "Log a meal" : "History"}
           </button>
         ))}

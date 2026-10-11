@@ -62,7 +62,8 @@ class Settings(BaseSettings):
     # Menu extraction
     extraction_provider: Literal["disabled", "anthropic"] = "disabled"
     anthropic_api_key: str | None = Field(default=None, repr=False)
-    anthropic_model: str = "claude-sonnet-5-5"
+    # Any vision-capable Claude model; override with ANTHROPIC_MODEL.
+    anthropic_model: str = "claude-opus-5-5"
     extraction_timeout_seconds: int = 90
     extraction_max_attempts: int = 3
     extraction_lease_seconds: int = 300

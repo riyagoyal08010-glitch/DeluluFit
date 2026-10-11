@@ -50,7 +50,7 @@ export function LiveNutrition() {
         {VIEWS.map((v) => (
           <button key={v.value} type="button" aria-pressed={view === v.value} onClick={() => setView(v.value)}
                   className={cn("min-h-[40px] rounded-full px-4 text-sm font-medium transition-colors",
-                                view === v.value ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:text-ink")}>
+                                view === v.value ? "bg-action text-ink-inverse" : "text-ink-muted hover:text-ink")}>
             {v.label}
           </button>
         ))}

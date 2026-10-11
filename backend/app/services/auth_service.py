@@ -7,14 +7,14 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import select, update
+from sqlalchemy import delete, select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.core.errors import AuthenticationError, ConflictError, ValidationFailedError
 from app.core.security import hash_password, hash_token, needs_rehash, new_token, verify_password
-from app.db.models import MenuUpload, StudentProfile, User, UserSession
+from app.db.models import MenuUpload, MessMenu, StudentProfile, User, UserSession
 from app.services.storage import get_storage
 
 logger = logging.getLogger(__name__)
@@ -120,6 +120,10 @@ def delete_account(db: Session, user: User, *, password: str) -> None:
         raise AuthenticationError("Password is incorrect.", code="invalid_credentials")
     keys = list(db.scalars(select(MenuUpload.storage_key).where(MenuUpload.user_id == user.id)))
     user_id = user.id
+    # Menus first: menu_versions reference menu_uploads without a cascade, so letting the
+    # user row cascade to uploads before the versions are gone violates that foreign key.
+    db.execute(delete(MessMenu).where(MessMenu.user_id == user_id))
+    db.flush()
     db.delete(user)
     db.commit()
     storage = get_storage()

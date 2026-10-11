@@ -22,6 +22,12 @@ export const liveKeys = {
   budgetTrend: (days: number) => ["live", "budget", "trend", days] as const,
   transactions: (start: string, end: string, limit: number) =>
     ["live", "budget", "transactions", start, end, limit] as const,
+  // Everything menu-related, including suggestions (they are computed from a menu), lives under ["live","menus"].
+  menus: ["live", "menus"] as const,
+  menuList: ["live", "menus", "list"] as const,
+  menu: (id: string) => ["live", "menus", "detail", id] as const,
+  menuSuggestions: (id: string, mealType?: string | null) =>
+    ["live", "menus", "suggestions", id, mealType ?? "all"] as const,
   foodSearch: (q: string) => ["live", "foods", "search", q] as const,
   food: (id: string) => ["live", "foods", "detail", id] as const,
   estimate: (id: string, quantity: string, unit: string, servingId: string | null) =>
@@ -36,4 +42,12 @@ export function invalidateMeals(client: QueryClient): Promise<void> {
 /** After any budget or transaction change: refetch the Budget page and the dashboard's budget card. */
 export function invalidateBudget(client: QueryClient): Promise<void> {
   return client.invalidateQueries({ queryKey: liveKeys.budget });
+}
+
+/**
+ * After any menu change, and after saving food preferences, allergies or the eating pattern:
+ * suggestions are computed from those, so every menu list, detail and suggestion query is refetched.
+ */
+export function invalidateMenus(client: QueryClient): Promise<void> {
+  return client.invalidateQueries({ queryKey: liveKeys.menus });
 }

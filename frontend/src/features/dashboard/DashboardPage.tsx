@@ -1,6 +1,5 @@
 import { ArrowRight, ChevronRight, Soup, UtensilsCrossed, Wallet } from "lucide-react";
 
-import { CoinJarIllustration } from "@/components/illustrations/Porcelain";
 import { DemoTag } from "@/components/layout/DemoTag";
 import { MealTimeline } from "@/components/meals/MealTimeline";
 import { ButtonLink } from "@/components/ui/Button";
@@ -81,7 +80,7 @@ function HeroTotals({ totals }: { totals: Totals }) {
             ? `${t.status === "incomplete" ? "≥ " : ""}${formatAmount(t.display, t.unit)}` : "—";
           return <li key={k}><GlassChip>{NUTRIENT_LABELS[k]} <span className="metric font-semibold">{value}</span></GlassChip></li>;
         })}
-        {partial && <li><GlassChip className="ring-1 ring-warning/60">Partial</GlassChip></li>}
+        {partial && <li><GlassChip className="border-white">Partial</GlassChip></li>}
       </ul>
       {totals.note && <p className="mt-4 max-w-md text-xs leading-relaxed text-white/90">{totals.note}</p>}
     </>
@@ -98,10 +97,10 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
+      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-8">
         <div className="min-w-0">
-          <h1 className="text-[1.875rem] leading-tight sm:text-[2.5rem]">
-            {greeting()}{name ? <>, <span className="font-semibold">{name}</span></> : null}
+          <h1 className="text-[2.25rem] leading-[1.02] tracking-[-0.03em] sm:text-[3.25rem]">
+            {greeting()}{name ? <>, <span className="font-normal">{name}</span></> : null}
           </h1>
           <p className="mt-1 text-sm text-ink-muted">Welcome to DeluluFit · {formatLongDate(date)}</p>
         </div>
@@ -125,7 +124,7 @@ export function DashboardPage() {
             <div className="flex min-h-[19rem] flex-col justify-between p-6 sm:p-8">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 id="today-nutrition" className="text-base font-medium text-white">Today's nutrition</h2>
+                  <h2 id="today-nutrition" className="text-base font-normal text-white">Today's nutrition</h2>
                   {demoTag}
                 </div>
                 {today.isPending ? <p className="mt-6 text-sm text-white/90" role="status">Loading today's totals…</p>
@@ -137,8 +136,7 @@ export function DashboardPage() {
                   ) : <HeroTotals totals={today.data.totals} />}
               </div>
               <div className="mt-6 flex flex-wrap items-center gap-2">
-                <ButtonLink to="/app/meals" variant="secondary" className="pl-1.5"
-                            icon={<span className="grid h-8 w-8 place-items-center rounded-full bg-action text-ink-inverse"><ArrowRight className="h-4 w-4" aria-hidden="true" /></span>}>
+                <ButtonLink to="/app/meals" variant="inverse" icon={<ArrowRight className="h-4 w-4" aria-hidden="true" />}>
                   Log a meal
                 </ButtonLink>
                 <ButtonLink to="/app/nutrition" variant="onImage">Nutrition details <ChevronRight className="h-4 w-4" aria-hidden="true" /></ButtonLink>
@@ -147,8 +145,7 @@ export function DashboardPage() {
           </ImagePanel>
         )}
 
-        <Card aria-labelledby="budget" className="relative overflow-hidden">
-          <div aria-hidden="true" className="pointer-events-none absolute -right-6 -top-4 w-28 opacity-70"><CoinJarIllustration /></div>
+        <Card aria-labelledby="budget">
           <CardHeader id="budget" title={<span className="flex items-center gap-2">Food budget{demoTag}</span>}
                       description="Spending recorded for the current period." />
           {budget.isPending ? <CardSkeleton />

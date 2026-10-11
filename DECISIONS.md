@@ -92,3 +92,44 @@ assertion keeps them in sync).
 ## D16. Empty meals are allowed
 A meal may be created with no items and filled later; its totals have status
 `empty` and null values.
+
+## D17. Menu photos: one existing schema, no parallel "MessMenu" table
+The upload milestone reuses the menu tables already in the schema
+(`mess_menus`, `menu_uploads`, `menu_extraction_jobs`, versions → days →
+meals → items) instead of adding a second menu model. Menu date and meal
+period live on the version (`menu_days.menu_date`,
+`menu_versions.meal_type_hint`) so a revision can correct them without
+rewriting history. Processing status is derived from the draft's extraction
+job (`processing | failed | needs_review | confirmed`), never stored twice.
+Institution and hostel are reached through the optional `mess_id`; a menu
+does not carry its own institution/hostel columns. No new migration was
+needed (`0004` is the latest revision).
+
+## D18. Menu photo storage and validation
+* Private storage behind `app/services/storage` (`LocalStorage` in
+  `backend/var/uploads`, gitignored and outside the frontend; or a private,
+  server-side-encrypted S3 bucket). Keys are server-generated
+  (`menus/<user hex>/<random uuid hex>`), checked against
+  `^[a-z0-9/_-]{8,200}$`, and local paths must resolve inside the root. The
+  client's filename is discarded. No public URL exists; the owner reads the
+  photo through `GET /menus/{id}/image` (`private, no-store`).
+* The decoded content decides acceptance (JPEG/PNG/WebP via Pillow, with
+  `verify()`, a pixel-count guard and a size limit `MAX_UPLOAD_BYTES`
+  checked on the Content-Length and again on the bytes read). Accepted photos
+  are rotated upright and re-encoded as JPEG, so EXIF/GPS, ICC and comments
+  are never stored.
+* Duplicate retries: a per-student unique `(user_id, sha256)` of the original
+  bytes turns a repeated upload into 409 `duplicate_upload` with the existing
+  `menu_id`.
+* Consistency: the file is written first; if the database transaction fails
+  it is deleted. On menu deletion the rows are committed first and the files
+  (only of uploads owned by that student) are deleted afterwards; a failed
+  file delete is logged and the API still returns 204, so no row ever points
+  at a missing file, at the cost of a possible orphaned private file.
+
+## D19. Ownership is derived from the session only
+Menu endpoints take no owner id. Every query filters on the session's user,
+and another student's menu is `404 not_found`. A `mess_id` is checked against
+the student's own messes (422 `mess_unavailable`) before any file is
+written, and the composite FK `(mess_id, user_id) → messes(id, user_id)`
+backs this up in the database.

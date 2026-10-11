@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, PenLine, Plus, Trash2 } from "lucide-react";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { NutritionSummary } from "@/components/nutrition/NutritionSummary";
 import { Button } from "@/components/ui/Button";
@@ -10,7 +11,7 @@ import { Input, Select } from "@/components/ui/Field";
 import { foodsApi, mealsApi } from "@/lib/api/endpoints";
 import { invalidateMeals, liveKeys } from "@/lib/api/queryKeys";
 import { formatAmount, localIsoDate, MEAL_LABELS } from "@/lib/format";
-import type { FoodSearchHit, Meal, MealInput, MealType, Unit } from "@/types/api";
+import type { FoodSearchHit, Meal, MealInput, MealItemInput, MealType, Unit } from "@/types/api";
 
 import { describeMealError } from "./errors";
 import { FoodSearch } from "./FoodSearch";
@@ -26,13 +27,46 @@ interface DraftItem {
   unit: Unit;
   servingId: string | null;
   servingLabel: string | null;
+  /** The confirmed-menu dish this item came from ("Log this" on Suggestions), if any. */
+  menuItemId: string | null;
 }
 
-type Step = { kind: "review" } | { kind: "search" } | { kind: "portion"; hit: FoodSearchHit } | { kind: "manual"; name: string };
+/** What the portion editor needs to know about a food: a search hit, or a dish's linked reference food. */
+type FoodRef = Pick<FoodSearchHit, "id" | "canonical_name">;
+
+type Step =
+  | { kind: "review" }
+  | { kind: "search" }
+  | { kind: "portion"; hit: FoodRef; menuItemId: string | null }
+  | { kind: "manual"; name: string; menuItemId: string | null };
+
+const MEAL_TYPES: readonly MealType[] = ["breakfast", "lunch", "snacks", "dinner", "other"];
 
 function defaultMealType(now = new Date()): MealType {
   const h = now.getHours();
   return h < 11 ? "breakfast" : h < 16 ? "lunch" : h < 19 ? "snacks" : "dinner";
+}
+
+/**
+ * Prefill from Suggestions ("Log this"): /app/meals?menu_meal=&menu_item=&meal_type=&food=&name=.
+ * Only the dish is filled in; the student still chooses the portion and presses Save.
+ */
+interface Prefill {
+  menuMealId: string;
+  menuItemId: string;
+  mealType: MealType | null;
+  foodId: string | null;
+  name: string;
+}
+
+function readPrefill(params: URLSearchParams): Prefill | null {
+  const menuMealId = params.get("menu_meal");
+  const menuItemId = params.get("menu_item");
+  if (!menuMealId || !menuItemId) return null;
+  const mealType = params.get("meal_type");
+  const name = (params.get("name") ?? "").trim().replace(/\s+/g, " ").slice(0, 160);
+  return { menuMealId, menuItemId, mealType: MEAL_TYPES.includes(mealType as MealType) ? mealType as MealType : null,
+           foodId: params.get("food") || null, name };
 }
 
 export function portionText(quantity: string, unit: Unit, servingLabel: string | null): string {
@@ -67,9 +101,35 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
   const [step, setStep] = useState<Step>({ kind: "review" });
   const [formError, setFormError] = useState<string | null>(null);
   const [saved, setSaved] = useState<Meal | null>(null);
+  // The confirmed menu meal the prefilled dish belongs to; sent only while a linked dish is in the draft.
+  const [menuMealId, setMenuMealId] = useState<string | null>(null);
   // Reuse the idempotency key only when retrying the exact same request, so a retry after a
   // lost response can't create a second meal, while an edited draft is a new request.
   const lastAttempt = useRef<{ payload: string; key: string } | null>(null);
+
+  // Read the "Log this" parameters once, then drop them from the address so a refresh or a later
+  // visit never re-applies a stale prefill (and StrictMode's double effect can't apply it twice).
+  const [params, setParams] = useSearchParams();
+  const prefilled = useRef(false);
+  useEffect(() => {
+    if (prefilled.current) return;
+    const prefill = readPrefill(params);
+    if (!prefill) return;
+    prefilled.current = true;
+    if (prefill.mealType) setMealType(prefill.mealType);
+    setMenuMealId(prefill.menuMealId);
+    setSaved(null);
+    if (prefill.foodId) {
+      // The linked reference food: the portion step shows its servings and the backend's estimate.
+      setStep({ kind: "portion", hit: { id: prefill.foodId, canonical_name: prefill.name }, menuItemId: prefill.menuItemId });
+    } else {
+      // No reference food is linked, so it is logged by name with unknown nutrition (never guessed).
+      setStep({ kind: "manual", name: prefill.name, menuItemId: prefill.menuItemId });
+    }
+    const rest = new URLSearchParams(params);
+    for (const k of ["menu_meal", "menu_item", "meal_type", "food", "name"]) rest.delete(k);
+    setParams(rest, { replace: true });
+  }, [params, setParams]);
 
   const create = useMutation({
     mutationFn: (body: MealInput) => mealsApi.create(body),
@@ -77,6 +137,7 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
       lastAttempt.current = null;
       setSaved(meal);
       setItems([]);
+      setMenuMealId(null);
       setNote("");
       setLocation("");
       setTime(currentTime());
@@ -84,10 +145,10 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
     },
   });
 
-  function addFood(hit: FoodSearchHit, portion: { quantity: string; unit: Unit; servingId: string | null },
-                   servingLabel: string | null) {
+  function addFood(hit: FoodRef, portion: { quantity: string; unit: Unit; servingId: string | null },
+                   servingLabel: string | null, menuItemId: string | null) {
     setItems((list) => [...list, { key: newIdempotencyKey(), foodId: hit.id, name: hit.canonical_name, ...portion,
-                                   servingLabel }]);
+                                   servingLabel, menuItemId }]);
     setStep({ kind: "review" });
   }
 
@@ -100,11 +161,17 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
     const consumedAt = toOffsetIso(date, time);
     if (!consumedAt) return setFormError("Enter a valid date and time.");
     if (isInFuture(consumedAt)) return setFormError("Meals can only be logged once they've been eaten, not for a future time.");
+    // A dish may only be linked to its menu meal together with that meal (the server enforces both).
+    const linked = menuMealId !== null && items.some((i) => i.menuItemId !== null);
     const body: Omit<MealInput, "idempotency_key"> = {
       meal_type: mealType, consumed_at: consumedAt, note: note.trim() || null, location_note: location.trim() || null,
-      items: items.map((i) => i.foodId
-        ? { food_id: i.foodId, quantity: i.quantity, unit: i.unit, serving_id: i.servingId }
-        : { display_name: i.name, quantity: i.quantity, unit: i.unit }),
+      ...(linked ? { menu_meal_id: menuMealId } : {}),
+      items: items.map((i): MealItemInput => ({
+        ...(i.foodId
+          ? { food_id: i.foodId, quantity: i.quantity, unit: i.unit, serving_id: i.servingId }
+          : { display_name: i.name, quantity: i.quantity, unit: i.unit }),
+        ...(linked && i.menuItemId ? { menu_item_id: i.menuItemId } : {}),
+      })),
     };
     const payload = JSON.stringify(body);
     const key = lastAttempt.current?.payload === payload ? lastAttempt.current.key : newIdempotencyKey();
@@ -136,17 +203,25 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
 
       {step.kind === "search" ? (
         <div className="space-y-3">
-          <FoodSearch autoFocus onSelect={(hit) => setStep({ kind: "portion", hit })}
-                      onManual={(name) => setStep({ kind: "manual", name: name.slice(0, 160) })} />
+          <FoodSearch autoFocus onSelect={(hit) => setStep({ kind: "portion", hit, menuItemId: null })}
+                      onManual={(name) => setStep({ kind: "manual", name: name.slice(0, 160), menuItemId: null })} />
           <Button variant="ghost" onClick={() => setStep({ kind: "review" })}>Back to meal</Button>
         </div>
       ) : step.kind === "portion" ? (
-        <PortionFor hit={step.hit} onAdd={addFood} onCancel={() => setStep({ kind: "search" })} />
+        <>
+          {step.menuItemId && <MenuDishNote name={step.hit.canonical_name} />}
+          <PortionFor hit={step.hit} onAdd={(hit, p, label) => addFood(hit, p, label, step.menuItemId)}
+                      onCancel={() => setStep(step.menuItemId ? { kind: "review" } : { kind: "search" })} />
+        </>
       ) : step.kind === "manual" ? (
-        <ManualItemForm initial={{ name: step.name, quantity: "1", unit: "serving" }} submitLabel="Add to meal"
-                        onCancel={() => setStep({ kind: "search" })}
-                        onSubmit={(m) => { setItems((list) => [...list, { key: newIdempotencyKey(), foodId: null, name: m.name,
-                          quantity: m.quantity, unit: m.unit, servingId: null, servingLabel: null }]); setStep({ kind: "review" }); }} />
+        <>
+          {step.menuItemId && <MenuDishNote name={step.name} />}
+          <ManualItemForm initial={{ name: step.name, quantity: "1", unit: "serving" }} submitLabel="Add to meal"
+                          onCancel={() => setStep(step.menuItemId ? { kind: "review" } : { kind: "search" })}
+                          onSubmit={(m) => { setItems((list) => [...list, { key: newIdempotencyKey(), foodId: null, name: m.name,
+                            quantity: m.quantity, unit: m.unit, servingId: null, servingLabel: null, menuItemId: step.menuItemId }]);
+                            setStep({ kind: "review" }); }} />
+        </>
       ) : (
         <form onSubmit={submit} noValidate className="space-y-5">
           <div className="grid gap-3 sm:grid-cols-3">
@@ -174,7 +249,8 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
                     <div className="min-w-0">
                       <p className="truncate font-medium text-ink">{item.name}</p>
                       <p className="text-xs text-ink-muted">{portionText(item.quantity, item.unit, item.servingLabel)}
-                        {item.foodId === null && " · not in food list"}</p>
+                        {item.foodId === null && " · not in food list"}
+                        {item.menuItemId !== null && " · from your menu"}</p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
                       <DraftEstimate item={item} />
@@ -215,16 +291,28 @@ export function MealComposer({ onViewHistory }: { onViewHistory?: (date: string)
   );
 }
 
+/** Shown above the portion or manual step when the dish came from Suggestions. */
+function MenuDishNote({ name }: { name: string }) {
+  return (
+    <p role="status" className="mb-4 rounded-control border border-line/70 bg-sheet p-3 text-sm text-ink-muted">
+      <span className="font-medium text-ink">{name}</span> from your menu. Choose how much you ate, then save the meal:
+      nothing is logged until you do.
+    </p>
+  );
+}
+
 function PortionFor({ hit, onAdd, onCancel }:
-  { hit: FoodSearchHit; onAdd: (hit: FoodSearchHit, p: { quantity: string; unit: Unit; servingId: string | null },
-                                servingLabel: string | null) => void; onCancel: () => void }) {
+  { hit: FoodRef; onAdd: (hit: FoodRef, p: { quantity: string; unit: Unit; servingId: string | null },
+                          servingLabel: string | null) => void; onCancel: () => void }) {
   const queryClient = useQueryClient();
   return (
     <PortionEditor foodId={hit.id} submitLabel="Add to meal" onCancel={onCancel}
                    onSubmit={(p) => {
-                     const food = queryClient.getQueryData<{ servings: Array<{ id: string; label: string }> }>(liveKeys.food(hit.id));
+                     // The editor has fetched the food (same query key): use its name and the chosen serving's label.
+                     const food = queryClient.getQueryData<{ canonical_name: string; servings: Array<{ id: string; label: string }> }>(
+                       liveKeys.food(hit.id));
                      const label = food?.servings.find((s) => s.id === p.servingId)?.label ?? null;
-                     onAdd(hit, p, label);
+                     onAdd({ id: hit.id, canonical_name: food?.canonical_name ?? hit.canonical_name }, p, label);
                    }} />
   );
 }

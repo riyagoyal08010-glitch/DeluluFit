@@ -51,7 +51,7 @@ export function LiveBudget() {
             {PERIODS.map((p) => (
               <button key={p} type="button" aria-pressed={s?.period === p} onClick={() => go(p, date)}
                       className={cn("min-h-[36px] rounded-full px-3 text-sm font-medium transition-colors",
-                                    s?.period === p ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:text-ink")}>
+                                    s?.period === p ? "bg-action text-ink-inverse" : "text-ink-muted hover:text-ink")}>
                 {PERIOD_LABELS[p]}
               </button>
             ))}

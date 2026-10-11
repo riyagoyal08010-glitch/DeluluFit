@@ -14,7 +14,7 @@ export function NutritionSummary({ totals }: { totals: Totals }) {
         {SHOWN.map((key) => {
           const t = totals.nutrients[key];
           return (
-            <div key={key} className="rounded-control border border-line/70 bg-sheet p-3">
+            <div key={key} className="rounded-control border border-line/70 bg-sheet p-3 shadow-card">
               <dt className="flex items-center justify-between gap-1 text-xs font-medium text-ink-muted">
                 {NUTRIENT_LABELS[key]}
                 <Tooltip label={`About the ${NUTRIENT_LABELS[key].toLowerCase()} total`}

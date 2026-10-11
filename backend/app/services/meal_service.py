@@ -27,7 +27,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.errors import ConflictError, NotFoundError, ValidationFailedError
-from app.db.models import BudgetTransaction, ConsumedItem, Food, FoodServing, MealLog, NutritionEstimate
+from app.db.models import (BudgetTransaction, ConsumedItem, Food, FoodServing, MealLog, MenuDay, MenuItem, MenuMeal,
+                           MenuVersion, MessMenu, NutritionEstimate)
 from app.schemas.meals import (MAX_ITEMS_PER_MEAL, DayMealsOut, DayTotalsOut, ItemFoodOut, ItemPreviewOut,
                                ItemServingOut, MealIn,
                                MealItemIn, MealItemOut, MealItemUpdate, MealOut, MealUpdate, RangeSummaryOut)
@@ -127,6 +128,13 @@ def _add_item(db: Session, indexer: _Indexer, meal: MealLog, data: MealItemIn, p
     food, name, confidence, mass = _resolve(db, indexer, food_id=data.food_id, display_name=data.display_name,
                                             quantity=data.quantity, unit=data.unit, serving_id=data.serving_id)
     item = ConsumedItem(meal_log_id=meal.id, position=position, note=data.note)
+    if data.menu_item_id is not None:
+        on_meal = meal.menu_meal_id is not None and db.scalar(
+            select(MenuItem.id).where(MenuItem.id == data.menu_item_id, MenuItem.meal_id == meal.menu_meal_id))
+        if not on_meal:
+            raise ValidationFailedError("A dish isn't on this meal's menu.", code="menu_item_mismatch")
+        item.menu_meal_id = meal.menu_meal_id
+        item.menu_item_id = data.menu_item_id
     _apply(item, food, name, confidence, mass)
     db.add(item)
     db.flush()
@@ -135,10 +143,35 @@ def _add_item(db: Session, indexer: _Indexer, meal: MealLog, data: MealItemIn, p
 
 def _fingerprint(data: MealIn) -> str:
     payload = data.model_dump(mode="json", exclude={"idempotency_key"})
+    # Menu links are left out when unset, so requests made before they existed keep their fingerprint.
+    if payload.get("menu_meal_id") is None:
+        payload.pop("menu_meal_id", None)
+    for item in payload.get("items", []):
+        if item.get("menu_item_id") is None:
+            item.pop("menu_item_id", None)
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
 
 
 # --- commands ------------------------------------------------------------------------------------
+
+def _check_menu_links(db: Session, user_id: uuid.UUID, data: MealIn) -> None:
+    """A menu-linked meal must point at a meal of one of this student's confirmed menus."""
+    if data.menu_meal_id is None:
+        return
+    owned = db.scalar(select(MenuMeal.id).join(MenuDay, MenuDay.id == MenuMeal.day_id)
+                      .join(MenuVersion, MenuVersion.id == MenuDay.version_id)
+                      .join(MessMenu, MessMenu.id == MenuVersion.menu_id)
+                      .where(MenuMeal.id == data.menu_meal_id, MessMenu.user_id == user_id,
+                             MenuVersion.status == "confirmed"))
+    if owned is None:
+        raise ValidationFailedError("That menu isn't available. Confirm the menu first.", code="menu_unavailable")
+    item_ids = {i.menu_item_id for i in data.items if i.menu_item_id}
+    if item_ids:
+        found = set(db.scalars(select(MenuItem.id).where(MenuItem.id.in_(item_ids),
+                                                         MenuItem.meal_id == data.menu_meal_id)))
+        if found != item_ids:
+            raise ValidationFailedError("A dish isn't on that menu meal.", code="menu_item_mismatch")
+
 
 def create_meal(db: Session, user_id: uuid.UUID, data: MealIn) -> tuple[MealOut, bool]:
     """Returns (meal, created). Replaying an idempotency key returns the original meal."""
@@ -152,8 +185,10 @@ def create_meal(db: Session, user_id: uuid.UUID, data: MealIn) -> tuple[MealOut,
                 raise ConflictError("This request key was already used for a different meal.",
                                     code="idempotency_conflict")
             return get_meal(db, user_id, existing.id), False
+    _check_menu_links(db, user_id, data)
     meal = MealLog(user_id=user_id, idempotency_key=key, request_fingerprint=fingerprint, meal_type=data.meal_type,
-                   source="manual", consumed_at=data.consumed_at,
+                   source="mess_menu" if data.menu_meal_id else "manual", menu_meal_id=data.menu_meal_id,
+                   consumed_at=data.consumed_at,
                    log_date=local_date_of(data.consumed_at, user_tz(db, user_id)), notes=data.note,
                    location_note=data.location_note)
     try:

@@ -9,7 +9,7 @@ import { Badge, ErrorState } from "@/components/ui/Feedback";
 import { Input, Select } from "@/components/ui/Field";
 import { useDebouncedValue } from "@/features/meals/portion";
 import { profileApi } from "@/lib/api/endpoints";
-import { liveKeys } from "@/lib/api/queryKeys";
+import { invalidateMenus, liveKeys } from "@/lib/api/queryKeys";
 import type { Institution, ProfileBundle, ProfileInput } from "@/types/api";
 
 import { ACTIVITY_LABELS, CURRENCIES, DIETARY_PATTERN_LABELS, options, timeZones } from "./options";
@@ -44,7 +44,14 @@ function toInput(v: ProfileFormValues): ProfileInput {
 const FIELD_MAP = { display_name: "displayName", height_cm: "heightCm", weight_kg: "weightKg", currency: "currency",
                     timezone: "timezone", dietary_pattern: "dietaryPattern", activity_level: "activityLevel" } as const;
 
-export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
+/** Used by the setup wizard: saving also records setup progress, then moves on. */
+export interface ProfileFormWizard {
+  nextStep: number;
+  onSaved: () => void;
+  onBack: () => void;
+}
+
+export function PersonalProfileForm({ bundle, wizard }: { bundle: ProfileBundle; wizard?: ProfileFormWizard }) {
   const queryClient = useQueryClient();
   const [saved, setSaved] = useState<string | null>(null);
   const [institution, setInstitution] = useState<Institution | null>(bundle.institution ?? null);
@@ -64,6 +71,7 @@ export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
     onSuccess: async () => {
       setSaved("Profile saved.");
       await queryClient.invalidateQueries({ queryKey: liveKeys.profile });
+      await invalidateMenus(queryClient);  // the eating pattern changes how menu dishes are ranked
     },
     onError: (err) => { applyFieldErrors(err, setError, FIELD_MAP); },
   });
@@ -73,7 +81,9 @@ export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
     setSaved(null);
     // After the server confirms, the submitted values become the clean baseline; the refetched
     // profile then replaces them through the effect above.
-    save.mutate(toInput(values), { onSuccess: () => reset(values) });
+    const input = wizard ? { ...toInput(values), onboarding_step: wizard.nextStep } : toInput(values);
+    // Mutation-level onSuccess (and its profile refetch) finishes before this runs.
+    save.mutate(input, { onSuccess: () => { reset(values); wizard?.onSaved(); } });
   });
 
   const currency = watch("currency");
@@ -92,7 +102,7 @@ export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
       <CardHeader id="personal-title" title="Personal profile"
                   description={bundle.profile ? undefined : "You haven't saved a profile yet. Only your name is required."} />
       <form onSubmit={onSubmit} noValidate className="space-y-4" aria-label="Personal profile">
-        {saved && !isDirty && <SavedNotice>{saved}</SavedNotice>}
+        {saved && !isDirty && !wizard && <SavedNotice>{saved}</SavedNotice>}
         <div className="grid gap-4 sm:grid-cols-2">
           <Input label="Name" autoComplete="nickname" error={errors.displayName?.message} {...register("displayName")} />
           <Select label="Eating pattern" error={errors.dietaryPattern?.message} options={options(DIETARY_PATTERN_LABELS)}
@@ -132,7 +142,12 @@ export function PersonalProfileForm({ bundle }: { bundle: ProfileBundle }) {
           {isDirty && <Badge tone="warning" className="self-start sm:self-center">Unsaved changes</Badge>}
           {isDirty && <Button variant="ghost" onClick={() => { save.reset(); reset(toForm(bundle)); setInstitution(bundle.institution ?? null); }}
                               disabled={save.isPending}>Discard changes</Button>}
-          <Button type="submit" loading={save.isPending} disabled={!isDirty}>Save profile</Button>
+          {wizard ? (
+            <>
+              <Button variant="secondary" onClick={wizard.onBack} disabled={save.isPending}>Back</Button>
+              <Button type="submit" loading={save.isPending}>Save and continue</Button>
+            </>
+          ) : <Button type="submit" loading={save.isPending} disabled={!isDirty}>Save profile</Button>}
         </div>
       </form>
     </Card>

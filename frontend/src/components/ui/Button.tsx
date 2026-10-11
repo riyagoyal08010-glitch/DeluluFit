@@ -4,26 +4,30 @@ import { Link, type LinkProps } from "react-router-dom";
 
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger" | "onImage";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "onImage" | "inverse";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[background-color,color,box-shadow,transform] " +
-  "duration-150 active:scale-[0.98] " +
+  "inline-flex items-center justify-center gap-2 rounded-full font-normal transition-[background-color,color,border-color,box-shadow] " +
+  "duration-300 ease-glide " +
   "focus-visible:shadow-focus disabled:cursor-not-allowed disabled:opacity-50 select-none whitespace-nowrap";
 const variants: Record<Variant, string> = {
-  primary: "bg-action text-ink-inverse shadow-pill hover:bg-action-strong",
-  secondary: "bg-white/85 text-ink border border-white shadow-pill hover:bg-white",
-  ghost: "text-ink-muted hover:text-ink hover:bg-white/60",
-  danger: "bg-danger/10 text-danger border border-danger/30 hover:bg-danger/15",
-  // Over imagery only: dark glass keeps white text ≥ 4.5:1 (see index.css).
-  onImage: "glass-dark hover:bg-[rgb(36_55_70/0.72)]",
+  // Filled black pill: the one solid action on a screen.
+  primary: "border border-action bg-action text-ink-inverse hover:bg-action-strong",
+  // Ghost pill with a 1px black outline.
+  secondary: "border border-ink bg-transparent text-ink hover:bg-surface-raised",
+  ghost: "text-ink-muted hover:text-ink hover:bg-surface-raised",
+  danger: "border border-danger bg-transparent text-danger hover:bg-danger/5",
+  // On black inverse bands: a white-outlined ghost pill.
+  onImage: "border border-white/40 bg-transparent text-white hover:border-white hover:bg-white/10",
+  // The primary action on a black band: a filled white pill.
+  inverse: "border border-white bg-white text-ink hover:bg-white/85",
 };
 // Every size keeps at least a 40px touch target; md and lg meet 44px.
 const sizes: Record<Size, string> = {
-  sm: "h-10 px-3 text-sm",
-  md: "h-11 px-5 text-sm",
-  lg: "h-12 px-7 text-base",
+  sm: "h-10 px-4 text-sm",
+  md: "h-11 px-6 text-sm",
+  lg: "h-12 px-8 text-base",
 };
 
 export function buttonClasses(variant: Variant = "primary", size: Size = "md", className?: string): string {

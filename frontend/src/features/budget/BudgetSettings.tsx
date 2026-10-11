@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Wallet } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader } from "@/components/ui/Card";
@@ -26,12 +26,13 @@ function budgetLine(b: Budget): string {
 }
 
 /** Current budget, a form to set or change it, ending it, and past budgets (GET/PUT/DELETE /budget...). */
-export function BudgetSettings() {
+export function BudgetSettings({ onEditingChange }: { onEditingChange?: (editing: boolean) => void } = {}) {
   const queryClient = useQueryClient();
   const overview = useQuery({ queryKey: liveKeys.budgetOverview, queryFn: ({ signal }) => budgetApi.overview(signal) });
   const [editing, setEditing] = useState(false);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  useEffect(() => onEditingChange?.(editing), [editing, onEditingChange]);
 
   const save = useMutation({
     mutationFn: budgetApi.setActive,

@@ -7,25 +7,30 @@ _Last updated: 2026-10-11. Nothing here is committed yet._
 | Check | Command | Result |
 |---|---|---|
 | Type check | `npx tsc --noEmit` (frontend) | passes |
-| Frontend tests | `npm test` (frontend) | **107 passed, 0 failed** (8 files; 3 new tests for Card surfaces, ImagePanel and DayStrip; the live-dashboard test now asserts no menu card without menu data) |
+| Frontend tests | `npx vitest run` (frontend) | **139 tests, 10 files** (18 new suggestion / menu-logging tests in `features/recommendations/suggestions.test.tsx`). Last full run: 138 passed, 1 failed: the older nutrition day-view test that occasionally exceeds the 3 s async timeout in full parallel runs; it passed alone immediately afterwards (13/13) and was not touched by the suggestions work (timing flake, known before) |
 | Production build | `npm run build` (frontend) | passes; main JS 500 kB (150 kB gzip; Vite prints its >500 kB advisory), Nutrition chunk 398 kB (111 kB gzip, lazy) |
-| Backend tests | `python -m pytest` (backend) | **238 passed** (last run in the meal-logging phase; no backend code changed in the nutrition, budget or profile phases) |
+| Backend tests | `python -m pytest` (backend) | **238 passed** (last run in the meal-logging phase; no backend code changed in the nutrition, budget, profile or onboarding phases, so not re-run) |
+| Live onboarding check | wizard request shapes replayed directly against the running dev backend (disposable DB, port 54329); 25/25 checks | register with a name → `has_profile` true, `onboarding_completed` false, step 1; `PUT /profile` with step 3, then 2 → stays 3; re-sending the server's own profile with a higher step changes no field; preferences, allergies, target and budget saved (budget save repeated → still one active budget); `complete-onboarding` 200 and idempotent (same timestamp); session and a fresh login report completed; step frozen afterwards; account without a name → `has_profile` false, completion 422 `profile_incomplete`, first `PUT /profile` creates the profile at the given step; after sign-out `GET /profile` 401. Both test accounts deleted |
 | Live API check | frontend request shapes replayed through the Vite proxy against the real backend | register 201; search; food detail; preview; create 201 / identical replay 200 (same meal); saved estimate equals preview; day view; edit → estimate version 2; delete 204; missing CSRF 403 |
 | Live nutrition check | requests replayed against the real backend | `/nutrition/summary?days=7` (and with `end`), `/meals/day` without a date (server picks today), `/targets` before/after setting one: shapes match `src/types/api.ts`; per-day `incomplete`/`complete` statuses and `unavailable` sodium come through |
 | Live budget check | requests replayed against the real backend | set budget; expense + identical replay (same id); over-refund 422 with server message; refund; summary totals (expenses/refunds/net/remaining/utilisation/by category); list for the summary range; delete expense with refunds → `has_refunds`; edit; meal deleted → linked expense kept and unlinked, net unchanged; weekly budget not compared with a daily view; trend; end budget |
 | Live profile/account check | real backend + disposable DB (port 54329) | full-body PUT keeps fields, partial body resets them (why the form always sends all fields); preference de-duplication; "other" allergy needs a label; self-set 1000 kcal → `unsafe_target`, professional accepted; wrong current password → 401 and session stays valid; delete with wrong confirmation (422) or password (401) deletes nothing; successful delete → 204, session gone, no rows left for the user in the tables checked, shared institution kept with attribution cleared |
-| Contrast | token audit script (text composited over glass and page) | glass redesign: every normal-text pair ≥ 4.79:1; white on image overlay and dark glass 5.06:1; accent-soft (2.22) and accent-light (1.25) are decorative only and carry no text |
-| Redesign build check | built CSS inspected | glass variants, backdrop-filter fallback (`@supports not`) and `prefers-reduced-transparency` rules generated; Inter bundled locally (no external font requests) |
+| Contrast | four-colour audit (text composited over each glass level and the lightest page point) | palette F34: every text pair ≥ 6.99:1, 0 failures; primary button text 18.7:1; text on image overlay 8.8:1; input borders 10:1; focus ring 14:1; partial vs complete chart bars 4.9:1 |
+| Palette check | literal colours in built CSS | only #06141B, #11212D (via variables), #CCD0CF, white and transparent remain |
+| Redesign build check | built CSS inspected | glass variants, backdrop-filter fallback (`@supports not`) and `prefers-reduced-transparency` rules generated; Playfair Display (display) and Newsreader (body) bundled locally (OFL) with per-subset unicode ranges, font-display swap and metric-matched Georgia fallbacks (no external font requests); deep-ocean glass variants and dark fallbacks generated |
 
 Deliberate-breakage checks confirmed: the duplicate-submission test fails
 when idempotency-key reuse is removed; the nutrition tests fail if unknown
 days are charted as zero; the budget refresh tests fail if the dashboard or
 post-meal-deletion invalidation is removed; the cross-account privacy test
-fails if the query cache is not cleared on account deletion. Tests now use the production
+fails if the query cache is not cleared on account deletion. Onboarding tests fail when
+any of these is removed: the setup redirect, the cache refresh after finishing, updating
+the session's completed flag, busy/disabled step buttons, limiting `?step=` to saved
+progress, blocking Continue on unsaved list edits, or keeping visited steps mounted. Tests now use the production
 cache settings (30 s staleTime), so a missing invalidation is detectable.
 
 Not run: Playwright browser tests, manual screen-reader testing. The glass
-redesign (decision F30) has **not been inspected visually in a browser**: no
+redesign (decision F30) and the deep-ocean theme (F32) have **not been inspected visually in a browser**: no
 browser tool was available, so layout, blur and illustration rendering are
 verified only by tests, type-check, build output, CSS inspection and the
 contrast script.
@@ -84,20 +89,49 @@ contrast script.
   (`POST /auth/delete-account`) with password + typed DELETE confirmation;
   on success the session and all cached queries are cleared before showing
   the signed-out login screen.
+- **Account setup** (`/app/onboarding`, decision F34): Welcome → Your profile
+  (name required; body, college and hostel optional) → Food preferences and
+  allergies (optional) → Nutrition targets (optional) → Food budget (optional)
+  → Review and finish. Reuses `PersonalProfileForm`, `PreferencesEditor`,
+  `AllergiesEditor`, `TargetsManager` and `BudgetSettings` with the same
+  endpoints as Profile & settings. Progress is stored as the profile's
+  `onboarding_step` (`PUT /profile`); finishing calls
+  `POST /profile/complete-onboarding`, refreshes every live query, then shows
+  the dashboard. New registrations go straight to setup; a session reporting
+  `onboarding_completed: false` is redirected to setup, with "Finish later"
+  (this tab, until the next sign-in or sign-out) and a dashboard reminder.
+  Demo mode shows a labelled notice and makes no calls.
+
+- **Suggestions** (`/app/suggestions`, decision F37): menus for the chosen
+  date from `GET /menus?limit=50` (filtered client-side on `menu_date` and
+  `has_confirmed`, newest `updated_at` first; the API has no date filter yet),
+  then `GET /menus/{id}/suggestions[?meal_type=]` for each confirmed menu,
+  shown in fixed sections (Suggested for you / Also on the menu / Check first)
+  with the server's reasons and cautions, source ("From photo" / "Typed in",
+  "Edited"), reference food and diet type, per-100 g reference nutrition with
+  reported / "No data" / "Not in source" statuses, prices only when printed
+  on the menu, the allergy notice once, and a "Log this" link that opens the
+  meal logger with the dish filled in (`/app/meals?menu_meal=&menu_item=&meal_type=&food=&name=`).
+  The logger reads those once, removes them from the address, opens the
+  portion step (linked reference food) or the manual form, and sends
+  `menu_meal_id` / `menu_item_id` only when the student saves. Preference,
+  allergy and profile saves invalidate every menu query. Demo mode renders a
+  fixture in the exact response shape through the same cards, with "Log this"
+  disabled ("Not available in demo") and no request made.
 
 ## Demo data only (clearly labelled; real accounts see "not available yet")
-Mess menu, Suggestions, dashboard menu card. In demo mode the Meals,
+Mess menu, dashboard menu card. In demo mode the Meals,
 Nutrition and Budget pages show their sample versions and make no API calls.
 
 ## Not implemented
-Onboarding wizard, custom date ranges on the Nutrition page (the API accepts
+Custom date ranges on the Nutrition page (the API accepts
 `start`/`end` up to 92 days), target setting/editing UI (the API supports it),
 creating new colleges or hostels from the profile page (the API supports it;
 not built), data export (no backend support), averages (deliberately not
 computed), filtering transactions by kind or
 category (the API filters by date only), changing a transaction's type or
 links after creation (the API doesn't allow it), currency choice or conversion
-(budgets use the profile currency), menu upload/review, suggestions, profile editing,
+(budgets use the profile currency), menu upload/review, profile editing,
 account deletion UI, password reset (no backend support), recent/favourite
 foods quick-log (no backend support), Playwright tests.
 
@@ -139,11 +173,39 @@ foods quick-log (no backend support), Playwright tests.
   for reduced transparency.
 - The mess-menu summary on the dashboard is shown only in demo mode until a
   menu API exists.
+- **Suggestions** depend on the menu upload/review UI (step 7), which is not
+  built: a real account can only reach "No confirmed menu for this date"
+  until a menu is confirmed through the API. The backend files it uses
+  (`backend/app/api/routes/menus.py`, `schemas/menus.py`,
+  `services/suggestion_service.py`) are uncommitted work of the menu
+  session; the frontend types were transcribed from them on 2026-10-11 and
+  must be re-checked before merging. `GET /menus` has no date filter, so the
+  page reads the latest 50 menus and filters locally. The response carries no
+  allergy severity, no match confidence per dish, and its budget "remaining"
+  is for today's period, not the menu date (labelled "as of today"). There
+  is no dismissal: nothing is persisted by viewing suggestions. The backend's
+  per-dish ranking `score` and `rule_version` are received but never shown.
 - Recharts 2.x is no longer actively developed (move to v3 later).
 - Test-only shim in `src/test/setup.ts` for a jsdom/Node `Request` AbortSignal
   incompatibility.
 - Vite binds to `localhost` (IPv6 `::1` on this machine): open
   `http://localhost:5173`.
+
+- **Onboarding and existing accounts:** nothing called
+  `complete-onboarding` before the wizard, so every account created earlier
+  reports `onboarding_completed: false` and is offered setup at sign-in (with
+  its saved data filled in) until it finishes setup. "Finish later" lasts for
+  the tab until the next sign-in or sign-out.
+- **Onboarding progress** is one number (`onboarding_step`) that only rises.
+  A refresh reopens the step in the address (`?step=`) or the furthest saved
+  step, never one beyond it. Edits typed but not saved are lost on refresh,
+  sign-out or session expiry; the wizard says so and the editors mark
+  "Unsaved changes". Recording progress re-sends the saved profile (the
+  endpoint replaces the whole profile), so it reads the profile first; an edit
+  made in another tab in between could be overwritten.
+- The backend's `OnboardedAuth` gate exists but no endpoint uses it; the
+  frontend doesn't block any page on setup either.
+- Setup can't create a college or hostel (search only), like the profile page.
 
 ## Run locally
 ```powershell

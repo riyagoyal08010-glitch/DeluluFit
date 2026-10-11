@@ -41,6 +41,8 @@ class MealItemIn(BaseModel):
     unit: UnitLit
     serving_id: uuid.UUID | None = None
     note: str | None = Field(default=None, max_length=280)
+    # The dish on the meal's menu (`MealIn.menu_meal_id`) this item is, when logged from a menu.
+    menu_item_id: uuid.UUID | None = None
 
     _names = field_validator("display_name", "note")(_clean)
 
@@ -74,10 +76,19 @@ class MealIn(BaseModel):
     location_note: str | None = Field(default=None, max_length=120)
     # Optional client-generated key: resending the same request returns the original meal.
     idempotency_key: uuid.UUID | None = None
+    # Set when the student logs what they ate from a confirmed menu meal; the meal's source
+    # becomes "mess_menu". Viewing a menu never creates a meal.
+    menu_meal_id: uuid.UUID | None = None
     items: list[MealItemIn] = Field(default_factory=list, max_length=MAX_ITEMS_PER_MEAL)
 
     _at = field_validator("consumed_at")(_aware)
     _texts = field_validator("note", "location_note")(_clean)
+
+    @model_validator(mode="after")
+    def _menu_links(self) -> MealIn:
+        if self.menu_meal_id is None and any(i.menu_item_id for i in self.items):
+            raise ValueError("A menu dish can only be logged together with its menu meal.")
+        return self
 
 
 class MealUpdate(BaseModel):

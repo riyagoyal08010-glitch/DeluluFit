@@ -5,11 +5,11 @@ import { useForm, type FieldValues, type Path, type UseFormSetError } from "reac
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { Brand } from "@/components/layout/Brand";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/Feedback";
 import { Checkbox, Input } from "@/components/ui/Field";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { ApiError } from "@/lib/api/client";
 
 import { loginSchema, registerSchema, type LoginValues, type RegisterValues } from "./schemas";
@@ -19,14 +19,14 @@ function AuthLayout({ title, subtitle, children, footer }:
   { title: string; subtitle: string; children: ReactNode; footer: ReactNode }) {
   return (
     <main className="mx-auto grid min-h-screen w-full max-w-6xl items-center gap-8 px-4 py-8 lg:grid-cols-2 lg:px-8">
-      {/* Cinematic panel (large screens only): decorative, so hidden from assistive tech. */}
-      <ImagePanel scene="bowl" as="div" aria-hidden="true" className="hidden h-full max-h-[44rem] lg:block"
-                  artClassName="md:top-auto md:bottom-6 md:right-6 md:w-[70%] md:translate-y-0">
+      {/* Brand panel (large screens only): the logo on its own ground; decorative, so hidden from assistive tech. */}
+      <div aria-hidden="true" className="hidden h-full max-h-[44rem] flex-col justify-between bg-[rgb(var(--brand-ground))] text-white lg:flex">
+        <BrandLogo decorative priority />
         <div className="p-10">
-          <p className="text-4xl font-light leading-tight">Eat, log,<br /><span className="font-semibold">and know.</span></p>
-          <p className="mt-4 max-w-xs text-sm text-white/90">Estimates with sources. Gaps marked, never guessed.</p>
+          <p className="text-5xl font-light leading-[0.95] tracking-[-0.035em]">Eat, log,<br />and know.</p>
+          <p className="mt-5 max-w-xs text-sm text-white/75">Estimates with sources. Gaps marked, never guessed.</p>
         </div>
-      </ImagePanel>
+      </div>
       <div className="mx-auto w-full max-w-md">
         <Link to="/" className="mb-8 inline-block rounded-control"><Brand /></Link>
         <Card raised>
@@ -93,7 +93,7 @@ export function LoginPage() {
 
   return (
     <AuthLayout title="Welcome back" subtitle="Sign in to see your meals and spending."
-                footer={<>New to DeluluFit? <Link className="font-medium text-accent hover:underline" to="/register">Create an account</Link></>}>
+                footer={<>New to DeluluFit? <Link className="font-medium text-accent underline underline-offset-2 hover:text-accent-soft" to="/register">Create an account</Link></>}>
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {state.status === "anonymous" && state.notice && <p role="status" className="rounded-control border border-success/30 bg-success/10 p-3 text-sm text-success">{state.notice}</p>}
         {state.status === "anonymous" && state.connectionError && !formError && (
@@ -127,7 +127,8 @@ export function RegisterPage() {
     setFormError(null);
     try {
       await registerAccount(values.email, values.password, values.displayName?.trim() || null);
-      navigate("/app", { replace: true });
+      // A new account always starts setup (the server reports it as not set up).
+      navigate("/app/onboarding", { replace: true });
     } catch (err) {
       if (err instanceof ApiError && err.code === "email_taken") {
         setError("email", { message: "An account with this email already exists." });
@@ -140,7 +141,7 @@ export function RegisterPage() {
 
   return (
     <AuthLayout title="Create your account" subtitle="Log meals, see estimates and track food spending."
-                footer={<>Already have an account? <Link className="font-medium text-accent hover:underline" to="/login">Sign in</Link></>}>
+                footer={<>Already have an account? <Link className="font-medium text-accent underline underline-offset-2 hover:text-accent-soft" to="/login">Sign in</Link></>}>
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         {formError && <ErrorState title="Couldn't create your account" message={formError} />}
         <Input label="What should we call you?" optional autoComplete="nickname" error={errors.displayName?.message}

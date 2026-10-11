@@ -26,7 +26,7 @@ export function DayStrip({ today = localIsoDate(), hrefFor, label = "This week" 
             <>
               <span className="text-xs">{name}</span>
               <span className={cn("metric grid h-8 w-8 place-items-center rounded-full text-sm font-medium",
-                                  isToday ? "bg-white text-ink shadow-pill" : "bg-white/80 text-ink")}>{num}</span>
+                                  isToday ? "bg-action text-ink-inverse" : "bg-transparent text-ink ring-1 ring-inset ring-line")}>{num}</span>
             </>
           );
           const base = "flex flex-col items-center gap-1.5 rounded-full px-1 py-2 text-ink-muted";
@@ -37,7 +37,7 @@ export function DayStrip({ today = localIsoDate(), hrefFor, label = "This week" 
               ) : (
                 <Link to={hrefFor(d)} aria-label={`${full}${isToday ? ", today" : ""}: meals`}
                       aria-current={isToday ? "date" : undefined}
-                      className={cn(base, "transition-colors hover:bg-white/60",
+                      className={cn(base, "transition-colors hover:bg-surface-raised",
                                     isToday && "bg-accent-tint text-ink ring-1 ring-inset ring-accent-light")}>
                   {body}
                 </Link>

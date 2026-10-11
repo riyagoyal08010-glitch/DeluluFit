@@ -58,6 +58,7 @@ export function setUnauthorizedHandler(handler: (() => void) | null): void {
 
 export interface RequestOptions {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  /** JSON-serialised, or sent as-is when it is a FormData (multipart uploads; the browser sets the boundary). */
   body?: unknown;
   query?: Record<string, string | number | undefined | null>;
   signal?: AbortSignal;
@@ -76,10 +77,21 @@ function buildUrl(path: string, query?: RequestOptions["query"]): string {
   return qs ? `${url}?${qs}` : url;
 }
 
-export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+function parseJson(text: string): unknown {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+/** Sends the request and turns every failure into an ApiError. Returns the raw successful response. */
+async function send(path: string, options: RequestOptions, accept: string): Promise<Response> {
   const method = options.method ?? "GET";
-  const headers: Record<string, string> = { Accept: "application/json" };
-  if (options.body !== undefined) headers["Content-Type"] = "application/json";
+  const headers: Record<string, string> = { Accept: accept };
+  const isForm = typeof FormData !== "undefined" && options.body instanceof FormData;
+  if (options.body !== undefined && !isForm) headers["Content-Type"] = "application/json";
   if (UNSAFE.has(method) && csrfToken) headers[CSRF_HEADER] = csrfToken;
 
   let response: Response;
@@ -88,7 +100,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
       method,
       headers,
       credentials: "include",
-      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      body: options.body === undefined ? undefined : isForm ? (options.body as FormData) : JSON.stringify(options.body),
       signal: options.signal,
     });
   } catch (err) {
@@ -96,19 +108,8 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     throw new ApiError(0, "network_error", "We couldn't reach DeluluFit. Check your connection and try again.");
   }
 
-  if (response.status === 204) return undefined as T;
-
-  let payload: unknown = null;
-  const text = await response.text();
-  if (text) {
-    try {
-      payload = JSON.parse(text);
-    } catch {
-      payload = null;
-    }
-  }
-
   if (!response.ok) {
+    const payload = parseJson(await response.text());
     const envelope = (payload as { error?: { code?: string; message?: string; details?: unknown; request_id?: string } })
       ?.error;
     const error = envelope?.code
@@ -120,8 +121,25 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     if (error.isUnauthorized && !options.skipUnauthorizedHandler) onUnauthorized?.();
     throw error;
   }
+  return response;
+}
+
+export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
+  const response = await send(path, options, "application/json");
+  if (response.status === 204) return undefined as T;
+  const payload = parseJson(await response.text());
   if (payload === null) {
     throw new ApiError(response.status, "invalid_response", "The server sent an unexpected response.");
   }
   return payload as T;
+}
+
+/**
+ * A binary response (a private menu photo) as a Blob, with the same credentials, error
+ * handling and sign-out behaviour as JSON requests. Callers turn it into an object URL and
+ * revoke it when done; the bytes never land in a public URL.
+ */
+export async function apiRequestBlob(path: string, options: RequestOptions = {}): Promise<Blob> {
+  const response = await send(path, options, "image/*");
+  return response.blob();
 }

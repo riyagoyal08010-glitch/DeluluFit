@@ -56,6 +56,36 @@ Nutrient value: `{value, display, unit, status}`; status
 `complete | incomplete | unavailable | empty`. `total` is null when nothing is
 known — never a fake zero.
 
+## Menus
+Every menu belongs to the signed-in student; another student's menu is
+always `404 not_found` (never 403, so ids cannot be probed).
+
+| Method | Path | Notes |
+|---|---|---|
+| POST | `/menus` | `multipart/form-data`: `menu_date` (required, ISO date, within the past year / next 60 days), `meal_type?` (`breakfast` \| `lunch` \| `snacks` \| `dinner` \| `other`), `mess_id?` (one of your own messes), `image?` (JPEG/PNG/WebP, ≤ `MAX_UPLOAD_BYTES`, default 8 MB). 201 → menu detail. Owner comes from the session only |
+| GET | `/menus?limit=&offset=` | Your menus, newest menu date first; `{items, total, limit, offset}` (limit ≤ 50) |
+| GET | `/menus/{id}` | Menu detail: summary + `image {width, height, size_bytes}` + extraction state + draft/confirmed versions |
+| GET | `/menus/{id}/image` | The stored photo (always JPEG), owner only; `Cache-Control: private, no-store`, sandboxing CSP |
+| DELETE | `/menus/{id}` | 204. Deletes versions, dishes, upload record, extraction jobs, then the file. Meals logged from it are kept as manual meals |
+
+Summary fields: `id, title, menu_date, meal_type_hint, mess_id, status
+(processing | failed | needs_review | confirmed), has_draft, has_confirmed,
+item_count, has_image, created_at, updated_at`. Storage keys and file paths
+are never returned.
+
+Upload errors: 413 `upload_too_large`; 422 `upload_empty`,
+`unsupported_image_type` (decoded format is not JPEG/PNG/WebP — the file name
+and declared Content-Type are ignored), `invalid_image` (not decodable /
+truncated), `image_too_large` (pixel count), `menu_date_out_of_range`,
+`mess_unavailable`, `validation_failed` (bad date / meal type / id format);
+409 `duplicate_upload` (same photo bytes again; `details.menu_id` points at the
+existing menu, so a retried upload is safe); 429 `rate_limited`; 401 / 403
+`csrf_failed`.
+
+Review and extraction (beyond the upload milestone): `POST /menus/{id}/extraction`,
+`PUT /menus/{id}/draft`, `POST /menus/{id}/confirm`, `POST /menus/{id}/revise`,
+`GET /menus/{id}/suggestions`.
+
 ## Budget
 `GET /budget`, `PUT|DELETE /budget/active`, `GET /budget/summary?date=&period=`,
 `GET /budget/trend?days=`, `GET|POST /budget/transactions`,

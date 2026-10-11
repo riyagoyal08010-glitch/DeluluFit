@@ -7,7 +7,7 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { Badge, ErrorState } from "@/components/ui/Feedback";
 import { Input, Select } from "@/components/ui/Field";
 import { profileApi } from "@/lib/api/endpoints";
-import { liveKeys } from "@/lib/api/queryKeys";
+import { invalidateMenus, liveKeys } from "@/lib/api/queryKeys";
 import type { Allergen, AllergySeverity, UserAllergy } from "@/types/api";
 
 import { ALLERGEN_LABELS, options, SEVERITY_LABELS } from "./options";
@@ -24,7 +24,8 @@ const describe = (d: Draft) => (d.allergen === "other" ? d.custom_label ?? "Othe
  * Allergies and severity (PUT /profile/allergies replaces the list). Recording an allergy here
  * does not make any food safe or unsafe: DeluluFit does not check meals or menus against it.
  */
-export function AllergiesEditor({ saved }: { saved: UserAllergy[] }) {
+export function AllergiesEditor({ saved, onDirtyChange }:
+  { saved: UserAllergy[]; onDirtyChange?: (dirty: boolean) => void }) {
   const queryClient = useQueryClient();
   // The last list the server confirmed: the save response, until a refetched bundle replaces it.
   const [baseline, setBaseline] = useState<Draft[]>(() => toDraft(saved));
@@ -36,6 +37,7 @@ export function AllergiesEditor({ saved }: { saved: UserAllergy[] }) {
   const [addError, setAddError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const dirty = JSON.stringify(draft) !== JSON.stringify(baseline);
+  useEffect(() => onDirtyChange?.(dirty), [dirty, onDirtyChange]);
 
   useEffect(() => {
     setBaseline(toDraft(saved));
@@ -49,6 +51,7 @@ export function AllergiesEditor({ saved }: { saved: UserAllergy[] }) {
       setDraft(toDraft(rows));
       setNotice("Allergies saved.");
       await queryClient.invalidateQueries({ queryKey: liveKeys.profile });
+      await invalidateMenus(queryClient);  // menu suggestions carry allergy cautions from this list
     },
   });
 
