@@ -32,7 +32,7 @@ export function AccountSettings({ email }: { email: string }) {
           <dd className="break-all text-ink">{email}</dd>
         </dl>
         <ChangePassword />
-        <div className="flex flex-wrap gap-2 border-t border-line/30 pt-5">
+        <div className="flex flex-wrap gap-2 border-t border-line/70 pt-5">
           <Button variant="secondary" loading={signingOut} icon={<LogOut className="h-4 w-4" aria-hidden="true" />}
                   onClick={async () => { setSigningOut(true); await logout(); }}>Sign out</Button>
         </div>
@@ -129,7 +129,7 @@ function DeleteAccount() {
   }
 
   return (
-    <section aria-labelledby="delete-title" className="space-y-3 rounded-control border border-danger/30 bg-danger/5 p-4">
+    <section aria-labelledby="delete-title" className="space-y-3 rounded-control border border-danger/40 bg-[rgb(252_243_243)] p-4">
       <h3 id="delete-title" className="text-sm font-semibold text-ink">Delete account</h3>
       <p className="text-sm text-ink-muted">Permanently delete your account and your data from DeluluFit. This can't be undone.</p>
       <Button variant="danger" onClick={() => setOpen(true)}>Delete account…</Button>
