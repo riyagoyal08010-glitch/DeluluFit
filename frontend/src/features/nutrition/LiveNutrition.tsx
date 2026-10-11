@@ -46,11 +46,11 @@ export function LiveNutrition() {
 
   return (
     <div className="space-y-4">
-      <div role="group" aria-label="Period" className="inline-flex rounded-control border border-line/40 bg-surface p-1">
+      <div role="group" aria-label="Period" className="glass-card inline-flex rounded-full p-1">
         {VIEWS.map((v) => (
           <button key={v.value} type="button" aria-pressed={view === v.value} onClick={() => setView(v.value)}
-                  className={cn("min-h-[40px] rounded-[0.6rem] px-4 text-sm font-medium transition-colors",
-                                view === v.value ? "bg-surface-raised text-ink" : "text-ink-muted hover:text-ink")}>
+                  className={cn("min-h-[40px] rounded-full px-4 text-sm font-medium transition-colors",
+                                view === v.value ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:text-ink")}>
             {v.label}
           </button>
         ))}
