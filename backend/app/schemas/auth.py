@@ -16,19 +16,19 @@ def _normalize_email(value: str) -> str:
     return value
 
 
+def _password_strength(value: str) -> str:
+    if value.strip() != value or len(set(value)) < 4:
+        raise ValueError("Choose a less predictable password without leading or trailing spaces.")
+    return value
+
+
 class RegisterRequest(BaseModel):
     email: str = Field(max_length=_EMAIL_MAX)
     password: str = Field(min_length=10, max_length=128)
     display_name: str | None = Field(default=None, max_length=80)
 
     _email = field_validator("email")(_normalize_email)
-
-    @field_validator("password")
-    @classmethod
-    def _password_strength(cls, value: str) -> str:
-        if value.strip() != value or len(set(value)) < 4:
-            raise ValueError("Choose a less predictable password without leading or trailing spaces.")
-        return value
+    _password = field_validator("password")(_password_strength)
 
 
 class LoginRequest(BaseModel):
@@ -41,6 +41,8 @@ class LoginRequest(BaseModel):
 class ChangePasswordRequest(BaseModel):
     current_password: str = Field(min_length=1, max_length=128)
     new_password: str = Field(min_length=10, max_length=128)
+
+    _new_password = field_validator("new_password")(_password_strength)
 
 
 class DeleteAccountRequest(BaseModel):

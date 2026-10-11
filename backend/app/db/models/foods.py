@@ -13,7 +13,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db import enums
 from app.db.base import Base, CreatedAtMixin, TimestampMixin, enum_check, uuid_pk
 
-NUTRIENT_COLUMNS = ("energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g")
+# Units are part of the column name: kcal, grams, milligrams. Values are per
+# food_nutrients.reference_mass_g grams of edible portion.
+NUTRIENT_COLUMNS = ("energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g", "sugars_g", "sodium_mg")
+_ALLOWED_NUTRIENTS = ", ".join(f"'{n}'" for n in NUTRIENT_COLUMNS)
 
 
 class Food(TimestampMixin, Base):
@@ -66,7 +69,9 @@ class FoodNutrient(CreatedAtMixin, Base):
 
     Rows are immutable (enforced by trigger); a data update inserts a new row
     and flips `is_current`. Historical estimates keep pointing at the row they
-    were calculated from. NULL means "unknown", never zero.
+    were calculated from. NULL is never zero: it means "unknown for this food"
+    when the nutrient is listed in `source_nutrients`, and "not provided by the
+    source" otherwise.
     """
 
     __tablename__ = "food_nutrients"
@@ -74,6 +79,10 @@ class FoodNutrient(CreatedAtMixin, Base):
         CheckConstraint("reference_mass_g > 0", name="reference_mass_positive"),
         *[CheckConstraint(f"{c} IS NULL OR {c} >= 0", name=f"{c}_nonnegative") for c in NUTRIENT_COLUMNS],
         CheckConstraint("length(btrim(source_name)) > 0", name="source_required"),
+        CheckConstraint(f"source_nutrients <@ ARRAY[{_ALLOWED_NUTRIENTS}]::varchar[]", name="source_nutrients_known"),
+        # A reported value must belong to a nutrient the source covers.
+        CheckConstraint(" AND ".join(f"({n} IS NULL OR '{n}' = ANY(source_nutrients))" for n in NUTRIENT_COLUMNS),
+                        name="values_within_coverage"),
         Index("uq_food_nutrients_current", "food_id", unique=True, postgresql_where=text("is_current")),
         Index("ix_food_nutrients_food_id", "food_id"),
     )
@@ -87,9 +96,18 @@ class FoodNutrient(CreatedAtMixin, Base):
     carbohydrate_g: Mapped[Decimal | None] = mapped_column(Numeric(8, 2))
     fat_g: Mapped[Decimal | None] = mapped_column(Numeric(8, 2))
     fibre_g: Mapped[Decimal | None] = mapped_column(Numeric(8, 2))
+    sugars_g: Mapped[Decimal | None] = mapped_column(Numeric(8, 2))
+    sodium_mg: Mapped[Decimal | None] = mapped_column(Numeric(9, 2))
     source_name: Mapped[str] = mapped_column(String(120), nullable=False)
     source_reference: Mapped[str | None] = mapped_column(String(300))
+    # The record's identifier in the source dataset, e.g. the FDC ID.
+    source_food_id: Mapped[str | None] = mapped_column(String(60))
     dataset_version: Mapped[str | None] = mapped_column(String(60))
+    # Nutrients the source provides for this record (see class docstring).
+    source_nutrients: Mapped[list[str]] = mapped_column(
+        ARRAY(String(20)), nullable=False,
+        server_default=text("'{energy_kcal,protein_g,carbohydrate_g,fat_g,fibre_g}'::varchar[]"),
+        default=lambda: list(NUTRIENT_COLUMNS[:5]))
     is_current: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("true"), default=True)
 
 

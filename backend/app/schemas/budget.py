@@ -3,20 +3,22 @@ from __future__ import annotations
 import uuid
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Literal
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import AfterValidator, BaseModel, Field
 
-from app.schemas.common import DecimalStr, ORMModel, OptionalDecimalStr
+from app.schemas.common import DecimalStr, OptionalDecimalStr, ORMModel
 
 PeriodLit = Literal["daily", "weekly", "monthly"]
 KindLit = Literal["expense", "refund"]
 CategoryLit = Literal["mess", "outside_food", "groceries", "beverages", "snacks", "other"]
+# Amounts are normalized to cents on input so responses match what is stored (NUMERIC(12, 2)).
+Money = Annotated[Decimal, AfterValidator(lambda v: v.quantize(Decimal("0.01")))]
 
 
 class BudgetIn(BaseModel):
     period: PeriodLit
-    amount: Decimal = Field(ge=0, le=Decimal("9999999999.99"), decimal_places=2)
+    amount: Money = Field(ge=0, le=Decimal("9999999999.99"), decimal_places=2)
     effective_from: date | None = None
 
 
@@ -31,7 +33,7 @@ class BudgetOut(ORMModel):
 
 class TransactionIn(BaseModel):
     kind: KindLit
-    amount: Decimal = Field(gt=0, le=Decimal("9999999999.99"), decimal_places=2)
+    amount: Money = Field(gt=0, le=Decimal("9999999999.99"), decimal_places=2)
     category: CategoryLit
     occurred_on: date
     description: str | None = Field(default=None, max_length=200)
@@ -41,7 +43,7 @@ class TransactionIn(BaseModel):
 
 
 class TransactionUpdate(BaseModel):
-    amount: Decimal | None = Field(default=None, gt=0, le=Decimal("9999999999.99"), decimal_places=2)
+    amount: Money | None = Field(default=None, gt=0, le=Decimal("9999999999.99"), decimal_places=2)
     category: CategoryLit | None = None
     occurred_on: date | None = None
     description: str | None = Field(default=None, max_length=200)

@@ -206,6 +206,11 @@ def target_history(db: Session, user_id: uuid.UUID) -> list[NutritionTarget]:
 
 
 def set_target(db: Session, user_id: uuid.UUID, data: TargetIn) -> NutritionTarget:
+    if data.source == "reference_estimate":
+        # Reserved for targets the app calculates from cited general references. That
+        # calculation does not exist yet, so a client may not label its own numbers this way.
+        raise ValidationFailedError("Reference estimates are not available yet. Choose 'self_set' for a target "
+                                    "you chose, or 'professional' for one given to you.", code="unsupported_source")
     if (data.source == "self_set" and data.energy_kcal is not None
             and data.energy_kcal < MIN_SELF_SET_ENERGY_KCAL):
         raise ValidationFailedError(

@@ -73,9 +73,11 @@ def end_budget(db: Session, user_id: uuid.UUID) -> None:
     db.commit()
 
 
-def _owned_txn(db: Session, user_id: uuid.UUID, txn_id: uuid.UUID) -> BudgetTransaction:
-    txn = db.scalar(select(BudgetTransaction).where(BudgetTransaction.id == txn_id,
-                                                    BudgetTransaction.user_id == user_id))
+def _owned_txn(db: Session, user_id: uuid.UUID, txn_id: uuid.UUID, *, lock: bool = False) -> BudgetTransaction:
+    stmt = select(BudgetTransaction).where(BudgetTransaction.id == txn_id, BudgetTransaction.user_id == user_id)
+    # Locking the original expense serializes concurrent refunds against it, so
+    # two requests cannot both pass the "refunds <= expense" check.
+    txn = db.scalar(stmt.with_for_update() if lock else stmt)
     if txn is None:
         raise NotFoundError("Transaction not found.")
     return txn
@@ -102,7 +104,7 @@ def create_transaction(db: Session, user_id: uuid.UUID, data: TransactionIn) -> 
         if owned is None:
             raise NotFoundError("Meal log not found.")
     if data.kind == "refund" and data.refund_of_id:
-        original = _owned_txn(db, user_id, data.refund_of_id)
+        original = _owned_txn(db, user_id, data.refund_of_id, lock=True)
         if original.kind != "expense":
             raise ValidationFailedError("A refund must refer to an expense.")
         if original.currency != currency:
@@ -133,7 +135,7 @@ def update_transaction(db: Session, user_id: uuid.UUID, txn_id: uuid.UUID, data:
         raise ValidationFailedError("Amount is required.")
     new_amount = changes.get("amount", txn.amount)
     if txn.kind == "refund" and txn.refund_of_id:
-        original = _owned_txn(db, user_id, txn.refund_of_id)
+        original = _owned_txn(db, user_id, txn.refund_of_id, lock=True)
         if _refunded_total(db, original.id, exclude_id=txn.id) + new_amount > original.amount:
             raise ValidationFailedError("Refunds cannot exceed the original expense amount.")
     if txn.kind == "expense" and new_amount < _refunded_total(db, txn.id):

@@ -9,10 +9,11 @@ from __future__ import annotations
 
 import os
 import tempfile
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
 
 import pytest
+from fastapi.testclient import TestClient
 
 from app.core.config import Settings, get_settings
 
@@ -78,3 +79,27 @@ def db() -> Iterator[Session]:
     finally:
         session.rollback()
         session.close()
+
+
+@pytest.fixture
+def make_client() -> Iterator[Callable[[], TestClient]]:
+    """Factory for API clients. Each client has its own cookie jar (one per simulated user)."""
+    from app.core.rate_limit import limiter
+    from app.main import app
+
+    limiter.reset()
+    clients: list[TestClient] = []
+
+    def _make() -> TestClient:
+        c = TestClient(app)
+        clients.append(c)
+        return c
+
+    yield _make
+    for c in clients:
+        c.close()
+
+
+@pytest.fixture
+def client(make_client: Callable[[], TestClient]) -> TestClient:
+    return make_client()

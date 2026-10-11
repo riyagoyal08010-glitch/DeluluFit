@@ -46,6 +46,39 @@ def test_profile_checks(db: Session) -> None:
                                                         dietary_pattern="carnivore")))
 
 
+def test_session_csrf_token_is_required_and_bounded(db: Session) -> None:
+    user = f.make_user(db)
+    db.commit()
+    expires = datetime(2099, 1, 1, tzinfo=timezone.utc)
+
+    def session(**kw):  # type: ignore[no-untyped-def]
+        base = dict(user_id=user.id, token_hash=uuid.uuid4().hex * 2, csrf_token="c" * 43, expires_at=expires)
+        base.update(kw)
+        return m.UserSession(**base)
+
+    expect_db_error(db, lambda: db.add(session(csrf_token=None)))
+    expect_db_error(db, lambda: db.add(session(csrf_token="x" * 65)))
+    db.add(session())
+    db.commit()
+    stored = db.scalar(select(m.UserSession.csrf_token))
+    assert stored == "c" * 43
+
+
+def test_food_alias_confidence_is_validated(db: Session) -> None:
+    food = f.make_food(db)
+    db.commit()
+    for bad in ("UNKNOWN", "high", "", "VERY_HIGH"):
+        expect_db_error(db, lambda bad=bad: db.add(m.FoodAlias(food_id=food.id, alias="x", normalized_alias="x",
+                                                               confidence=bad)))
+    # The server default applies when the column is omitted from the INSERT.
+    db.execute(text("INSERT INTO food_aliases (food_id, alias, normalized_alias) VALUES (:f, 'dal', 'dal')"),
+               {"f": food.id})
+    db.add(m.FoodAlias(food_id=food.id, alias="rajma", normalized_alias="rajma", confidence="MEDIUM"))
+    db.commit()
+    rows = dict(db.execute(select(m.FoodAlias.normalized_alias, m.FoodAlias.confidence)).all())
+    assert rows == {"dal": "HIGH", "rajma": "MEDIUM"}
+
+
 def test_hostel_must_belong_to_selected_institution(db: Session) -> None:
     user = f.make_user(db)
     inst_a = m.Institution(name="Inst A", normalized_name="inst a")

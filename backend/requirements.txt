@@ -1,0 +1,18 @@
+# Runtime dependencies, pinned to the versions the test suite was run with
+# (Python 3.10, 2026-10-11).
+fastapi==0.143.0
+starlette==1.7.0
+uvicorn[standard]==0.54.0
+pydantic==2.14.0
+pydantic-settings==2.15.0
+python-dotenv==1.2.4
+python-multipart==0.0.32
+SQLAlchemy==2.0.54
+alembic==1.20.0
+psycopg[binary]==3.3.6
+argon2-cffi==25.1.0
+# Used by modules that are planned but not implemented yet (S3 storage is
+# imported lazily; menu image handling and extraction are not written).
+boto3==1.43.111
+pillow==12.3.0
+anthropic==1.13.0

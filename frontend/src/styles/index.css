@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens. The palette is the product's; semantic colours were chosen to
+ * keep at least 4.5:1 contrast for text on --color-surface and --color-background.
+ * Values are space-separated RGB so Tailwind can apply opacity.
+ */
+:root {
+  --color-background: 6 20 27;        /* #06141B */
+  --color-surface: 17 33 45;          /* #11212D */
+  --color-surface-raised: 37 55 69;   /* #253745 */
+  --color-surface-muted: 74 92 106;   /* #4A5C6A  borders/decoration only, not text backgrounds */
+  --color-text-muted: 155 168 171;    /* #9BA8AB */
+  --color-text-primary: 204 208 207;  /* #CCD0CF */
+  --color-accent: 245 200 215;        /* #F5C8D7 */
+  --color-accent-strong: 236 168 192; /* hover state of the accent */
+  --color-success: 143 211 176;
+  --color-warning: 242 201 125;
+  --color-danger: 244 154 154;
+  --color-info: 156 199 232;
+  --color-line: 74 92 106;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    @apply bg-canvas text-ink antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply min-h-screen font-sans text-[15px] leading-relaxed;
+    background:
+      radial-gradient(60rem 40rem at 10% -10%, rgb(var(--color-surface-raised) / 0.55), transparent 60%),
+      radial-gradient(50rem 30rem at 110% 0%, rgb(var(--color-accent) / 0.06), transparent 60%),
+      rgb(var(--color-background));
+    background-attachment: fixed;
+  }
+  h1, h2, h3 {
+    @apply font-display tracking-tight text-ink;
+  }
+  :focus-visible {
+    @apply outline-none shadow-focus;
+  }
+  ::selection {
+    background: rgb(var(--color-accent) / 0.3);
+  }
+}
+
+@layer components {
+  /* Restrained glass: used for the shell chrome, not for every card. */
+  .glass {
+    background: rgb(var(--color-surface) / 0.72);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+  }
+  .metric {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

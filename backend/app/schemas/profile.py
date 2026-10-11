@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from app.schemas.common import ORMModel, OptionalDecimalStr
+from app.schemas.common import OptionalDecimalStr, ORMModel
 
 ActivityLevel = Literal["sedentary", "light", "moderate", "active", "very_active"]
 DietaryPattern = Literal["vegetarian", "eggetarian", "non_vegetarian", "vegan", "jain", "no_preference"]
@@ -17,6 +17,14 @@ Allergen = Literal["peanut", "tree_nut", "milk", "egg", "wheat_gluten", "soy", "
                    "mustard", "other"]
 Severity = Literal["mild", "moderate", "severe", "unknown"]
 TargetSource = Literal["reference_estimate", "self_set", "professional"]
+
+
+def _require_text(value: str) -> str:
+    """Collapse whitespace and reject names that are blank once trimmed."""
+    value = " ".join(value.split())
+    if not value:
+        raise ValueError("Enter a name.")
+    return value
 
 
 class ProfileUpdate(BaseModel):
@@ -128,6 +136,8 @@ class InstitutionOut(ORMModel):
 class HostelIn(BaseModel):
     name: str = Field(min_length=1, max_length=120)
 
+    _name = field_validator("name")(_require_text)
+
 
 class HostelOut(ORMModel):
     id: uuid.UUID
@@ -137,6 +147,8 @@ class HostelOut(ORMModel):
 
 class MessIn(BaseModel):
     name: str = Field(min_length=1, max_length=120)
+
+    _name = field_validator("name")(_require_text)
     institution_id: uuid.UUID | None = None
     hostel_id: uuid.UUID | None = None
 

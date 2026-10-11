@@ -11,8 +11,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import (auth, budget, foods, health, meals, menus, nutrition, profile,
-                            recommendations, uploads)
+from app.api.routes import auth, budget, foods, health, meals, profile
 from app.core.config import get_settings
 from app.core.errors import register_error_handlers
 from app.core.logging import configure_logging, request_id_var
@@ -24,7 +23,9 @@ logger = logging.getLogger("app.request")
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     settings = get_settings()
     worker = None
-    if settings.run_inline_worker:
+    # The worker only processes menu extraction jobs, so it is not started while
+    # extraction is disabled (the extraction worker is not implemented yet).
+    if settings.run_inline_worker and settings.extraction_enabled:
         from app.workers.extraction_worker import BackgroundWorker
 
         worker = BackgroundWorker()
@@ -79,7 +80,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(health.router, prefix="/api")
-    for module in (auth, profile, uploads, menus, foods, meals, nutrition, budget, recommendations):
+    for module in (auth, profile, foods, meals, budget):
         app.include_router(module.router, prefix="/api/v1")
     return app
 

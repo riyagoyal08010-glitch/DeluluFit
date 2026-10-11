@@ -18,6 +18,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import enums
 from app.db.base import Base, TimestampMixin, enum_check, uuid_pk
+from app.db.models.foods import NUTRIENT_COLUMNS
 
 
 class MealLog(TimestampMixin, Base):
@@ -97,6 +98,7 @@ class ConsumedItem(TimestampMixin, Base):
     match_confidence: Mapped[str] = mapped_column(String(8), nullable=False)
     is_user_corrected: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("false"),
                                                     default=False)
+    note: Mapped[str | None] = mapped_column(String(280))
 
     meal_log: Mapped[MealLog] = relationship(back_populates="items", foreign_keys=[meal_log_id])
     estimates: Mapped[list[NutritionEstimate]] = relationship(
@@ -114,7 +116,7 @@ class NutritionEstimate(Base):
         CheckConstraint("method <> 'per_reference_mass' OR food_nutrient_id IS NOT NULL",
                         name="reference_method_has_source"),
         *[CheckConstraint(f"{c} IS NULL OR {c} >= 0", name=f"{c}_nonnegative")
-          for c in ("energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g")],
+          for c in NUTRIENT_COLUMNS],
         UniqueConstraint("consumed_item_id", "estimate_version"),
         Index("uq_nutrition_estimates_current", "consumed_item_id", unique=True,
               postgresql_where=text("is_current")),
@@ -130,11 +132,15 @@ class NutritionEstimate(Base):
     method: Mapped[str] = mapped_column(String(24), nullable=False)
     engine_version: Mapped[str] = mapped_column(String(20), nullable=False)
     confidence: Mapped[str] = mapped_column(String(8), nullable=False)
-    energy_kcal: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
-    protein_g: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
-    carbohydrate_g: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
-    fat_g: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
-    fibre_g: Mapped[Decimal | None] = mapped_column(Numeric(10, 2))
+    # Stored at four decimal places so totals are summed before any rounding;
+    # values are rounded for display only.
+    energy_kcal: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    protein_g: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    carbohydrate_g: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    fat_g: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    fibre_g: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    sugars_g: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    sodium_mg: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
     input_snapshot: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     calculated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False,
                                                     server_default=text("now()"))

@@ -26,10 +26,12 @@ DATASET_VERSION = "2024-10-31"
 # The FNDDS survey CSV stores legacy nutrient numbers (208, 203, ...) in the
 # nutrient_id column, while other FDC releases use nutrient ids (1008, 1003, ...).
 # Both encodings are accepted; they do not overlap.
+# Sugars: 2000 / legacy 269 "Sugars, total" (g). Sodium: 1093 / legacy 307 "Sodium, Na" (mg).
 NUTRIENT_IDS = {"1008": "energy_kcal", "1003": "protein_g", "1005": "carbohydrate_g", "1004": "fat_g",
-                "1079": "fibre_g",
-                "208": "energy_kcal", "203": "protein_g", "205": "carbohydrate_g", "204": "fat_g", "291": "fibre_g"}
-NUTRIENT_FIELDS = ("energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g")
+                "1079": "fibre_g", "2000": "sugars_g", "1093": "sodium_mg",
+                "208": "energy_kcal", "203": "protein_g", "205": "carbohydrate_g", "204": "fat_g", "291": "fibre_g",
+                "269": "sugars_g", "307": "sodium_mg"}
+NUTRIENT_FIELDS = ("energy_kcal", "protein_g", "carbohydrate_g", "fat_g", "fibre_g", "sugars_g", "sodium_mg")
 
 V, E, N, VG = "vegetarian", "eggetarian", "non_vegetarian", "vegan"
 
@@ -161,6 +163,9 @@ def main(folder: Path, out: Path) -> None:
             "preparation_notes": note,
             "aliases": [{"alias": a, "confidence": c} for a, c in aliases],
             "nutrients": {"reference_mass_g": "100", **{k: nutrients[fdc_id].get(k) for k in NUTRIENT_FIELDS},
+                          # FNDDS reports every one of these nutrients for every survey food.
+                          "source_nutrients": list(NUTRIENT_FIELDS),
+                          "source_food_id": fdc_id,
                           "source_name": DATASET,
                           "source_reference": f"FDC ID {fdc_id}: {foods[fdc_id]['description']}",
                           "dataset_version": DATASET_VERSION},
