@@ -33,11 +33,11 @@ function LiveMeals() {
 
   return (
     <div className="space-y-4">
-      <div role="group" aria-label="Meals view" className="inline-flex rounded-control border border-line/40 bg-surface p-1">
+      <div role="group" aria-label="Meals view" className="glass-card inline-flex rounded-full p-1">
         {(["log", "history"] as View[]).map((v) => (
           <button key={v} type="button" aria-pressed={view === v} onClick={() => go(v)}
-                  className={cn("min-h-[40px] rounded-[0.6rem] px-4 text-sm font-medium transition-colors",
-                                view === v ? "bg-surface-raised text-ink" : "text-ink-muted hover:text-ink")}>
+                  className={cn("min-h-[40px] rounded-full px-4 text-sm font-medium transition-colors",
+                                view === v ? "bg-action text-ink-inverse shadow-pill" : "text-ink-muted hover:text-ink")}>
             {v === "log" ? "Log a meal" : "History"}
           </button>
         ))}
@@ -65,7 +65,7 @@ function DemoMeals() {
                 <tr><th className="px-2 py-2 font-medium">Food</th><th className="px-2 py-2 font-medium">Portion</th>
                   <th className="px-2 py-2 text-right font-medium">Energy</th><th className="px-2 py-2 text-right font-medium">Protein</th></tr>
               </thead>
-              <tbody className="divide-y divide-line/30">
+              <tbody className="divide-y divide-line/70">
                 {meal.items.map((it) => {
                   const n = it.estimate?.nutrients;
                   return (
