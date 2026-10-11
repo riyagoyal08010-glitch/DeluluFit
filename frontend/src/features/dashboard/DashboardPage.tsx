@@ -12,6 +12,8 @@ import { formatLongDate, formatMoney, greeting, localIsoDate, MEAL_LABELS } from
 import { DEMO_MENU } from "@/mocks/demoData";
 import type { BudgetSummary } from "@/types/api";
 
+import { absText } from "@/features/budget/money";
+
 import { useDashboard } from "./useDashboard";
 
 function errorMessage(err: unknown): string {
@@ -49,7 +51,7 @@ function BudgetBody({ budget }: { budget: BudgetSummary }) {
       <Progress value={Math.min(used, 1)} label="Share of budget used" tone={budget.over_budget ? "warning" : "accent"} />
       <p className="text-sm text-ink-muted">
         {budget.over_budget
-          ? `${formatMoney(String(Math.abs(Number(budget.remaining))), budget.currency)} over this ${budget.period} budget.`
+          ? `${formatMoney(absText(budget.remaining ?? "0"), budget.currency)} over this ${budget.period} budget.`
           : `${formatMoney(budget.remaining, budget.currency)} left for this ${budget.period} period.`}
       </p>
     </div>
