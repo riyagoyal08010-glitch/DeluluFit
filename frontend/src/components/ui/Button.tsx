@@ -4,23 +4,26 @@ import { Link, type LinkProps } from "react-router-dom";
 
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "onImage";
 type Size = "sm" | "md" | "lg";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-control font-medium transition-colors duration-150 " +
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[background-color,color,box-shadow,transform] " +
+  "duration-150 active:scale-[0.98] " +
   "focus-visible:shadow-focus disabled:cursor-not-allowed disabled:opacity-50 select-none whitespace-nowrap";
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-ink-inverse hover:bg-accent-strong active:bg-accent-strong/90",
-  secondary: "bg-surface-raised text-ink border border-line/60 hover:bg-surface-raised/70 hover:border-line",
-  ghost: "text-ink-muted hover:text-ink hover:bg-surface-raised/60",
-  danger: "bg-danger/15 text-danger border border-danger/40 hover:bg-danger/25",
+  primary: "bg-action text-ink-inverse shadow-pill hover:bg-action-strong",
+  secondary: "bg-white/85 text-ink border border-white shadow-pill hover:bg-white",
+  ghost: "text-ink-muted hover:text-ink hover:bg-white/60",
+  danger: "bg-danger/10 text-danger border border-danger/30 hover:bg-danger/15",
+  // Over imagery only: dark glass keeps white text ≥ 4.5:1 (see index.css).
+  onImage: "glass-dark hover:bg-[rgb(36_55_70/0.72)]",
 };
 // Every size keeps at least a 40px touch target; md and lg meet 44px.
 const sizes: Record<Size, string> = {
   sm: "h-10 px-3 text-sm",
-  md: "h-11 px-4 text-sm",
-  lg: "h-12 px-6 text-base",
+  md: "h-11 px-5 text-sm",
+  lg: "h-12 px-7 text-base",
 };
 
 export function buttonClasses(variant: Variant = "primary", size: Size = "md", className?: string): string {
