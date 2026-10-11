@@ -122,6 +122,7 @@ export interface BudgetSummary {
   remaining: DecimalString | null;
   utilization: DecimalString | null;
   over_budget: boolean;
+  excluded_other_currency: number;
   transaction_count: number;
   has_budget: boolean;
   by_category: Record<string, DecimalString>;
@@ -221,3 +222,81 @@ export interface MealInput {
 
 export type MealUpdateInput = Partial<Pick<MealInput, "meal_type" | "consumed_at" | "note" | "location_note">>;
 export type MealItemUpdateInput = Partial<MealItemInput>;
+
+/** GET /nutrition/summary — per-day totals over an inclusive range of profile-timezone dates. */
+export interface DayTotals {
+  date: string;
+  meal_count: number;
+  totals: Totals;
+}
+
+export interface RangeSummary {
+  start: string;
+  end: string;
+  days: DayTotals[];
+  totals: Totals;
+  days_with_meals: number;
+}
+
+/** GET /targets — history of the student's nutrition targets (daily amounts). */
+export interface NutritionTarget {
+  id: string;
+  source: "reference_estimate" | "self_set" | "professional";
+  energy_kcal: DecimalString | null;
+  protein_g: DecimalString | null;
+  carbohydrate_g: DecimalString | null;
+  fat_g: DecimalString | null;
+  fibre_g: DecimalString | null;
+  effective_from: string;
+  effective_to: string | null;
+  notes: string | null;
+}
+
+/** Budget API (backend/app/schemas/budget.py). Money is a decimal string; never do arithmetic on it here. */
+export type BudgetPeriod = "daily" | "weekly" | "monthly";
+export type SpendingCategory = "mess" | "outside_food" | "groceries" | "beverages" | "snacks" | "other";
+
+export interface Budget {
+  id: string;
+  period: BudgetPeriod;
+  amount: DecimalString;
+  currency: string;
+  effective_from: string;
+  effective_to: string | null;
+}
+
+export interface BudgetOverview {
+  active: Budget | null;
+  history: Budget[];
+}
+
+export interface Transaction {
+  id: string;
+  kind: "expense" | "refund";
+  amount: DecimalString;
+  currency: string;
+  category: SpendingCategory;
+  occurred_on: string;
+  description: string | null;
+  meal_log_id: string | null;
+  refund_of_id: string | null;
+  created_at: string;
+}
+
+export interface TransactionInput {
+  kind: "expense" | "refund";
+  amount: string;
+  category: SpendingCategory;
+  occurred_on: string;
+  description?: string | null;
+  meal_log_id?: string | null;
+  refund_of_id?: string | null;
+  idempotency_key?: string | null;
+}
+
+export type TransactionUpdateInput = Partial<Pick<TransactionInput, "amount" | "category" | "occurred_on" | "description">>;
+
+export interface SpendingPoint {
+  date: string;
+  net_spending: DecimalString;
+}
